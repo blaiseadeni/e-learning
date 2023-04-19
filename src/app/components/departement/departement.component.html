@@ -1,27 +1,35 @@
-
 <div class="grid">
     <div class="col-12">
         <div class="card px-6 py-6">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-                        <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
+                        <button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-success mr-2"
+                            (click)="openNew()"></button>
+                        <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger"
+                            (click)="deleteSelectedProducts()"
+                            [disabled]="!selectedProducts || !selectedProducts.length"></button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="right">
-                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1200000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
-                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" ></button>
+                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1200000" label="Import"
+                        chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="products" [columns]="cols" responsiveLayout="scroll" [rows]="12" [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="12" [paginator]="true" [rowsPerPageOptions]="[12,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="products" [columns]="cols" responsiveLayout="scroll" [rows]="12"
+                [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="12"
+                [paginator]="true" [rowsPerPageOptions]="[12,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Departements</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
                         </span>
                     </div>
                 </ng-template>
@@ -33,9 +41,9 @@
                         <th pSortableColumn="code">Code <p-sortIcon field="code"></p-sortIcon></th>
                         <th pSortableColumn="name">Section <p-sortIcon field="name"></p-sortIcon></th>
                         <th pSortableColumn="name">Departement<p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="price">Chef <p-sortIcon field="price"></p-sortIcon></th>
+                        <!-- <th pSortableColumn="price">Chef <p-sortIcon field="price"></p-sortIcon></th> -->
                         <th pSortableColumn="inventoryStatus">Date<p-sortIcon field="inventoryStatus"></p-sortIcon></th>
-                        <th pSortableColumn="price">Actions <p-sortIcon field="price"></p-sortIcon></th>
+                        <th pSortableColumn="price"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-product>
@@ -43,9 +51,10 @@
                         <td>
                             <p-tableCheckbox [value]="product"></p-tableCheckbox>
                         </td>
-                        <td style="width:15%; min-width:5rem;"><span class="p-column-title">Code</span>
+                        <td style="width:20%; min-width:5rem;"><span class="p-column-title">Code</span>
                             {{product.code || product.id}}
                         </td>
+
                         <td style="width:20%; min-width:12rem;">
                             <span class="p-column-title">Name</span>
                             {{product.name}}
@@ -54,86 +63,94 @@
                             <span class="p-column-title">Name</span>
                             {{product.name}}
                         </td>
-                       
-                        <td style="width:15%; min-width: 12rem;"><span class="p-column-title">Reviews</span>
-                            <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
+                        <td style="width:20%; min-width:12rem;">
+                            <span class="p-column-title">Name</span>
+                            {{product.name}}
                         </td>
-                        <td style="width:10%; min-width: 12rem;"><span class="p-column-title">Status</span>
-                            <span [class]="'product-badge status-' + (product.inventoryStatus ? product.inventoryStatus.toLowerCase() : '')">{{product.inventoryStatus}}</span>
-                        </td>
+
+
+
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(product)"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(product)"></button>
+                                <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2"
+                                    (click)="editProduct(product)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                    (click)="deleteProduct(product)"></button>
                             </div>
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
-    </div>
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Departement" [modal]="true" class="p-fluid">
-        <ng-template pTemplate="content">
-            <!-- <img [src]="'assets/demo/images/product/' + product.image" [alt]="product.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" *ngIf="product.image"> -->
-            <div class="grid p-fluid mt-3">
-                <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                        <input type="text" id="inputtext" pInputText [(ngModel)]="value1">
-                        <label for="inputtext">Code</label>
-                    </span>
+        </div>
+        <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Departement" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+                <!-- <img [src]="'assets/demo/images/product/' + product.image" [alt]="product.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" *ngIf="product.image"> -->
+                <div class="grid p-fluid mt-3">
+
+                    <div class="col-12 md:col-8">
+                        <div class="p-inputgroup">
+                            <span class="p-float-label">
+                                <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="cities"
+                                    [(ngModel)]="value12" optionLabel="name"></p-dropdown>
+                                <label for="inputtext">Section</label>
+                            </span>
+                            <button type="button" pButton pRipple icon="pi pi-plus" styleClass="p-button-warn"></button>
+                        </div>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <span class="p-float-label">
+                            <input type="date" id="inputtext" [autoDisplayFirst]="false" pInputText
+                                [(ngModel)]="value1">
+                            <!-- <label style="float: right;" for="inputtext">Date de creation</label> -->
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-12">
+                        <span class="p-float-label">
+                            <input type="text" id="inputtext" pInputText [(ngModel)]="value1">
+                            <label for="inputtext">Departement</label>
+                        </span>
+                    </div>
+
                 </div>
 
-                <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                        <input type="text" id="inputtext" pInputText [(ngModel)]="value1">
-                        <label for="inputtext">Nom</label>
-                    </span>
-                </div>
+            </ng-template>
 
-                <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                        <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="cities" [(ngModel)]="value12" optionLabel="name"></p-dropdown>
-                        <label for="dropdown">Chef</label>
-                    </span>
-                </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text"
+                    (click)="saveProduct()"></button>
+            </ng-template>
+        </p-dialog>
 
-                <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                        <input type="date" id="inputtext" [autoDisplayFirst]="false" pInputText [(ngModel)]="value1">
-                        <!-- <label style="float: right;" for="inputtext">Date de creation</label> -->
-                    </span>
-                </div>
+        <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="product">Etes-vous sûr de supprimer <b>{{product.name}}</b>?</span>
             </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Nom"
+                    (click)="deleteProductDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui"
+                    (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Etes-vous sûr de vouloir supprimer le departement selectionner ?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non"
+                    (click)="deleteProductsDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui"
+                    (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
         
-        </ng-template>
-
-        <ng-template pTemplate="footer">
-            <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-            <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text" (click)="saveProduct()"></button>
-        </ng-template>
-    </p-dialog>
-
-    <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-        <div class="flex align-items-center justify-content-center">
-            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-            <span *ngIf="product">Etes-vous sûr de supprimer <b>{{product.name}}</b>?</span>
-        </div>
-        <ng-template pTemplate="footer">
-            <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Nom" (click)="deleteProductDialog = false"></button>
-            <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete()"></button>
-        </ng-template>
-    </p-dialog>
-
-    <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-        <div class="flex align-items-center justify-content-center">
-            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-            <span>Etes-vous sûr de supprimer le departement selectionner ?</span>
-        </div>
-        <ng-template pTemplate="footer">
-            <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductsDialog = false"></button>
-            <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDeleteSelected()"></button>
-        </ng-template>
-    </p-dialog>
-</div>
-
-
-
+    </div>

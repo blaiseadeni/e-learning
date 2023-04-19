@@ -35,7 +35,7 @@ export class DepartementComponent {
   constructor(private productService: ProductService, private messageService: MessageService,
     private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) {
 this.breadcrumbService.setItems([
-{ label: 'departement' },
+{ label: 'Departement' },
 ]);
 }
 
@@ -145,8 +145,6 @@ onGlobalFilter(table: Table, event: Event) {
 table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
 }
 
- click(){
-  this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-}
+
 
 }

@@ -86,7 +86,7 @@ import {TreeModule} from 'primeng/tree';
 import {TreeTableModule} from 'primeng/treetable';
 import {VirtualScrollerModule} from 'primeng/virtualscroller';
 import {FullCalendarModule} from '@fullcalendar/angular';
-
+import { EditorModule } from 'primeng/editor';
 // Application Components
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
@@ -140,6 +140,7 @@ import {ProductService} from './demo/service/productservice';
 import {IconService} from './demo/service/iconservice';
 import {ConfigService} from './demo/service/app.config.service';
 
+
 // Application services
 import {BreadcrumbService} from './breadcrumb.service';
 import {MenuService} from './app.menu.service';
@@ -166,6 +167,7 @@ import { PromotionComponent } from './components/promotion/promotion/promotion.c
 @NgModule({
     imports: [
         BrowserModule,
+        EditorModule,
         FormsModule,
         AppRoutingModule,
         AppCodeModule,

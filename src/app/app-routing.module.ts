@@ -1,6 +1,5 @@
 import {RouterModule} from '@angular/router';
 import {NgModule} from '@angular/core';
-
 import {DashboardDemoComponent} from './demo/view/dashboarddemo.component';
 import {FormLayoutDemoComponent} from './demo/view/formlayoutdemo.component';
 import {FloatLabelDemoComponent} from './demo/view/floatlabeldemo.component';
@@ -20,7 +19,6 @@ import {ChartsDemoComponent} from './demo/view/chartsdemo.component';
 import {FileDemoComponent} from './demo/view/filedemo.component';
 import {DocumentationComponent} from './demo/view/documentation.component';
 import {IconsComponent} from './utilities/icons.component';
-
 import {AppMainComponent} from './app.main.component';
 import {AppNotfoundComponent} from './pages/app.notfound.component';
 import {AppErrorComponent} from './pages/app.error.component';
@@ -54,9 +52,14 @@ import { PromotionComponent } from './components/promotion/promotion/promotion.c
     imports: [
         RouterModule.forRoot([
             {
+                path:'',
+                redirectTo:'login',
+                pathMatch:'full',
+            },
+            {
                 path: '', component: AppMainComponent,
                 children: [
-                    {path: '', component: DashboardDemoComponent},
+                    {path: 'admin', component: DashboardDemoComponent},
                     {path: 'configuration/departement', component: DepartementComponent},
                     {path: 'configuration/promotion', component: PromotionComponent},
                     {path: 'configuration/cours', component: CoursComponent},
@@ -75,7 +78,6 @@ import { PromotionComponent } from './components/promotion/promotion/promotion.c
                     {path: 'evenement/article', component: ArticleComponent},
                     {path: 'evenement/evenement', component: EvenementComponent},
                     {path: 'evenement/vacance', component: VacanceComponent},
-
                     {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},
                     {path: 'uikit/invalidstate', component: InvalidStateDemoComponent},
@@ -108,6 +110,7 @@ import { PromotionComponent } from './components/promotion/promotion/promotion.c
             {path: 'notfound', component: AppNotfoundComponent},
             {path: 'login', component: AppLoginComponent},
             {path: '**', redirectTo: '/notfound'},
+           
         ], {scrollPositionRestoration: 'enabled'})
     ],
     exports: [RouterModule]
