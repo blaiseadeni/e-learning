@@ -13,7 +13,47 @@ export class AppMenuComponent implements OnInit {
 
     ngOnInit() {
         this.model = [
-            {label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/']},
+            {label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/']},
+            {
+                label: 'Configuration', icon: 'pi pi-fw pi-cog', routerLink: [''],
+                items: [
+                    {label: 'Département', icon: 'pi pi-fw pi-id-card', routerLink: ['/configuration/departement']},
+                    {label: 'Promotion', icon: 'pi pi-fw pi-paypal', routerLink: ['/configuration/promotion']},
+                    {label: 'Cours', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/configuration/cours']},
+                    {label: 'Enseignant', icon: 'pi pi-fw pi-user ', routerLink: ['/configuration/enseignant']},
+                    {label: 'Etudiant', icon: 'pi pi-fw pi-users', routerLink: ['/configuration/etudiant']},
+                    {label: 'Librairie', icon: 'pi pi-fw pi-book', routerLink: ['/configuration/librairie'], class: 'rotated-icon'},
+                   
+                ]
+            },
+            {
+                label: 'Evaluation', icon: 'pi pi-fw pi-file', routerLink: [''],
+                items: [
+                    {label: 'Travail dirigé', icon: 'pi pi-fw pi-circle', routerLink: ['/evaluation/td']},
+                    {label: 'Travail pratique', icon: 'pi pi-fw pi-spinner', routerLink: ['/evaluation/tp']},
+                    {label: 'Interrogation', icon: 'pi pi-fw pi-stop-circle', routerLink: ['/evaluation/interro']},
+                    {label: 'Examen', icon: 'pi pi-fw pi-circle-fill', routerLink: ['/evaluation/examen']},
+                ]
+            },
+            {
+                label: 'Conférence', icon: 'pi pi-fw pi-desktop', routerLink: [''],
+                items: [
+                    {label: 'Live', icon: 'pi pi-fw pi-video', routerLink: ['/conference/live']},
+                    {label: 'Forum', icon: 'pi pi-fw pi-comments', routerLink: ['/conference/forum']},
+                    {label: 'Vidéo', icon: 'pi pi-fw pi-youtube', routerLink: ['/conference/video']},
+                    {label: 'Groupe', icon: 'pi pi-fw pi-users', routerLink: ['/conference/groupe']},
+                ]
+            },
+            {
+                label: 'Annonces', icon: 'pi pi-fw pi-volume-off', routerLink: [''],
+                items: [
+                    {label: 'Horaire', icon: 'pi pi-fw pi-stopwatch', routerLink: ['/evenement/horaire']},
+                    {label: 'Article', icon: 'pi pi-fw pi-check-square', routerLink: ['/evenement/article']},
+                    {label: 'Evénement', icon: 'pi pi-fw pi-volume-up', routerLink: ['/evenement/evenement']},
+                    {label: 'Vacance', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/evenement/vacance']},
+                ]
+            },
+            
             {
                 label: 'UI Kit', icon: 'pi pi-fw pi-star-fill', routerLink: ['/uikit'],
                 items: [

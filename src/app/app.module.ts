@@ -144,6 +144,24 @@ import {ConfigService} from './demo/service/app.config.service';
 import {BreadcrumbService} from './breadcrumb.service';
 import {MenuService} from './app.menu.service';
 import {AppCodeModule} from './blocks/app-code/app.code.component';
+import { EtudiantComponent } from './components/etudiant/etudiant.component';
+import { EnseignantComponent } from './components/enseignant/enseignant.component';
+import { DepartementComponent } from './components/departement/departement.component';
+import { CoursComponent } from './components/cours/cours.component';
+import { TpComponent } from './components/tp/tp.component';
+import { TdComponent } from './components/td/td.component';
+import { InterroComponent } from './components/interro/interro.component';
+import { ExamenComponent } from './components/examen/examen.component';
+import { HoraireComponent } from './components/horaire/horaire.component';
+import { ArticleComponent } from './components/article/article.component';
+import { LiveComponent } from './components/live/live.component';
+import { ForumComponent } from './components/forum/forum.component';
+import { GroupeComponent } from './components/groupe/groupe.component';
+import { LibrairieComponent } from './components/librairie/librairie/librairie.component';
+import { VideoComponent } from './components/video/video/video.component';
+import { VacanceComponent } from './components/vacance/vacance/vacance.component';
+import { EvenementComponent } from './components/evenement/evenement/evenement.component';
+import { PromotionComponent } from './components/promotion/promotion/promotion.component';
 
 @NgModule({
     imports: [
@@ -273,7 +291,25 @@ import {AppCodeModule} from './blocks/app-code/app.code.component';
         DocumentationComponent,
         IconsComponent,
         BlocksComponent,
-        BlockViewer
+        BlockViewer,
+        EtudiantComponent,
+        EnseignantComponent,
+        DepartementComponent,
+        CoursComponent,
+        TpComponent,
+        TdComponent,
+        InterroComponent,
+        ExamenComponent,
+        HoraireComponent,
+        ArticleComponent,
+        LiveComponent,
+        ForumComponent,
+        GroupeComponent,
+        LibrairieComponent,
+        VideoComponent,
+        VacanceComponent,
+        EvenementComponent,
+        PromotionComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
