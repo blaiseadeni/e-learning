@@ -163,6 +163,9 @@ import { VideoComponent } from './components/video/video/video.component';
 import { VacanceComponent } from './components/vacance/vacance/vacance.component';
 import { EvenementComponent } from './components/evenement/evenement/evenement.component';
 import { PromotionComponent } from './components/promotion/promotion/promotion.component';
+import { QuestionComponent } from './components/forum/questions/question/question.component';
+import { LectureComponent } from './components/forum/lectures/lecture/lecture.component';
+import { LibLectureComponent } from './components/librairie/lib-lecture/lib-lecture.component';
 
 @NgModule({
     imports: [
@@ -311,7 +314,10 @@ import { PromotionComponent } from './components/promotion/promotion/promotion.c
         VideoComponent,
         VacanceComponent,
         EvenementComponent,
-        PromotionComponent
+        PromotionComponent,
+        QuestionComponent,
+        LectureComponent,
+        LibLectureComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

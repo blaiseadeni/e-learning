@@ -46,6 +46,9 @@ import { ArticleComponent } from './components/article/article.component';
 import { EvenementComponent } from './components/evenement/evenement/evenement.component';
 import { VacanceComponent } from './components/vacance/vacance/vacance.component';
 import { PromotionComponent } from './components/promotion/promotion/promotion.component';
+import { QuestionComponent } from './components/forum/questions/question/question.component';
+import { LectureComponent } from './components/forum/lectures/lecture/lecture.component';
+import { LibLectureComponent } from './components/librairie/lib-lecture/lib-lecture.component';
 
 
 @NgModule({
@@ -66,6 +69,7 @@ import { PromotionComponent } from './components/promotion/promotion/promotion.c
                     {path: 'configuration/enseignant', component: EnseignantComponent},
                     {path: 'configuration/etudiant', component: EtudiantComponent},
                     {path: 'configuration/librairie', component: LibrairieComponent},
+                    {path: 'librairie/lib-lecture', component: LibLectureComponent},
                     {path: 'evaluation/tp', component: TpComponent},
                     {path: 'evaluation/td', component: TdComponent},
                     {path: 'evaluation/interro', component: InterroComponent},
@@ -78,6 +82,8 @@ import { PromotionComponent } from './components/promotion/promotion/promotion.c
                     {path: 'evenement/article', component: ArticleComponent},
                     {path: 'evenement/evenement', component: EvenementComponent},
                     {path: 'evenement/vacance', component: VacanceComponent},
+                    {path: 'forum/question', component: QuestionComponent},
+                    {path: 'forum/lecture', component: LectureComponent},
                     {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},
                     {path: 'uikit/invalidstate', component: InvalidStateDemoComponent},
@@ -109,8 +115,7 @@ import { PromotionComponent } from './components/promotion/promotion/promotion.c
             {path: 'accessdenied', component: AppAccessdeniedComponent},
             {path: 'notfound', component: AppNotfoundComponent},
             {path: 'login', component: AppLoginComponent},
-            {path: '**', redirectTo: '/notfound'},
-           
+            {path: '**', redirectTo: '/notfound'},           
         ], {scrollPositionRestoration: 'enabled'})
     ],
     exports: [RouterModule]

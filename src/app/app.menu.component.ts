@@ -48,9 +48,9 @@ export class AppMenuComponent implements OnInit {
                 label: 'Annonces', icon: 'pi pi-fw pi-volume-off', routerLink: [''],
                 items: [
                     {label: 'Horaire', icon: 'pi pi-fw pi-stopwatch', routerLink: ['/evenement/horaire']},
-                    {label: 'Blogs', icon: 'pi pi-fw pi-check-square', routerLink: ['/evenement/article']},
-                    {label: 'Evenements', icon: 'pi pi-fw pi-volume-up', routerLink: ['/evenement/evenement']},
-                    {label: 'Vacances', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/evenement/vacance']},
+                    // {label: 'Blogs', icon: 'pi pi-fw pi-check-square', routerLink: ['/evenement/article']},
+                    {label: 'Calendrier', icon: 'pi pi-fw pi-volume-up', routerLink: ['/evenement/evenement']},
+                    {label: 'Evenements', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/evenement/vacance']},
                 ]
             },
             

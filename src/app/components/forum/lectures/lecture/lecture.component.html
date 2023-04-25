@@ -1,0 +1,31 @@
+<div class="grid">
+    <div class="col-9" style="margin-left: 130px;">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <h4>Impossible de personnaliser PrimeNG Quill Editor dans Angular</h4>
+                    </div>
+                </ng-template>               
+            </p-toolbar>
+            
+            <div>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi voluptates, dolore ea voluptatibus tenetur a placeat iusto voluptas. Esse repudiandae nam reiciendis aliquam. Vel doloremque fugiat corrupti, beatae repellendus voluptas.
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Itaque natus esse, inventore consequuntur temporibus suscipit aut tempora ex expedita sapiente maiores distinctio fuga, minima et aliquam cumque repellendus quisquam iusto.
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sint, suscipit! Molestias qui pariatur nulla velit inventore amet quasi ea architecto sit eum rem, obcaecati dolorem, maiores, laborum ratione animi tempora!
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque repudiandae maiores magnam quae molestias repellat facere, quisquam in hic doloremque, explicabo suscipit? Minima, magni? Sapiente esse pariatur ea sit nostrum?
+            </div>
+            
+            <div style="display: flex; ">
+                <div style="margin-top: 10px; width:700px;">
+                    <hr>
+                    <h5>Votre réponse</h5>
+                    <p-editor [(ngModel)]="text" [style]="{'height':'300px'} "></p-editor>
+                    <div style="margin-top: 10px;">
+                        <button pButton routerLink="/conference/forum" pRipple label="Annuler" icon="pi pi-times-circle" class="p-button-danger mr-2"></button>
+                        <button pButton pRipple label="Soumettre" icon="pi pi-check" class="p-button-success mr-2"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

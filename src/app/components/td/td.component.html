@@ -1,1 +1,30 @@
-<p>td works!</p>
+
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <div class="container bg-light py-5">
+                <h1 class="display-5 fw-bold">Welcome to Quiz App</h1>
+                <p class="col-md-8 fs-4">This quiz will contains total 9 questions. Each Question holds 10 Points</p>
+                <h4>Rules:</h4>
+                <ol>
+                    <li>Correct Question gives you 10 points</li>
+                    <li>Incorrect question gives to -10 points</li>
+                    <li>You will have 60 sec to answer each question</li>
+                    <li>Refreshing the page will reset the Quiz</li>
+                </ol>
+                <h1 style="font-family: cursive;text-align:center">All the best!!</h1>
+                
+                <div class="field col-12 md:col-12  " >
+                    <span class="p-float-label">
+                        <input type="text" id="inputtext" pInputText style="width: 300px;">
+                        <label for="inputtext">Entrer votre Nom(Complet)</label>
+                    </span>
+                </div>               
+                
+                <button style="margin-left: 5px; " pButton pRipple label="Demarrer" icon="pi pi-play" class="p-button-success mr-2" routerLink="/evaluation/tp"></button>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>

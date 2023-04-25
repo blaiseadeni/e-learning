@@ -3,42 +3,50 @@
         <div class="card">
             <h5>Didacticiel</h5>
             <p-dataView #dv [value]="products" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField"
-                [sortOrder]="sortOrder" layout="grid">
-                <ng-template pTemplate="header">
-                    <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
-                        <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Choisir une date"
-                            (onChange)="onSortChange($event)"></p-dropdown>
-                        <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Choisir un auditoire"
-                            (onChange)="onSortChange($event)"></p-dropdown>
-                        <span class="p-input-icon-left mb-2 md:mb-0">
-                            <i class="pi pi-search"></i>
-                            <input type="search" pInputText placeholder="Nom du cours"
-                                (input)="dv.filter($event.target.value)">
-                        </span>
-                        <!-- <p-dataViewLayoutOptions></p-dataViewLayoutOptions> -->
+            [sortOrder]="sortOrder" layout="grid">
+            <ng-template pTemplate="header">
+                <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
+                    <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Choisir une date"
+                    (onChange)="onSortChange($event)"></p-dropdown>
+                    <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Choisir un auditoire"
+                    (onChange)="onSortChange($event)"></p-dropdown>
+                    <span class="p-input-icon-left mb-2 md:mb-0">
+                        <i class="pi pi-search"></i>
+                        <input type="search" pInputText placeholder="Nom du cours"
+                        (input)="dv.filter($event.target.value)">
+                    </span>
+                    <!-- <p-dataViewLayoutOptions></p-dataViewLayoutOptions> -->
+                </div>
+            </ng-template>
+            
+            <ng-template let-product pTemplate="gridItem">
+                <div class="col-12 md:col-4 " >
+                    <div class="card m-1">
+                        <video  width="230" height="150" controls src="movie.ogg">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="font-bold ">Programmation orientee objet C#</div>
+                        <div class="mb-3">L2GL</div>
+                        <div style="margin-top: -12px;">Prof. Salomon LOMO AMUKI</div>
                     </div>
-                </ng-template>
-
-                <ng-template let-product pTemplate="gridItem">
-                    <div class="col-12 md:col-4 " >
-                        <div class="card m-1">
-                            <video  width="230" height="150" controls src="movie.ogg">
-                                Your browser does not support the video tag.
-                            </video>
-                            <div class="font-bold ">Programmation orientee objet C#</div>
-                            <div class="mb-3">L2GL</div>
-                            <div style="margin-top: -12px;">Prof. Salomon LOMO AMUKI</div>
-                            <!-- <div class="text-center ">
-                                <video style="margin-left: -10px;" width="280" height="180" controls src="movie.ogg">
-                                    Your browser does not support the video tag.
-                                </video>
-                                <div class="text-2xl font-bold">{{product.name}}</div>
-                                <div class="mb-3">{{product.description}}</div>
-                            </div> -->
-                        </div>
+                </div>
+            </ng-template>
+            
+            <ng-template let-product pTemplate="gridItem">
+                <div class="col-12 md:col-4 " >										
+                    <div class="card m-3 border-0 surface-border">
+                        <p-card header="Titre du cours" subheader="Auditoire"  [style]="{ width: '230px' }">
+                            <ng-template pTemplate="header">
+                                <video  width="230" height="180" controls src="movie.ogg">
+                            Your browser does not support the video tag.
+                        </video>
+                            </ng-template>
+                            <p style="margin-top: -15px;">Professeur </p>	
+                         </p-card>
                     </div>
-                </ng-template>
-            </p-dataView>
-        </div>
+                </div>
+            </ng-template>
+        </p-dataView>
     </div>
+</div>
 </div>
