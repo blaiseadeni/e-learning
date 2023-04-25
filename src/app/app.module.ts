@@ -166,6 +166,7 @@ import { PromotionComponent } from './components/promotion/promotion/promotion.c
 import { QuestionComponent } from './components/forum/questions/question/question.component';
 import { LectureComponent } from './components/forum/lectures/lecture/lecture.component';
 import { LibLectureComponent } from './components/librairie/lib-lecture/lib-lecture.component';
+import { LectureGroupeComponent } from './components/groupe/lecture-groupe/lecture-groupe.component';
 
 @NgModule({
     imports: [
@@ -317,7 +318,8 @@ import { LibLectureComponent } from './components/librairie/lib-lecture/lib-lect
         PromotionComponent,
         QuestionComponent,
         LectureComponent,
-        LibLectureComponent
+        LibLectureComponent,
+        LectureGroupeComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

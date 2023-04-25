@@ -39,7 +39,7 @@
 				<ng-template let-product pTemplate="gridItem">
 					<div class="col-12 md:col-4 " >										
 						<div class="card m-3 border-0 surface-border">
-							<p-card header="Advanced Card" subheader="Card Subheader" [style]="{ width: '250px' }">
+							<p-card header="Advanced Card" subheader="Card Subheader" [style]="{ width: '250px' }" routerLink="/groupe/lecture-groupe">
 								<ng-template pTemplate="header">
 									<img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" />
 								</ng-template>

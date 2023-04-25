@@ -49,6 +49,7 @@ import { PromotionComponent } from './components/promotion/promotion/promotion.c
 import { QuestionComponent } from './components/forum/questions/question/question.component';
 import { LectureComponent } from './components/forum/lectures/lecture/lecture.component';
 import { LibLectureComponent } from './components/librairie/lib-lecture/lib-lecture.component';
+import { LectureGroupeComponent } from './components/groupe/lecture-groupe/lecture-groupe.component';
 
 
 @NgModule({
@@ -77,9 +78,9 @@ import { LibLectureComponent } from './components/librairie/lib-lecture/lib-lect
                     {path: 'conference/live', component: LiveComponent},
                     {path: 'conference/forum', component: ForumComponent},
                     {path: 'conference/video', component: VideoComponent},
-                    {path: 'conference/groupe', component: GroupeComponent},
                     {path: 'evenement/horaire', component: HoraireComponent},
-                    {path: 'evenement/article', component: ArticleComponent},
+                    {path: 'conference/groupe', component: GroupeComponent},
+                    {path: 'groupe/lecture-groupe', component: LectureGroupeComponent},
                     {path: 'evenement/evenement', component: EvenementComponent},
                     {path: 'evenement/vacance', component: VacanceComponent},
                     {path: 'forum/question', component: QuestionComponent},
