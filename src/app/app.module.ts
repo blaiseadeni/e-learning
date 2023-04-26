@@ -167,6 +167,7 @@ import { QuestionComponent } from './components/forum/questions/question/questio
 import { LectureComponent } from './components/forum/lectures/lecture/lecture.component';
 import { LibLectureComponent } from './components/librairie/lib-lecture/lib-lecture.component';
 import { LectureGroupeComponent } from './components/groupe/lecture-groupe/lecture-groupe.component';
+import { CreerGroupeComponent } from './components/groupe/creer-groupe/creer-groupe.component';
 
 @NgModule({
     imports: [
@@ -319,7 +320,8 @@ import { LectureGroupeComponent } from './components/groupe/lecture-groupe/lectu
         QuestionComponent,
         LectureComponent,
         LibLectureComponent,
-        LectureGroupeComponent
+        LectureGroupeComponent,
+        CreerGroupeComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

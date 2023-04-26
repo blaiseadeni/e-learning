@@ -50,6 +50,7 @@ import { QuestionComponent } from './components/forum/questions/question/questio
 import { LectureComponent } from './components/forum/lectures/lecture/lecture.component';
 import { LibLectureComponent } from './components/librairie/lib-lecture/lib-lecture.component';
 import { LectureGroupeComponent } from './components/groupe/lecture-groupe/lecture-groupe.component';
+import { CreerGroupeComponent } from './components/groupe/creer-groupe/creer-groupe.component';
 
 
 @NgModule({
@@ -80,6 +81,7 @@ import { LectureGroupeComponent } from './components/groupe/lecture-groupe/lectu
                     {path: 'conference/video', component: VideoComponent},
                     {path: 'evenement/horaire', component: HoraireComponent},
                     {path: 'conference/groupe', component: GroupeComponent},
+                    {path: 'groupe/creer-groupe', component: CreerGroupeComponent},
                     {path: 'groupe/lecture-groupe', component: LectureGroupeComponent},
                     {path: 'evenement/evenement', component: EvenementComponent},
                     {path: 'evenement/vacance', component: VacanceComponent},

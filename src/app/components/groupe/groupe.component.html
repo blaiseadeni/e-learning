@@ -5,11 +5,11 @@
 			<p-dataView #dv [value]="products" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField" [sortOrder]="sortOrder" layout="grid">
 				<ng-template pTemplate="header">
 					<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
-						<p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Sort By Price" (onChange)="onSortChange($event)"></p-dropdown>
-						<span class="p-input-icon-left mb-2 md:mb-0">
+						<span class="p-input-icon-left mb-2 md:mb-0" style="margin-left: 15px;">
 							<i class="pi pi-search"></i>
 							<input type="search" pInputText placeholder="Search by Name" (input)="dv.filter($event.target.value)">
 						</span>	
+						<button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-success mr-2" style="margin-left: 550px;" routerLink="/groupe/creer-groupe"></button>
 						<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
 					</div>
 				</ng-template>

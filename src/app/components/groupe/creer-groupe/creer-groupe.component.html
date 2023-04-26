@@ -1,0 +1,30 @@
+<div class="grid" >
+    <div class="col-10" style="margin-left: 80px;">
+        <div>
+            <div style="margin-top: 10px; ">
+                <h3 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Créer un nouveau groupe</h3>
+                <p-card >
+                    <h6>Titre</h6>
+                    <input ngClass="col-12" pInputText type="text" class="p-inputtext-sm" placeholder="Exemple: TypeScript " />
+                    <h6>Image du groupe</h6>
+                    <div    > 
+                        <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1200000" label="Import"
+                        chooseLabel="Parcourir" class="mr-2 inline-block" style="margin-bottom: 5px;"></p-fileUpload>
+                        <input ngClass="col-12" disabled pInputText type="text" class="p-inputtext-sm" placeholder="Selectionner une image" style="height: 100px;" />
+                    </div>
+                    
+                    
+                    <h6>Description</h6>
+                    <p-editor [(ngModel)]="text" [style]="{'height':'320px'} "></p-editor>
+                    <div style="margin-top: 10px;">
+                        <!-- <button routerLink="/conference/forum" pButton pRipple label="Annuler" icon="pi pi-times-circle" class="p-button-danger mr-2"></button> -->
+                        <button pButton pRipple label="Soumettre" icon="pi pi-check" class="p-button-success mr-2"></button>
+                    </div>
+                </p-card>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+
