@@ -1,1 +1,27 @@
-<p>live works!</p>
+<div class="grid">
+    <div class="col-12 " style="display:flex;" >
+        <div id="jitsi-iframe"></div>
+        <div >
+            <i (click)="executeCommand('toggleAudio')" class="fas fa-2x grey-color" [ngClass]="isAudioMuted ? 'fa-microphone-slash' : 'fa-microphone'" aria-hidden="true" title="Mute / Unmute"></i>
+            <i (click)="executeCommand('hangup')" class="fas fa-phone-slash fa-2x red-color" aria-hidden="true" title="Leave"></i>
+            <i (click)="executeCommand('toggleVideo')" class="fas fa-2x grey-color" [ngClass]="isVideoMuted ? 'fa-video-slash' : 'fa-video'" aria-hidden="true" title="Start / Stop camera"></i>
+            <i (click)="executeCommand('toggleShareScreen')" class="fas fa-film fa-2x grey-color" aria-hidden="true" title="Share your screen"></i>
+        </div> 
+        <div style="width:300px;">            
+            <p-card header="Vidéoconférence">
+                <div style="display: flex;">
+                    <div> <img src="assets/layout/images/editer.png" alt="logo"  style="height: 30px; width: 30px;"></div>
+                    <div style="margin-left: 10px; font-size: smaller;">
+                        <p> Devenez apprenti chaque jour pour construire une vie que vous méritez. </p>
+                    </div>
+                </div>
+            </p-card>
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    

@@ -168,6 +168,7 @@ import { LectureComponent } from './components/forum/lectures/lecture/lecture.co
 import { LibLectureComponent } from './components/librairie/lib-lecture/lib-lecture.component';
 import { LectureGroupeComponent } from './components/groupe/lecture-groupe/lecture-groupe.component';
 import { CreerGroupeComponent } from './components/groupe/creer-groupe/creer-groupe.component';
+import { WelcomeLiveComponent } from './components/live/welcome-live/welcome-live.component';
 
 @NgModule({
     imports: [
@@ -321,7 +322,8 @@ import { CreerGroupeComponent } from './components/groupe/creer-groupe/creer-gro
         LectureComponent,
         LibLectureComponent,
         LectureGroupeComponent,
-        CreerGroupeComponent
+        CreerGroupeComponent,
+        WelcomeLiveComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

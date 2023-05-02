@@ -186,5 +186,5 @@ export class AppMainComponent {
     isHorizontal() {
         return this.app.horizontalMenu === true;
     }
-
+   
 }

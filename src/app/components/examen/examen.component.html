@@ -1,1 +1,54 @@
-<p>examen works!</p>
+<div class=grid>
+    <div class="col-12">
+        <div class="card px-6 py-12">
+            <div class="col-12 md:col-6">
+                <div class="p-inputgroup">
+                    <span class="p-float-label">
+                        <input pInputText type="text" class="p-inputtext-sm" placeholder="Small"  />  
+                        <label for="inputtext">Libellé</label>
+                    </span>                    
+                </div>
+            </div>
+            <div class="col-12 md:col-6" style="margin-top:5px;">
+                <div class="p-inputgroup">
+                    <span class="p-float-label">
+                        <p-dropdown inputId="dropdown" optionLabel="name"></p-dropdown>
+                        <label for="inputtext">Intitulé du cours</label>
+                    </span>                    
+                </div>
+            </div>
+            <h5>Question</h5>
+            <p>Soyez précis et imaginez que vous posez la question à une autre personne.</p>            
+            <div class="col-12 md:col-6" style="margin-top:5px;">
+                <div class="p-inputgroup">
+                    <span class="p-float-label">
+                        <textarea id="float-input" rows="5" cols="70" pInputTextarea></textarea>
+                        <label for="float-input">Exemple: Angular est basé sur quelle architecture ?</label>
+                    </span>                    
+                </div>
+            </div>
+            
+            <h5>Reponses</h5>
+            <p>Cocher la bonne reponse dans la zone droite </p>
+            <div>
+                <button pButton pRipple label="" icon="pi pi-plus" class="p-button-primary mr-2"></button>
+            </div>
+            <div class="col-12 md:col-6">
+                <div class="p-inputgroup">
+                    <span class="p-float-label">
+                        <input pInputText type="text" class="p-inputtext-sm" placeholder="Small"  />  
+                    </span>       
+                    <p-checkbox  [binary]="true" inputId="binary" style="margin-left:10px; " ></p-checkbox>             
+                </div>
+            </div>
+            <div style="margin-top: 10px;">
+                <button pButton pRipple label="Valider" icon="pi pi-check" class="p-button-primary mr-2"></button>
+            </div>                   
+            <hr style="width:500px;">
+            <div style="margin-top: 10px; margin-left:300px;">
+                <button pButton pRipple label="Annuler" icon="pi pi-check" class="p-button-danger mr-2"></button>
+                <button pButton pRipple label="Terminer" icon="pi pi-check" class="p-button-success mr-2" routerLink="/evaluation/interro" ></button>
+            </div>                   
+        </div>            
+    </div>
+</div>

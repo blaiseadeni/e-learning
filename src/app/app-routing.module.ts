@@ -51,6 +51,7 @@ import { LectureComponent } from './components/forum/lectures/lecture/lecture.co
 import { LibLectureComponent } from './components/librairie/lib-lecture/lib-lecture.component';
 import { LectureGroupeComponent } from './components/groupe/lecture-groupe/lecture-groupe.component';
 import { CreerGroupeComponent } from './components/groupe/creer-groupe/creer-groupe.component';
+import { WelcomeLiveComponent } from './components/live/welcome-live/welcome-live.component';
 
 
 @NgModule({
@@ -76,8 +77,9 @@ import { CreerGroupeComponent } from './components/groupe/creer-groupe/creer-gro
                     {path: 'evaluation/td', component: TdComponent},
                     {path: 'evaluation/interro', component: InterroComponent},
                     {path: 'evaluation/examen', component: ExamenComponent},
-                    {path: 'conference/live', component: LiveComponent},
                     {path: 'conference/forum', component: ForumComponent},
+                    {path: 'conference/live', component: LiveComponent},
+                    {path: 'conference/welcome-live', component: WelcomeLiveComponent},
                     {path: 'conference/video', component: VideoComponent},
                     {path: 'evenement/horaire', component: HoraireComponent},
                     {path: 'conference/groupe', component: GroupeComponent},
@@ -87,31 +89,7 @@ import { CreerGroupeComponent } from './components/groupe/creer-groupe/creer-gro
                     {path: 'evenement/vacance', component: VacanceComponent},
                     {path: 'forum/question', component: QuestionComponent},
                     {path: 'forum/lecture', component: LectureComponent},
-                    {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
-                    {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},
-                    {path: 'uikit/invalidstate', component: InvalidStateDemoComponent},
-                    {path: 'uikit/input', component: InputDemoComponent},
-                    {path: 'uikit/button', component: ButtonDemoComponent},
-                    {path: 'uikit/table', component: TableDemoComponent},
-                    {path: 'uikit/list', component: ListDemoComponent},
-                    {path: 'uikit/tree', component: TreeDemoComponent},
-                    {path: 'uikit/panel', component: PanelsDemoComponent},
-                    {path: 'uikit/overlay', component: OverlaysDemoComponent},
-                    {path: 'uikit/media', component: MediaDemoComponent},
-                    {path: 'uikit/menu', loadChildren: () => import('./demo/view/menus/menus.module').then(m => m.MenusModule)},
-                    {path: 'uikit/message', component: MessagesDemoComponent},
-                    {path: 'uikit/misc', component: MiscDemoComponent},
-                    {path: 'uikit/charts', component: ChartsDemoComponent},
-                    {path: 'uikit/file', component: FileDemoComponent},
-                    {path: 'utilities/icons', component: IconsComponent},
-                    {path: 'pages/empty', component: EmptyDemoComponent},
-                    {path: 'pages/crud', component: AppCrudComponent},
-                    {path: 'pages/calendar', component: AppCalendarComponent},
-                    {path: 'pages/timeline', component: AppTimelineDemoComponent},
-                    {path: 'components/charts', component: ChartsDemoComponent},
-                    {path: 'components/file', component: FileDemoComponent},
-                    {path: 'documentation', component: DocumentationComponent},
-                    {path: 'blocks', component: BlocksComponent},
+                  
                 ]
             },
             {path: 'error', component: AppErrorComponent},
