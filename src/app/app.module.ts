@@ -169,10 +169,12 @@ import { LibLectureComponent } from './components/librairie/lib-lecture/lib-lect
 import { LectureGroupeComponent } from './components/groupe/lecture-groupe/lecture-groupe.component';
 import { CreerGroupeComponent } from './components/groupe/creer-groupe/creer-groupe.component';
 import { WelcomeLiveComponent } from './components/live/welcome-live/welcome-live.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 @NgModule({
     imports: [
         BrowserModule,
+        NgxExtendedPdfViewerModule,
         EditorModule,
         FormsModule,
         AppRoutingModule,

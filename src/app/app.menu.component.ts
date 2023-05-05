@@ -6,11 +6,11 @@ import { AppMainComponent } from './app.main.component';
     templateUrl: './app.menu.component.html'
 })
 export class AppMenuComponent implements OnInit {
-
+    
     model: any[];
- 
+    
     constructor(public appMain: AppMainComponent) {}
-
+    
     ngOnInit() {
         this.model = [
             {label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/']},
@@ -23,14 +23,14 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Cours', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/configuration/cours']},
                     {label: 'Etudiants', icon: 'pi pi-fw pi-users', routerLink: ['/configuration/etudiant']},
                     {label: 'Librairie', icon: 'pi pi-fw pi-book', routerLink: ['/configuration/librairie'], class: 'rotated-icon'},
-                   
+                    
                 ]
             },
             {
                 label: 'Evaluations', icon: 'pi pi-fw pi-file', routerLink: [''],
                 items: [
                     {label: 'Créer', icon: 'pi pi-fw pi-circle-fill', routerLink: ['/evaluation/examen']},
-                   // {label: 'Epreuves', icon: 'pi pi-fw pi-stop-circle', routerLink: ['/evaluation/td']},
+                    // {label: 'Epreuves', icon: 'pi pi-fw pi-stop-circle', routerLink: ['/evaluation/td']},
                     // {label: 'Travail pratique', icon: 'pi pi-fw pi-spinner', routerLink: ['/evaluation/tp']},
                     {label: 'Liste', icon: 'pi pi-fw pi-stop-circle', routerLink: ['/evaluation/interro']},
                 ]
@@ -39,7 +39,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'Conférence', icon: 'pi pi-fw pi-desktop', routerLink: [''],
                 items: [
                     {label: 'Direct', icon: 'pi pi-fw pi-video', routerLink: ['/conference/welcome-live']},
-                    {label: 'Forum', icon: 'pi pi-fw pi-comments', routerLink: ['/conference/forum']},
+                    {label: 'Forum', icon: 'pi pi-fw pi-comments',  routerLink: ['/conference/forum']},
                     {label: 'Vidéos', icon: 'pi pi-fw pi-youtube', routerLink: ['/conference/video']},
                     {label: 'Groupes', icon: 'pi pi-fw pi-users', routerLink: ['/conference/groupe']},
                 ]
@@ -55,10 +55,10 @@ export class AppMenuComponent implements OnInit {
             },
         ];
     }
-
+    
     onMenuClick() {
         this.appMain.menuClick = true;
     }
-
-   
+    
+    
 }
