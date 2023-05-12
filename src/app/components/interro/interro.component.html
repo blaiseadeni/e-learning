@@ -8,7 +8,7 @@
                         routerLink="/evaluation/examen"></button>
                     </div>
                 </ng-template>
-              
+                
             </p-toolbar>
             
             <p-table #dt [value]="products" [columns]="cols" responsiveLayout="scroll" [rows]="12"
@@ -81,9 +81,7 @@
                             <!-- <button pButton pRipple icon="pi pi-fw pi-eye"
                                 class="p-button-rounded p-button-primary mr-2"
                                 (click)="editProduct(product)"></button> -->
-                                <button pButton pRipple icon="pi pi-pencil"
-                                class="p-button-rounded p-button-primary mr-2"
-                                (click)="editProduct(product)"></button>
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary mr-2" routerLink="/evaluation/tp"></button>
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
                                 (click)="deleteProduct(product)"></button>
                             </div>

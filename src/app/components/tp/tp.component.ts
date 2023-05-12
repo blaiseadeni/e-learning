@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { clearScreenDown } from 'readline';
 import { interval } from 'rxjs';
 import { QuestionService } from 'src/app/services/question/question.service';
 
@@ -22,6 +23,8 @@ export class TpComponent {
   
   gfg1: number = 0;
   gfg2: number = 0;
+  alphabets = [{ a: 'a', b: 'b', c: 'c', d: 'd', e: 'e',}]
+  
   constructor(private questionService: QuestionService) { }
   
   ngOnInit(): void {
@@ -115,7 +118,7 @@ export class TpComponent {
     this.currentQuestion = 0;
     this.progress = "0";
   }
- 
+  
   getProgressPercent() {
     this.progress = ((this.currentQuestion / this.questionList.length) * 100).toString();
     return this.progress;

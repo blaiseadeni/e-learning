@@ -5,12 +5,12 @@
                 <ng-template pTemplate="left">
                     <div class="my-2">
                         <div class="image">
-                            <img src="https://img.icons8.com/color/96/000000/angularjs.png" width="90" alt="logo">
+                            <img src="assets/layout/images/quiz.jpeg" width="150" alt="logo" style="border-radius: 10px;">
                         </div> 
                     </div>
-                    <div class="my-2" style="margin-left: 300px;">
-                        <h4 style="font-family: cursive;">Angular & TypeScript Quiz!</h4>
-                        <span style="font-style: italic;">Welcome {{name}}</span>
+                    <div class="my-2" style="margin-left: 400px; font-family: 'Courier New', Courier, monospace; ">
+                        <h4 style="font-family: cursive;">ISI-TEST </h4>
+                        <span style="font-style: italic;">Bonne chance {{name}}</span>
                     </div>
                 </ng-template>               
             </p-toolbar>
@@ -45,11 +45,12 @@
                                 <h3>{{currentQuestion+1}}. {{questionList[currentQuestion]?.questionText}}</h3>
                             </div>
                         </div>
-                        <div class="options">
-                                                        <ol *ngFor="let option of questionList[currentQuestion]?.options">
-                                <li (click)="answer(currentQuestion+1,option)">
-                                    <div appChangeBg [isCorrect]="option.correct" class="card">
-                                       {{option.text}}
+                        <div class="options" >
+                            <ol *ngFor="let option of questionList[currentQuestion]?.options, let i=index" >
+                                {{i+1}}
+                                <li  (click)="answer(currentQuestion+1,option)" >
+                                    <div appChangeBg [isCorrect]="option.correct" class="card" style="background-color: rgb(77, 125, 170); color: aliceblue;">
+                                        {{option.text}}
                                     </div>
                                 </li>
                                 
@@ -65,14 +66,15 @@
                     <ng-container *ngIf="isQuizCompleted">
                         <div class="row d-flex justify-content-between">
                             <div lass="result text-left col-md-6 col-sm-12">
-                                <img style="width: 40%;" class="img-fluid col-sm-12 mx-auto" src="https://icon-library.com/images/celebration-icon-png/celebration-icon-png-7.jpg" alt="">
+                                <img src="assets/layout/images/result.jpeg" width="350px" alt="logo" style="border-radius: 10px;" class="img-fluid col-sm-12 mx-auto">
+                                <!-- <img style="width: 40%;" class="img-fluid col-sm-12 mx-auto" src="https://icon-library.com/images/celebration-icon-png/celebration-icon-png-7.jpg" alt=""> -->
                             </div>
-                            <div class="result text-right col-md-6 col-sm-12" style="margin-top: -20em;">
-                                <h3>Congratulations!! <br>You have completed the quiz. <br>Below is your result:</h3>
-                                <p>Total Question Attempted : {{questionList.length}} </p>
-                                <p>Total Correct Answered   : {{correctAnswer}} </p>
-                                <p>Total Wrong Answered     : {{inCorrectAnswer}} </p>
-                                <p>Your Score               : {{points}} Points </p>
+                            <div class="result text-right col-md-6 col-sm-12" style="margin-top: -15em;">
+                                <h3>Toutes nos félicitations!! <br>Vous avez terminé le quiz. <br>Ci-dessous est votre résultat:</h3>
+                                <p>Nombre total de questions tentées : {{questionList.length}} </p>
+                                <p>Nombre total de réponses correctes: {{correctAnswer}} </p>
+                                <p>Nombre total de réponses erronées : {{inCorrectAnswer}} </p>
+                                <p>Votre Score                       : {{points}} Points </p>
                             </div>
                         </div>
                     </ng-container>                    

@@ -65,7 +65,7 @@ export class EvenementComponent {
 
     this.options = {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-      initialDate: '2021-02-01',
+      initialDate: '2023-05-11',
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
