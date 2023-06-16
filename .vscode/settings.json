@@ -3,8 +3,14 @@
     "gitConfigUser.profiles": [
         {
             "label": "git",
-            "email": "blaiseadeni@gmail.com",
             "userName": "blaiseadeni",
+            "email": "blaiseadeni@gmail.com",
+            "selected": false
+        },
+        {
+            "label": "adimin",
+            "email": "blaiseadeni@gmail.com",
+            "userName": "adimin",
             "selected": true
         }
     ]

@@ -1,0 +1,46 @@
+<div class="login-body" [ngClass]="{'layout-dark': dark, 'layout-light': !dark}">    
+    <div class="login-content">
+        <div class="night-switch">
+            <p-button styleClass="dark-switch" icon="pi pi-circle-on" (click)="dark = true"></p-button>
+            <p-button styleClass="light-switch" icon="pi pi-circle-off" (click)="dark = false"></p-button>
+        </div>
+        <div class="login-panel">
+            <div class="login-panel-content">
+                <div class="logo">
+                    <img src="assets/layout/images/logo-mirage@2x.png" alt="mirage-layout" />
+                </div>
+                <h4>S'inscrire</h4>
+                <p style="margin-top: -20px;">Entrez les détails pour créer votre compte</p>
+                <div class="forms">
+                    <div class="login-input-wrapper">
+                        <label for="username">Nom d'utilisateur</label>
+                        <input id="username" pInputText placeholder="Entrez votre nom d'utilisateur" />
+                        <i class="pi pi-user"></i>
+                    </div>
+                    <div class="login-input-wrapper">
+                        <label for="username">Email</label>
+                        <input id="username" pInputText placeholder="Entrez votre nom d'utilisateur" />
+                        <i class="pi pi-user"></i>
+                    </div>
+                    <div class="login-input-wrapper">
+                        <label for="username">Mot de passe</label>
+                        <input type="password" id="password" placeholder="Entrez votre mot de passe" pPassword
+                        [feedback]="false" />
+                        <i class="pi pi-lock"></i>
+                    </div>
+                    
+                    <div class="login-input-wrapper">
+                        <label for="password">Confirmez le mot de passe</label>
+                        <input type="password" id="password" placeholder="Entrez votre mot de passe" pPassword
+                        [feedback]="false" />
+                        <i class="pi pi-lock"></i>
+                    </div>
+                    <p>Déjà enregistré?<a routerLink="/login"> Connexion</a> </p>
+                    <div class="buttons">
+                        <button pButton type="button" [routerLink]="['/admin']" label="Enregistrer"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="desert"></div>
+        </div>
+    </div>

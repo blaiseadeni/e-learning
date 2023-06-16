@@ -169,13 +169,26 @@ import { LibLectureComponent } from './components/librairie/lib-lecture/lib-lect
 import { LectureGroupeComponent } from './components/groupe/lecture-groupe/lecture-groupe.component';
 import { CreerGroupeComponent } from './components/groupe/creer-groupe/creer-groupe.component';
 import { WelcomeLiveComponent } from './components/live/welcome-live/welcome-live.component';
+
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { AdminComponent } from './components/dashboard/admin/admin.component';
+import { StudentComponent } from './components/dashboard/student/student.component';
+import { TeacherComponent } from './components/dashboard/teacher/teacher.component';
+import { InscriptionComponent } from './components/compte/inscription/inscription.component';
+// import {VgCoreModule} from '@videogular/ngx-videogular/core';
+// import {VgControlsModule} from '@videogular/ngx-videogular/controls';
+// import {VgOverlayPlayModule} from '@videogular/ngx-videogular/overlay-play';
+// import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
 
 @NgModule({
     imports: [
         BrowserModule,        
         ReactiveFormsModule,
         NgxExtendedPdfViewerModule,
+        // VgCoreModule,        
+        // VgControlsModule,
+        // VgOverlayPlayModule,
+        // VgBufferingModule,
         EditorModule,
         FormsModule,
         AppRoutingModule,
@@ -261,7 +274,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
         TooltipModule,
         TreeModule,
         TreeTableModule,
-        VirtualScrollerModule,
+        VirtualScrollerModule, 
     ],
     declarations: [
         AppComponent,
@@ -326,7 +339,11 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
         LibLectureComponent,
         LectureGroupeComponent,
         CreerGroupeComponent,
-        WelcomeLiveComponent
+        WelcomeLiveComponent,
+        AdminComponent,
+        StudentComponent,
+        TeacherComponent,
+        InscriptionComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

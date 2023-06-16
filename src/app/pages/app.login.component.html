@@ -1,5 +1,5 @@
 <div class="login-body" [ngClass]="{'layout-dark': dark, 'layout-light': !dark}">
-
+    
     <div class="login-content">
         <div class="night-switch">
             <p-button styleClass="dark-switch" icon="pi pi-circle-on" (click)="dark = true"></p-button>
@@ -10,29 +10,31 @@
                 <div class="logo">
                     <img src="assets/layout/images/logo-mirage@2x.png" alt="mirage-layout" />
                 </div>
-                <p>Bienvenue, veuillez utiliser ce formulaire pour vous connectez</p>
+                <h4>Bienvenue</h4>
+                <p>Besoin d'un compte?<a routerLink="/inscription"> S'inscrire</a> </p>
+                
                 <div class="forms">
                     <div class="login-input-wrapper">
                         <label for="username">Utilisateur</label>
                         <input id="username" pInputText placeholder="Entrez votre nom d'utilisateur" />
                         <i class="pi pi-user"></i>
                     </div>
-
+                    
                     <div class="login-input-wrapper">
                         <label for="password">Mot de passe</label>
                         <input type="password" id="password" placeholder="Entrez votre mot de passe" pPassword
-                            [feedback]="false" />
+                        [feedback]="false" />
                         <i class="pi pi-lock"></i>
                     </div>
-
+                    
                     <div class="col-12">
                         <p-checkbox [(ngModel)]="checked" label="Souvenez-vous de moi" value="SaveInfo"
-                            binary="true"></p-checkbox>
+                        binary="true"></p-checkbox>
                     </div>
-
+                    
                     <div class="buttons">
                         <button pButton type="button" [routerLink]="['/admin']" label="Connexion"></button>
-                        <a href="#" class="secondary-button" [routerLink]="['/admin']">Mot de passe oublier?</a>
+                        <a href="#" class="secondary-button" [routerLink]="['/inscription']">Mot de passe oublier?</a>
                     </div>
                 </div>
             </div>

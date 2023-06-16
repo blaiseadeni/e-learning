@@ -28,7 +28,6 @@
                             "src/favicon.ico",
                             "src/upload.php",
                             "src/assets",
-                            "src/assets",
                             {
                                 "glob": "**/*",
                                 "input": "node_modules/ngx-extended-pdf-viewer/assets/",
@@ -37,13 +36,11 @@
                         ],
                         "styles": [
                             "src/styles.scss",
-                            "node_modules/quill/dist/quill.core.css",
-                            "node_modules/quill/dist/quill.snow.css"
+                            "node_modules/@videogular/ngx-videogular/fonts/videogular.css"
                         ],
                         "scripts": [
                             "node_modules/prismjs/prism.js",
-                            "node_modules/prismjs/components/prism-typescript.js",
-                            "node_modules/quill/dist/quill.js"
+                            "node_modules/prismjs/components/prism-typescript.js"
                         ]
                     },
                     "configurations": {

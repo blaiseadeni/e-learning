@@ -36,6 +36,7 @@ export class HoraireComponent {
   constructor(private productService: ProductService, private messageService: MessageService,
     private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) {
     this.breadcrumbService.setItems([
+      { label: 'Annonces' },
       { label: 'Horaire' },
     ]);
   }

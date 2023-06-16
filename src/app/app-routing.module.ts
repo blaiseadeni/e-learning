@@ -52,7 +52,9 @@ import { LibLectureComponent } from './components/librairie/lib-lecture/lib-lect
 import { LectureGroupeComponent } from './components/groupe/lecture-groupe/lecture-groupe.component';
 import { CreerGroupeComponent } from './components/groupe/creer-groupe/creer-groupe.component';
 import { WelcomeLiveComponent } from './components/live/welcome-live/welcome-live.component';
-
+import { TeacherComponent } from './components/dashboard/teacher/teacher.component';
+import { StudentComponent } from './components/dashboard/student/student.component';
+import { InscriptionComponent } from './components/compte/inscription/inscription.component';
 
 @NgModule({
     imports: [
@@ -66,6 +68,8 @@ import { WelcomeLiveComponent } from './components/live/welcome-live/welcome-liv
                 path: '', component: AppMainComponent,
                 children: [
                     {path: 'admin', component: DashboardDemoComponent},
+                    {path: 'teacher', component: TeacherComponent},
+                    {path: 'student', component: StudentComponent},
                     {path: 'configuration/departement', component: DepartementComponent},
                     {path: 'configuration/promotion', component: PromotionComponent},
                     {path: 'configuration/cours', component: CoursComponent},
@@ -88,14 +92,14 @@ import { WelcomeLiveComponent } from './components/live/welcome-live/welcome-liv
                     {path: 'evenement/evenement', component: EvenementComponent},
                     {path: 'evenement/vacance', component: VacanceComponent},
                     {path: 'forum/question', component: QuestionComponent},
-                    {path: 'forum/lecture', component: LectureComponent},
-                  
+                    {path: 'forum/lecture', component: LectureComponent},                    
                 ]
             },
             {path: 'error', component: AppErrorComponent},
             {path: 'accessdenied', component: AppAccessdeniedComponent},
             {path: 'notfound', component: AppNotfoundComponent},
             {path: 'login', component: AppLoginComponent},
+            {path: 'inscription', component: InscriptionComponent},
             {path: '**', redirectTo: '/notfound'},           
         ], {scrollPositionRestoration: 'enabled'})
     ],

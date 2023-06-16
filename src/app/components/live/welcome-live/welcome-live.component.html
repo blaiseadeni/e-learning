@@ -1,15 +1,32 @@
 <div class="grid">
-    <div class="col-5" style="margin-left:280px;">
-        <div class="card">
-            <div>
-                <h5>Bienvenue</h5>
-                <label>Titre du cours</label><br>
-                <input pInputText type="text" class="p-inputtext-sm" placeholder="Saisir le titre du cours"  style="width:390px;"/><br>
-                <label>Pseudo</label><br>
-                <input pInputText type="text" class="p-inputtext-sm" placeholder="Saisir un pseudo" style="width:390px;" /><br><br>
-                <button routerLink="/conference/live" pButton pRipple label="Demarrer" icon="pi pi-play" class="p-button-primary mr-2"></button>
-                <!-- <button pButton pRipple label="Annuler" icon="pi pi-trash" class="p-button-danger"></button> -->
+    <div class="col-5" style="margin-left: 300px;">
+        <div class="card"> 
+            <h6>Prière de remplir les informations afin de lancer le live</h6>                     
+            <form >
+                <div class="grid p-fluid mt-3">                    
+                    <div class="field col-12 md:col-12">
+                        <label for="">Intitule</label>
+                        <span class="p-float-label">
+                            <input type="text" id="inputtext" pInputText >
+                            <label for="inputtext">Intitule</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="grid p-fluid mt-0">                    
+                    
+                    <div class="field col-12 md:col-12">
+                        <label for="">Cours</label>
+                        <span class="p-float-label">
+                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" 
+                            optionLabel="name">
+                        </p-dropdown>
+                        <label for="inputtext">Cours</label>
+                    </span>
+                </div>
             </div>
-        </div>        
-    </div>
+            <button pButton pRipple label="Demarrer" icon="pi pi-play" class="p-button-primary mr-2" routerLink="/conference/live"> </button>
+            <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-danger mr-2"> </button>
+        </form>
+    </div>        
+</div>
 </div>

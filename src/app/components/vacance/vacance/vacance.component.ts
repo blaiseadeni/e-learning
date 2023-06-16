@@ -36,7 +36,8 @@ export class VacanceComponent {
   constructor(private productService: ProductService, private messageService: MessageService,
     private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) {
     this.breadcrumbService.setItems([
-      { label: 'Vacances' },
+      { label: 'Anonces' },
+      { label: 'Evenement' },
     ]);
   }
 
