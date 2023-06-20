@@ -175,6 +175,8 @@ import { AdminComponent } from './components/dashboard/admin/admin.component';
 import { StudentComponent } from './components/dashboard/student/student.component';
 import { TeacherComponent } from './components/dashboard/teacher/teacher.component';
 import { InscriptionComponent } from './components/compte/inscription/inscription.component';
+import { ChatComponent } from './components/chat/chat.component';
+import { ChatMessagesComponent } from './components/chat-messages/chat-messages.component';
 // import {VgCoreModule} from '@videogular/ngx-videogular/core';
 // import {VgControlsModule} from '@videogular/ngx-videogular/controls';
 // import {VgOverlayPlayModule} from '@videogular/ngx-videogular/overlay-play';
@@ -343,7 +345,9 @@ import { InscriptionComponent } from './components/compte/inscription/inscriptio
         AdminComponent,
         StudentComponent,
         TeacherComponent,
-        InscriptionComponent
+        InscriptionComponent,
+        ChatComponent,
+        ChatMessagesComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

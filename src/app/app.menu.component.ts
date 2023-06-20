@@ -49,6 +49,7 @@ export class AppMenuComponent implements OnInit {
                 {label: 'Forum', icon: 'pi pi-fw pi-comments',  routerLink: ['/conference/forum']},
                 {label: 'Vidéos', icon: 'pi pi-fw pi-youtube', routerLink: ['/conference/video']},
                 {label: 'Groupes', icon: 'pi pi-fw pi-users', routerLink: ['/conference/groupe']},
+                {label: 'Chat', icon: 'pi pi-fw pi-comments', routerLink: ['/conference/chat']},
             ]
         },
         {
