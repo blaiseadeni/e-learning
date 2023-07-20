@@ -2,7 +2,7 @@
     <p-toast></p-toast>
     <div class="col-12">
         <div class="card px-6 py-6">
-            <h5 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">ISI-DEPS</h5>
+            <h5 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">ISI-ORIENT</h5>
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
@@ -14,14 +14,15 @@
                     </div>
                 </ng-template>
             </p-toolbar>
-            <p-table #dt [value]="departements" [columns]="cols" responsiveLayout="scroll" [rows]="12"
+            
+            <p-table #dt [value]="orientations" [columns]="cols" responsiveLayout="scroll" [rows]="12"
             [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="12"
             [paginator]="true" [rowsPerPageOptions]="[12,20,30]" [showCurrentPageReport]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
             selectionMode="multiple" [rowHover]="true" dataKey="id">
             <ng-template pTemplate="caption">
                 <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                    <h5 class="m-0">Departements</h5>
+                    <h5 class="m-0">Orientations</h5>
                     <span class="block mt-2 md:mt-0 p-input-icon-left">
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
@@ -35,9 +36,9 @@
                         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                     </th>
                     <th pSortableColumn="code">#<p-sortIcon field="code"></p-sortIcon></th>
-                    <th pSortableColumn="name">Departement<p-sortIcon field="name"></p-sortIcon></th>
-                    <th pSortableColumn="inventoryStatus">Date<p-sortIcon field="inventoryStatus"></p-sortIcon></th>
-                    <th pSortableColumn="name">Section <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">Option<p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">Orientation <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="inventoryStatus">Site<p-sortIcon field="inventoryStatus"></p-sortIcon></th>
                     <th ></th>
                 </tr>
             </ng-template>
@@ -46,21 +47,21 @@
                     <td>
                         <p-tableCheckbox [value]="departement"></p-tableCheckbox>
                     </td>
-                    <td style="width:10%; min-width:5rem;"><span class="p-column-title">id</span>
+                    <td style="width:20%; min-width:5rem;"><span class="p-column-title">id</span>
                         {{departement.id}}
                     </td>
                     
-                    <td style="width:30%; min-width:12rem;">
+                    <td style="width:20%; min-width:12rem;">
                         <span class="p-column-title">libelle</span>
-                        {{departement.libelle}}
+                        {{departement.optionId}}
                     </td>
                     <td style="width:20%; min-width:12rem;">
                         <span class="p-column-title">dateC</span>
-                        {{departement.dateC | date:'dd/MM/yyyy' }}
+                        {{departement.libelle}}
                     </td>
                     <td style="width:20%; min-width:12rem;">
                         <span class="p-column-title">sectionId</span>
-                        {{departement.sectionId}}
+                        {{departement.siteId}}
                     </td>
                     
                     
@@ -78,10 +79,10 @@
             </ng-template>
         </p-table>
     </div>
-    <p-dialog [(visible)]="departementDialog" [style]="{width: '450px'}" header="Departement" [modal]="true"
+    <p-dialog [(visible)]="orientationDialog" [style]="{width: '450px'}" header="Orientation" [modal]="true"
     class="p-fluid">
     <ng-template pTemplate="content">
-        <form [formGroup]="departementForm">
+        <form [formGroup]="orientationForm">
             <div class="grid p-fluid mt-3">
                 <div class="col-12 md:col-12">
                     <div class="p-inputgroup">
@@ -89,54 +90,65 @@
                             <p-dropdown 
                             inputId="dropdown"
                             [autoDisplayFirst]="false"
-                            [options]="sections" 
+                            [options]="options" 
                             [filter]="true" 
                             filterBy="libelle" 
                             [showClear]="true"
                             optionLabel="libelle" 
                             appendTo="body"
-                            id="sectionId"
+                            id="optionId"
                             required
                             autofocus
-                            placeholder="section"
-                            formControlName="sectionId">
+                            placeholder="Option"
+                            formControlName="optionId">
                         </p-dropdown>
                         <small
                         class="p-error"
                         *ngIf="
-                        departementForm.controls['sectionId'].dirty &&
-                        departementForm.hasError('required', 'sectionId')
+                        orientationForm.controls['optionId'].dirty &&
+                        orientationForm.hasError('required', 'optionId')
                         "
-                        >* code is required.</small
+                        >* Option obligatoire.</small
                         >
-                        <label for="inputtext">Section</label>
+                        <label for="inputtext">Option</label>
                     </span>
-                    <button type="button" pButton pRipple icon="pi pi-plus"
-                    styleClass="p-button-warn"
-                    (click)="openSection()"></button>
                 </div>
             </div>
-            <!-- <div class="field col-12 md:col-4">
-                <span class="p-float-label">
-                    <p-calendar 
-                    [showIcon]="true" 
-                    appendTo="body"
-                    id="dateC"
-                    required
-                    autofocus
-                    placeholder="Date"
-                    formControlName="dateC">
-                </p-calendar>
-                <small
-                class="p-error"
-                *ngIf="
-                departementForm.controls['sectionId'].dirty &&
-                departementForm.hasError('required', 'sectionId')
-                "
-                >* code is required.</small
-                >
-            </span>
-        </div> -->
+            
+            <div class="col-12 md:col-12">
+                <div class="p-inputgroup">
+                    <span class="p-float-label">
+                        <p-dropdown 
+                        inputId="dropdown"
+                        [autoDisplayFirst]="false"
+                        [options]="sites" 
+                        [filter]="true" 
+                        filterBy="libelle" 
+                        [showClear]="true"
+                        optionLabel="libelle" 
+                        appendTo="body"
+                        id="siteId"
+                        required
+                        autofocus
+                        placeholder="Site"
+                        formControlName="siteId">
+                    </p-dropdown>
+                    <small
+                    class="p-error"
+                    *ngIf="
+                    orientationForm.controls['siteId'].dirty &&
+                    orientationForm.hasError('required', 'siteId')
+                    "
+                    >* Site obligatoire.</small
+                    >
+                    <label for="inputtext">Site</label>
+                </span>
+                <button type="button" pButton pRipple icon="pi pi-plus"
+                styleClass="p-button-warn"
+                (click)="openSite()"></button>
+            </div>
+        </div>
+        
         <div class="field col-12 md:col-12">
             <span class="p-float-label">
                 <input type="text" 
@@ -144,16 +156,16 @@
                 id="libelle" 
                 required
                 autofocus
-                placeholder="Departement"
+                placeholder="Orientation"
                 formControlName="libelle">
-                <label for="inputtext">Departement</label>
+                <label for="inputtext">Orientation</label>
                 <small
                 class="p-error"
                 *ngIf="
-                departementForm.controls['libelle'].dirty &&
-                departementForm.hasError('required', 'libelle')
+                orientationForm.controls['libelle'].dirty &&
+                orientationForm.hasError('required', 'libelle')
                 "
-                >* Departement obligatoire.</small
+                >* Orientation obligatoire.</small
                 >
             </span>
             
@@ -161,71 +173,53 @@
     </div>
 </form>
 </ng-template>
+
 <ng-template pTemplate="footer">
     <button pButton pRipple label="Fermer" icon="pi pi-times" class="p-button-text"
     (click)="hideDialog()"></button>
     <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text"
-    (click)="addDep()"></button>
+    (click)="addOrientation()"></button>
 </ng-template>
 </p-dialog>
 
-<p-dialog [(visible)]="sectionDialog" [style]="{width: '400px'}" header="Section" [modal]="true"
+<p-dialog [(visible)]="siteDialog" [style]="{width: '450px'}" header="Site" [modal]="true"
 class="p-fluid">
 <ng-template pTemplate="content">
-    <form [formGroup]="sectionForm">
+    <form [formGroup]="siteForm">
         <div class="grid p-fluid mt-3">
+            
             <div class="field col-12 md:col-12">
                 <span class="p-float-label">
-                    <input type="text" id="inputtext"
+                    <input type="text" 
                     pInputText 
-                    id="designation"
+                    id="libelle" 
                     required
                     autofocus
-                    placeholder="designation"
-                    formControlName="designation"
-                    />
+                    placeholder="Site"
+                    formControlName="libelle">
+                    <label for="inputtext">Orientation</label>
                     <small
                     class="p-error"
                     *ngIf="
-                    sectionForm.controls['designation'].dirty &&
-                    sectionForm.hasError('required', 'designation')
+                    orientationForm.controls['libelle'].dirty &&
+                    orientationForm.hasError('required', 'libelle')
                     "
-                    >* Designation obligatoire.</small
+                    >* Orientation obligatoire.</small
                     >
-                    <label for="inputtext">Désignation</label>
                 </span>
+                
             </div>
         </div>
     </form>
-    
 </ng-template>
 
 <ng-template pTemplate="footer">
     <button pButton pRipple label="Fermer" icon="pi pi-times" class="p-button-text"
-    (click)="hideSection()"></button>
+    (click)="hideSiteDialog()"></button>
     <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text"
-    (click)="addSection()"></button>
+    (click)="addSite()"></button>
 </ng-template>
 </p-dialog>
-
-<!-- <p-dialog [(visible)]="sectionDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-    
-    <ng-template pTemplate="header">
-        <div class="field col-12 md:col-12">
-            <span class="p-float-label">
-                <input type="text" id="inputtext" pInputText >
-                <label for="inputtext">Departement</label>
-            </span>
-        </div>
-        
-    </ng-template>
-    <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Nom"
-        (click)="deleteProductDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui"
-        (click)="confirmDelete()"></button>
-    </ng-template>
-</p-dialog> -->
 
 <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
     <div class="flex align-items-center justify-content-center">

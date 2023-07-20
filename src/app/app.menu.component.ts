@@ -25,10 +25,12 @@ export class AppMenuComponent implements OnInit {
             label: 'Configurations', icon: 'pi pi-fw pi-cog', routerLink: [''],
             items: [
                 {label: 'Départements', icon: 'pi pi-fw pi-id-card', routerLink: ['/configuration/departement']},
-                {label: 'Promotions', icon: 'pi pi-fw pi-paypal', routerLink: ['/configuration/promotion']},
+                {label: 'Options', icon: 'pi pi-fw pi-id-card', routerLink: ['/configuration/option']},
+                {label: 'Orientations', icon: 'pi pi-fw pi-paypal', routerLink: ['/configuration/orientation']},
+                {label: 'Auditoires', icon: 'pi pi-fw pi-paypal', routerLink: ['/configuration/promotion']},
+                {label: 'Etudiants', icon: 'pi pi-fw pi-users', routerLink: ['/configuration/etudiant']},
                 {label: 'Enseignants', icon: 'pi pi-fw pi-user ', routerLink: ['/configuration/enseignant']},
                 {label: 'Cours', icon: 'pi pi-fw pi-file-pdf', routerLink: ['/configuration/cours']},
-                {label: 'Etudiants', icon: 'pi pi-fw pi-users', routerLink: ['/configuration/etudiant']},
                 {label: 'Librairie', icon: 'pi pi-fw pi-book', routerLink: ['/configuration/librairie'], class: 'rotated-icon'},
                 
             ]

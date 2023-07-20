@@ -34,6 +34,8 @@ import { StudentComponent } from './components/dashboard/student/student.compone
 import { InscriptionComponent } from './components/compte/inscription/inscription.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { ChatMessagesComponent } from './components/chat-messages/chat-messages.component';
+import { OrientationComponent } from './components/orientation/orientation.component';
+import { OptionComponent } from './components/option/option.component';
 
 @NgModule({
     imports: [
@@ -50,6 +52,8 @@ import { ChatMessagesComponent } from './components/chat-messages/chat-messages.
                     {path: 'teacher', component: TeacherComponent},
                     {path: 'student', component: StudentComponent},
                     {path: 'configuration/departement', component: DepartementComponent},
+                    {path: 'configuration/option', component: OptionComponent},
+                    {path: 'configuration/orientation', component: OrientationComponent},
                     {path: 'configuration/promotion', component: PromotionComponent},
                     {path: 'configuration/cours', component: CoursComponent},
                     {path: 'configuration/enseignant', component: EnseignantComponent},

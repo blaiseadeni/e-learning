@@ -1,4 +1,4 @@
-<div class="grid">
+<!-- <div class="grid">
     <div class="col-5" style="margin-left: 300px;">
         <div class="card"> 
             <h6>Prière de remplir les informations afin de lancer le live</h6>                     
@@ -28,5 +28,83 @@
             <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-danger mr-2"> </button>
         </form>
     </div>        
+</div>
+</div> -->
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <div   class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                <div class="col-12 md:col-4">
+                    <label>Libellé</label>               
+                    <div class="p-inputgroup">
+                        <span class="p-float-label">
+                            <input pInputText type="text" class="p-inputtext-sm" placeholder="Small" formControlName="libelle" placeholder="libelle" />  
+                        </span>                    
+                    </div>
+                </div>
+                <div class="col-12 md:col-4"> 
+                    <label>Cours</label>             
+                    <div class="p-inputgroup">
+                        <span class="p-float-label">
+                            <p-dropdown
+                            id="rue"
+                            name="rue"
+                            [options]=""
+                            optionLabel="designation"
+                            placeholder="selectionne un cours"
+                            appendTo="body"
+                            formControlName=""
+                            >
+                        </p-dropdown>
+                    </span>                    
+                </div>
+            </div>
+            <div class="col-12 md:col-4"> 
+                <label>Auditoire</label>             
+                <div class="p-inputgroup">
+                    <span class="p-float-label">
+                        <p-dropdown
+                        id="rue"
+                        name="rue"
+                        [options]=""
+                        optionLabel="designation"
+                        placeholder="selectionne un auditoire"
+                        appendTo="body"
+                        formControlName=""
+                        >
+                    </p-dropdown>
+                </span>                    
+            </div>
+        </div>
+    </div>            
+    <div   class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+        <div class="col-12 md:col-4">   
+            <label>Date</label>            
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input pInputText type="date" class="p-inputtext-sm" placeholder="Small" formControlName="libelle" />  
+                </span>                    
+            </div>
+        </div>
+        <div class="col-12 md:col-4">               
+            <label>Heure Début</label>
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input pInputText type="time" class="p-inputtext-sm" placeholder="Small" formControlName="libelle" />  
+                </span>                    
+            </div>
+        </div>
+        <div class="col-12 md:col-4">
+            <label>Heure Fin</label>               
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input pInputText type="time" class="p-inputtext-sm" placeholder="Small" formControlName="libelle" />  
+                </span>                    
+            </div>
+        </div>
+    </div>  
+    <div class="button-container">
+        <button  pButton pRipple label="Demarrer la sceance" icon="pi pi-play" class="p-button-primary mr-2" routerLink="/conference/live"> </button>
+    </div>
 </div>
 </div>

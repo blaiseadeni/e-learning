@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { parse } from 'path';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { BreadcrumbService } from 'src/app/breadcrumb.service';
-import { Product } from 'src/app/demo/domain/product';
-import { ProductService } from 'src/app/demo/service/productservice';
+import { EtudiantService } from 'src/app/services/etudiant/etudiant.service';
+
 
 @Component({
   selector: 'app-etudiant',
@@ -11,139 +13,222 @@ import { ProductService } from 'src/app/demo/service/productservice';
   providers: [MessageService, ConfirmationService],
   styleUrls: ['./etudiant.component.scss']
 })
+
+
 export class EtudiantComponent {
-
-  productDialog: boolean = false;
-
-  deleteProductDialog: boolean = false;
-
-  deleteProductsDialog: boolean = false;
-
-  products: Product[] = [];
-
-  product: Product = {};
-
-  selectedProducts: Product[] = [];
-
+  
+  image_url: any;
+  
+  file?:File;
+  
+  sexes: any = [];
+  
+  auditoires: any = [];
+  
+  etudiantForm: FormGroup;
+  etudiant: any = {};
+  etudiants: any = [];
+  etudiantDialog: boolean = false;
+  
   submitted: boolean = false;
-
+  
   cols: any[] = [];
-
-  statuses: any[] = [];
-
+  
   rowsPerPageOptions = [5, 10, 20];
-
-  constructor(private productService: ProductService, private messageService: MessageService,
-    private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) {
-    this.breadcrumbService.setItems([
-      { label: 'Etudiant' },
-    ]);
-  }
-
-  ngOnInit() {
-    this.productService.getProducts().then(data => this.products = data);
-    this.cols = [
-      { field: 'name', header: 'Name' },
-      { field: 'price', header: 'Price' },
-      { field: 'category', header: 'Category' },
-      { field: 'rating', header: 'Reviews' },
-      { field: 'inventoryStatus', header: 'Status' }
-    ];
-
-    this.statuses = [
-      { label: 'INSTOCK', value: 'instock' },
-      { label: 'LOWSTOCK', value: 'lowstock' },
-      { label: 'OUTOFSTOCK', value: 'outofstock' }
-    ];
-  }
-  openNew() {
-    this.product = {};
-    this.submitted = false;
-    this.productDialog = true;
-  }
-
-  deleteSelectedProducts() {
-    this.deleteProductsDialog = true;
-  }
-
-  editProduct(product: Product) {
-    this.product = { ...product };
-    this.productDialog = true;
-  }
-
-  deleteProduct(product: Product) {
-    this.deleteProductDialog = true;
-    this.product = { ...product };
-  }
-
-  confirmDeleteSelected() {
-    this.deleteProductsDialog = false;
-    this.products = this.products.filter(val => !this.selectedProducts.includes(val));
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-    this.selectedProducts = [];
-  }
-
-  confirmDelete() {
-    this.deleteProductDialog = false;
-    this.products = this.products.filter(val => val.id !== this.product.id);
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-    this.product = {};
-  }
-
-  hideDialog() {
-    this.productDialog = false;
-    this.submitted = false;
-  }
-
-  saveProduct() {
-    this.submitted = true;
-
-    if (this.product.name?.trim()) {
-      if (this.product.id) {
-        // @ts-ignore
-        this.product.inventoryStatus = this.product.inventoryStatus.value ? this.product.inventoryStatus.value : this.product.inventoryStatus;
-        this.products[this.findIndexById(this.product.id)] = this.product;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+  
+  constructor(private messageService: MessageService,
+    private service: EtudiantService,
+    private confirmationService: ConfirmationService,
+    private breadcrumbService: BreadcrumbService) {
+      this.breadcrumbService.setItems([
+        { label: 'Etudiant' },
+      ]);
+    }
+    
+    ngOnInit() {
+      this.etudiantForm = new FormGroup({
+        nom: new FormControl('', Validators.required),
+        postnom: new FormControl('', Validators.required),
+        prenom: new FormControl('', Validators.required),
+        genre: new FormControl('', Validators.required),
+        contact: new FormControl('', Validators.required),
+        mail: new FormControl('', Validators.required),
+        file: new FormControl([]),
+        auditoireId: new FormControl('', Validators.required),
+      })
+      
+      this.sexes = [
+        { label: 'Féminin', value: 'feminin' },
+        { label: 'Masculin', value: 'masculin' }
+      ];
+      
+      this.findAllAudi();
+      this.findAllEtu();
+      
+    }
+    
+    
+    
+    onImageChanged(files) {
+      
+      if (files.length === 0) {
+        return;
+      }
+      
+      let mimeType = files[0].type;
+      if (mimeType.match(/image\/*/) == null) {
+        console.log('Only images are supported.');
+        return;
+      }
+      
+      let reader = new FileReader();
+      this.file = files;
+      reader.onload = () => {
+        this.image_url = reader.result;
+      };
+      reader.readAsDataURL(this.file[0]);
+    }
+    
+    
+    findAllAudi() {
+      this.service.findAllAudi()
+      .subscribe({
+        next: (response) => {
+          this.auditoires = response;
+          console.log(this.auditoires);
+        },
+        error: (response) => {
+          console.log(response);
+        }
+      })
+    }  
+    
+    findAllEtu() {
+      this.service.findAllEtu()
+      .subscribe({
+        next: (response) => {
+          this.etudiants = response;
+          console.log(this.etudiants);
+        },
+        error: (response) => {
+          console.log(response);
+        }
+      })
+    }  
+    
+    addEtdudiant() {
+      if (this.etudiantForm.valid) {
+        const request = {
+          nom: this.nomValue.value,
+          postnom: this.postnomValue.value,
+          prenom: this.prenomValue.value,
+          genre: this.genreValue.value.value,
+          contact: this.contactValue.value,
+          mail: this.mailValue.value,
+          //file:  this.file,
+          auditoireId: this.auditoireIdValue.value.id,
+        }
+        if (this.etudiant.id) {
+          this.service.updateEtudiant(this.etudiant.id, request).subscribe({
+            next: (value) => {
+              
+            },
+            complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Supprimer avec succès', life: 3000 });  this.findAllEtu(); },
+            error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Supprimer avec succès', life: 3000 });  this.findAllEtu();}
+            
+          })
+        } else {
+          const frmData:any= Object.assign(request);
+          frmData.file=this.file;
+          console.log(frmData);
+          this.service.addEtdudiant(frmData).subscribe({
+            next: (value) => {
+              
+            },
+            complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Enregistrement avec succès', life: 3000 }); this.findAllEtu(); },
+            error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Enregistrement avec succès', life: 3000 }); this.findAllEtu(); }
+          });
+        }
       } else {
-        this.product.id = this.createId();
-        this.product.code = this.createId();
-        this.product.image = 'product-placeholder.svg';
-        // @ts-ignore
-        this.product.inventoryStatus = this.product.inventoryStatus ? this.product.inventoryStatus.value : 'INSTOCK';
-        this.products.push(this.product);
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-      }
-
-      this.products = [...this.products];
-      this.productDialog = false;
-      this.product = {};
+        this.validateAllFields(this.etudiantForm)
+      };
     }
-  }
-
-  findIndexById(id: string): number {
-    let index = -1;
-    for (let i = 0; i < this.products.length; i++) {
-      if (this.products[i].id === id) {
-        index = i;
-        break;
-      }
+    
+    
+    
+    
+    get nomValue() {
+      return this.etudiantForm.get('nom')
+    } 
+    get postnomValue() {
+      return this.etudiantForm.get('postnom')
+    } 
+    get prenomValue() {
+      return this.etudiantForm.get('prenom')
+    } 
+    get genreValue() {
+      return this.etudiantForm.get('genre')
+    } 
+    get contactValue() {
+      return this.etudiantForm.get('contact')
+    } 
+    get mailValue() {
+      return this.etudiantForm.get('mail')
+    } 
+    get photoValue() {
+      return  this.etudiantForm.get('photo')
+    } 
+    get auditoireIdValue() {
+      return this.etudiantForm.get('auditoireId')
+    } 
+    
+    delete(id: any) {
+      this.service.deleteEtudiant(id)
+      .subscribe({
+        next: (response) => {
+          
+        },
+        complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Supprimer avec succès', life: 3000 }); this.findAllEtu(); },
+        error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Supprimer avec succès', life: 3000 });  this.findAllEtu(); }
+      });
     }
-
-    return index;
-  }
-
-  createId(): string {
-    let id = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 5; i++) {
-      id += chars.charAt(Math.floor(Math.random() * chars.length));
+    
+    
+    edit(etudiant: any) {
+      this.etudiant = { ...etudiant };
+      this.etudiantDialog = true;
+      console.log(this.etudiant);
     }
-    return id;
+    
+    openNew() {
+      this.etudiant = {};
+      this.submitted = false;
+      this.etudiantDialog = true;
+    }
+    
+    
+    hideDialog() {
+      this.etudiantDialog = false;
+      this.submitted = false;
+    }
+    
+    
+    
+    onGlobalFilter(table: Table, event: Event) {
+      table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+    }
+    
+    private validateAllFields(formGroup: FormGroup) {
+      Object.keys(formGroup.controls).forEach((field) => {
+        const control = formGroup.get(field)
+        
+        if (control instanceof FormControl) {
+          control.markAsDirty({ onlySelf: true })
+        } else if (control instanceof FormGroup) {
+          this.validateAllFields(control)
+        }
+      })
+    }
+    
   }
-
-  onGlobalFilter(table: Table, event: Event) {
-    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
-  }
-
-
-}
+  

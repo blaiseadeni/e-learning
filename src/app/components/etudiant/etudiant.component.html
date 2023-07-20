@@ -1,205 +1,262 @@
 <div class="grid">
+    <p-toast></p-toast>
     <div class="col-12">
         <div class="card px-6 py-6">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
                         <button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-primary mr-2"
-                            (click)="openNew()"></button>
+                        (click)="openNew()"></button>
                         <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger"
-                            (click)="deleteSelectedProducts()"
-                            [disabled]="!selectedProducts || !selectedProducts.length"></button>
+                        (click)="deleteSelectedProducts()"
+                        [disabled]="!selectedProducts || !selectedProducts.length"></button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="right">
                     <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1200000" label="Import"
-                        chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+                    chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
                     <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
                 </ng-template>
             </p-toolbar>
-
-            <p-table #dt [value]="products" [columns]="cols" responsiveLayout="scroll" [rows]="12"
-                [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="12"
-                [paginator]="true" [rowsPerPageOptions]="[12,20,30]" [showCurrentPageReport]="true"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="id">
-                <ng-template pTemplate="caption">
-                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Etudiants</h5>
-                        <span class="block mt-2 md:mt-0 p-input-icon-left">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
-                                class="w-full sm:w-auto" />
-                        </span>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="width: 1rem">
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
-                        <th pSortableColumn="code">Matricule</th>
-                        <th pSortableColumn="name">Noms <p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="name">Sexe<p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="name">Promotion<p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="name">Contact<p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="name">E-mail<p-sortIcon field="name"></p-sortIcon></th>
-                        <th > </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-product>
-                    <tr>
-                        <td>
-                            <p-tableCheckbox [value]="product"></p-tableCheckbox>
-                        </td>
-                        <td style="width:15%; min-width:5rem;"><span class="p-column-title">Code</span>
-                            {{product.code || product.id}}
-                        </td>
-                        <td style="width:20%; min-width:12rem;">
-                            <span class="p-column-title">Name</span>
-                            {{product.name}}
-                        </td>
-
-                        <td style="width:20%; min-width:12rem;">
-                            <span class="p-column-title">Name</span>
-                            {{product.name}}
-                        </td>
-
-                        <td style="width:20%; min-width:12rem;">
-                            <span class="p-column-title">Name</span>
-                            {{product.name}}
-                        </td>
-
-                        <td style="width:20%; min-width:12rem;">
-                            <span class="p-column-title">Name</span>
-                            {{product.name}}
-                        </td>
-
-                        <td style="width:20%; min-width:12rem;">
-                            <span class="p-column-title">Name</span>
-                            {{product.name}}
-                        </td>
-
-                        <td>
-                            <div class="flex">
-                                <!-- <button pButton pRipple icon="pi pi-fw pi-eye"
-                                    class="p-button-rounded p-button-primary mr-2"
-                                    (click)="editProduct(product)"></button> -->
-                                <button pButton pRipple icon="pi pi-pencil"
-                                    class="p-button-rounded p-button-primary mr-2"
-                                    (click)="editProduct(product)"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                    (click)="deleteProduct(product)"></button>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
-        <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Etudiant" [modal]="true"
-            class="p-fluid">
-            <ng-template pTemplate="content">
-                <!-- <img [src]="'assets/demo/images/product/' + product.image" [alt]="product.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" *ngIf="product.image"> -->
-                <div class="grid p-fluid mt-3">
-
-                    <div class="field col-12 md:col-6">
-                        <span class="p-float-label">
-                            <input type="text" id="inputtext" pInputText [(ngModel)]="value1">
-                            <label for="inputtext">Nom</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <span class="p-float-label">
-                            <input type="text" id="inputtext" pInputText [(ngModel)]="value1">
-                            <label for="inputtext">Post-nom</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <span class="p-float-label">
-                            <input type="text" id="inputtext" pInputText [(ngModel)]="value1">
-                            <label for="inputtext">Prenom</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <span class="p-float-label">
-                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="cities"
-                                [(ngModel)]="value12" optionLabel="name">
-                            </p-dropdown>
-                            <label for="inputtext">Promotion</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <span class="p-float-label">
-                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="cities"
-                                [(ngModel)]="value12" optionLabel="name">
-                            </p-dropdown>
-                            <label for="inputtext">Genre</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <span class="p-float-label">
-                            <input type="text" id="inputtext" pInputText [(ngModel)]="value1">
-                            <label for="inputtext">Contact</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <span class="p-float-label">
-                            <input type="text" id="inputtext" pInputText [(ngModel)]="value1">
-                            <label for="inputtext">E-mail</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <div class="p-inputgroup">
-                            <span class="p-float-label">
-                                <input type="text" id="inputtext" pInputText [(ngModel)]="value1" disabled readonly>
-                                <label for="inputtext">Choisir une photo</label>
-                                <button type="button" pButton pRipple icon="pi pi-upload"
-                                    styleClass="p-button-warn"></button>
-                            </span>
-                        </div>
-                    </div>
+            
+            <p-table #dt [value]="etudiants" [columns]="cols" responsiveLayout="scroll" [rows]="12"
+            [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="12"
+            [paginator]="true" [rowsPerPageOptions]="[12,20,30]" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <ng-template pTemplate="caption">
+                <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                    <h5 class="m-0">Etudiants</h5>
+                    <span class="block mt-2 md:mt-0 p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                        class="w-full sm:w-auto" />
+                    </span>
                 </div>
-
             </ng-template>
-
-            <ng-template pTemplate="footer">
-                <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text"
-                    (click)="hideDialog()"></button>
-                <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text"
-                    (click)="saveProduct()"></button>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 1rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th pSortableColumn="code">Matricule</th>
+                    <th pSortableColumn="name">Nom<p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">Postnom <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">Prénom <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">Sexe<p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">Auditoire<p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">Contact<p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">E-mail<p-sortIcon field="name"></p-sortIcon></th>
+                    <!-- <th pSortableColumn="name">Photo<p-sortIcon field="name"></p-sortIcon></th> -->
+                    <th > </th>
+                </tr>
             </ng-template>
-        </p-dialog>
-
-        <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-            <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="product">Etes-vous sûr de supprimer <b>{{product.name}}</b>?</span>
-            </div>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Nom"
-                    (click)="deleteProductDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui"
-                    (click)="confirmDelete()"></button>
+            <ng-template pTemplate="body" let-etudiant>
+                <tr>
+                    <td>
+                        <p-tableCheckbox [value]="etudiant"></p-tableCheckbox>
+                    </td>
+                    <td style="width:15%; min-width:5rem;"><span class="p-column-title">Code</span>
+                        {{etudiant.matricul}}
+                    </td>
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{etudiant.nom}}
+                    </td>                    
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{etudiant.prenom}}
+                    </td>
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{etudiant.postnom}}
+                    </td>
+                    
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{etudiant.genre}}
+                    </td>
+                    
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{etudiant.auditoireId}}
+                    </td>
+                    
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{etudiant.contact}}
+                    </td>
+                    
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{etudiant.mail}}
+                    </td>
+                    
+                    <!-- <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{etudiant.photo}}
+                    </td> -->
+                    <td>
+                        <img id="etu" src="assets/layout/images/etudiant.jpeg" alt="mirage-layout" />
+                        <!-- <img [src]="'assets/layout/images/isipa.PNG'"  > -->
+                        <!-- <img  [src]="'E:/APS && ANGULAR/Memoire Modules/Memory/eLearningAPI/wwwroot/Images/etudiant.jpeg'"> -->
+                    </td>
+                    
+                    <td>
+                        <div class="flex">
+                            <button pButton pRipple icon="pi pi-pencil"
+                            class="p-button-rounded p-button-primary mr-2"
+                            (click)="edit(etudiant)"></button>
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                            (click)="delete(etudiant.id)"></button>
+                        </div>
+                    </td>
+                </tr>
             </ng-template>
-        </p-dialog>
-
-        <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-            <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>Etes-vous sûr de supprimer le departement selectionner ?</span>
-            </div>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non"
-                    (click)="deleteProductsDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui"
-                    (click)="confirmDeleteSelected()"></button>
-            </ng-template>
-        </p-dialog>
+        </p-table>
     </div>
+    <p-dialog [(visible)]="etudiantDialog" [style]="{width: '450px'}" header="Etudiant" [modal]="true"
+    class="p-fluid">
+    <p-toast></p-toast>
+    <ng-template pTemplate="content">
+        <form [formGroup]="etudiantForm">
+            <div class="grid p-fluid mt-3">
+                
+                <div class="field col-12 md:col-6">
+                    <span class="p-float-label">
+                        <input type="text" 
+                        id="nom"
+                        name="nom"
+                        formControlName="nom"
+                        pInputText>
+                        <label for="inputtext">Nom</label>
+                    </span>
+                </div>
+                
+                <div class="field col-12 md:col-6">
+                    <span class="p-float-label">
+                        <input type="text" 
+                        id="postnom"
+                        name="postnom"
+                        formControlName="postnom"
+                        pInputText >
+                        <label for="inputtext">Post-nom</label>
+                    </span>
+                </div>
+                
+                <div class="field col-12 md:col-6">
+                    <span class="p-float-label">
+                        <input type="text"
+                        id="prenom" 
+                        name="prenom"
+                        formControlName="prenom"
+                        pInputText>
+                        <label for="inputtext">Prenom</label>
+                    </span>
+                </div>
+                
+                <div class="field col-12 md:col-6">
+                    <span class="p-float-label">
+                        <p-dropdown inputId="dropdown" 
+                        [autoDisplayFirst]="false"
+                        [options]="auditoires"
+                        optionLabel="libelle"
+                        id="auditoireId"
+                        name="auditoireId"
+                        formControlName="auditoireId">
+                    </p-dropdown>
+                    <label for="inputtext">Auditoire</label>
+                </span>
+            </div>
+            
+            <div class="field col-12 md:col-6">
+                <span class="p-float-label">
+                    <p-dropdown inputId="dropdown"
+                    [autoDisplayFirst]="false" 
+                    [options]="sexes"
+                    optionLabel="label"
+                    id="genre"
+                    name="genre"
+                    formControlName="genre">
+                </p-dropdown>
+                <label for="inputtext">Genre</label>
+            </span>
+        </div>
+        
+        <div class="field col-12 md:col-6">
+            <span class="p-float-label">
+                <input type="text"
+                id="contact"
+                name="contact"
+                formControlName="contact"
+                pInputText>
+                <label for="inputtext">Contact</label>
+            </span>
+        </div>
+        
+        <div class="field col-12 md:col-6">
+            <span class="p-float-label">
+                <input type="text" 
+                id="mail"
+                name="mail"
+                formControlName="mail" 
+                pInputText >
+                <label for="inputtext">E-mail</label>
+            </span>
+        </div>
+        
+        <div class="col-6 "> 
+            <div class="p-col-12 p-md-12">
+                <div class="p-field p-grid">
+                    <img id="profil"  [src]="image_url">
+                    <input hidden class="d-none" type="file" accept="image/*" #file (change)="onImageChanged(file.files)">
+                    
+                    
+                </div>
+            </div>
+            <div class="p-col-12 p-md-12 ">
+                <div class="p-field p-grid">
+                    <button pButton type="button" label="Importer une image"
+                    class="p-button-outlined" 
+                    (click)="file.click()"></button>
+                    
+                </div>
+            </div> 
+        </div>
+        
+        
+        <!-- <div class="field col-12 md:col-6">
+            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" id="photo"
+            name="photo"  styleClass="mr-2" size="xlarge" shape="circle" ></p-avatar>
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input type="file"
+                    id="photo" pInputText
+                    name="photo"
+                    formControlName="photo"
+                    disabled readonly>
+                    <label for="inputtext">Choisir une photo</label>
+                    <button type="button" pButton 
+                    pRipple icon="pi pi-upload"
+                    (click)="onUpload($event)"
+                    styleClass="p-button-warn"></button>
+                </span>
+            </div>
+        </div> -->
+        
+        
+        
+        
+        
+    </div>
+</form>
+</ng-template>
+
+<ng-template pTemplate="footer">
+    <button pButton pRipple label="Fermer" icon="pi pi-times" class="p-button-text"
+    (click)="hideDialog()"></button>
+    <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text"
+    (click)="addEtdudiant()"></button>
+</ng-template>
+</p-dialog>
+

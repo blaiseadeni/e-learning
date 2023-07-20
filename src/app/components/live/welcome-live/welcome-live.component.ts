@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./welcome-live.component.scss']
 })
 export class WelcomeLiveComponent {
-
+  
 }
