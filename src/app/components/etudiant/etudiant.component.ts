@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { parse } from 'path';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { BreadcrumbService } from 'src/app/breadcrumb.service';
+import { AnneeService } from 'src/app/services/annee/annee.service';
 import { EtudiantService } from 'src/app/services/etudiant/etudiant.service';
 
 
@@ -19,16 +19,27 @@ export class EtudiantComponent {
   
   image_url: any;
   
-  file?:File;
+  image: any;
+  
+  file?:any=[];
   
   sexes: any = [];
   
   auditoires: any = [];
   
+  annees: any = [];
+  
   etudiantForm: FormGroup;
+  
   etudiant: any = {};
+  
   etudiants: any = [];
+  
   etudiantDialog: boolean = false;
+  
+  deleteDialog: boolean = false;
+  
+  formData = new FormData();
   
   submitted: boolean = false;
   
@@ -36,16 +47,24 @@ export class EtudiantComponent {
   
   rowsPerPageOptions = [5, 10, 20];
   
+  role: any;
+  etudiantR = "Etudiant";
+  enseignant = "Enseignant";
+  admin = "Admin";
+  
   constructor(private messageService: MessageService,
     private service: EtudiantService,
+    private anneeService: AnneeService,
     private confirmationService: ConfirmationService,
     private breadcrumbService: BreadcrumbService) {
       this.breadcrumbService.setItems([
+        { label: 'ISI-ETU' },
         { label: 'Etudiant' },
       ]);
     }
     
     ngOnInit() {
+      this.role = localStorage.getItem('role');
       this.etudiantForm = new FormGroup({
         nom: new FormControl('', Validators.required),
         postnom: new FormControl('', Validators.required),
@@ -55,6 +74,7 @@ export class EtudiantComponent {
         mail: new FormControl('', Validators.required),
         file: new FormControl([]),
         auditoireId: new FormControl('', Validators.required),
+        anneeId: new FormControl('', Validators.required),
       })
       
       this.sexes = [
@@ -64,6 +84,7 @@ export class EtudiantComponent {
       
       this.findAllAudi();
       this.findAllEtu();
+      this.findAllAnnees();
       
     }
     
@@ -75,18 +96,13 @@ export class EtudiantComponent {
         return;
       }
       
-      let mimeType = files[0].type;
-      if (mimeType.match(/image\/*/) == null) {
-        console.log('Only images are supported.');
-        return;
-      }
       
       let reader = new FileReader();
       this.file = files;
       reader.onload = () => {
         this.image_url = reader.result;
       };
-      reader.readAsDataURL(this.file[0]);
+      reader.readAsDataURL(this.file[0]);     
     }
     
     
@@ -95,10 +111,23 @@ export class EtudiantComponent {
       .subscribe({
         next: (response) => {
           this.auditoires = response;
-          console.log(this.auditoires);
+          // console.log(this.auditoires);
         },
-        error: (response) => {
-          console.log(response);
+        error: (Response) => {
+          console.log(Response);
+        }
+      })
+    }  
+    
+    findAllAnnees() {
+      this.anneeService.findAll()
+      .subscribe({
+        next: (response) => {
+          this.annees = response;
+          // console.log(this.annees);
+        },
+        error: (Response) => {
+          console.log(Response);
         }
       })
     }  
@@ -109,6 +138,7 @@ export class EtudiantComponent {
         next: (response) => {
           this.etudiants = response;
           console.log(this.etudiants);
+          
         },
         error: (response) => {
           console.log(response);
@@ -116,37 +146,49 @@ export class EtudiantComponent {
       })
     }  
     
+    
     addEtdudiant() {
       if (this.etudiantForm.valid) {
-        const request = {
-          nom: this.nomValue.value,
-          postnom: this.postnomValue.value,
-          prenom: this.prenomValue.value,
-          genre: this.genreValue.value.value,
-          contact: this.contactValue.value,
-          mail: this.mailValue.value,
-          //file:  this.file,
-          auditoireId: this.auditoireIdValue.value.id,
-        }
+        
+        this.formData.append("nom", this.nomValue.value);
+        this.formData.append("postnom", this.postnomValue.value);
+        this.formData.append("prenom", this.prenomValue.value);
+        this.formData.append("genre", this.genreValue.value.value);
+        this.formData.append("contact", this.contactValue.value);
+        this.formData.append("mail", this.mailValue.value);
+        this.formData.append("auditoireId", this.auditoireIdValue.value.id);
+        this.formData.append("anneeId", this.anneeIdValue.value.id);
+        this.formData.append("files", this.file[0]); 
+        console.log(this.formData);
         if (this.etudiant.id) {
-          this.service.updateEtudiant(this.etudiant.id, request).subscribe({
+          this.service.updateEtudiant(this.etudiant.id, this.formData).subscribe({
             next: (value) => {
               
             },
             complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Supprimer avec succès', life: 3000 });  this.findAllEtu(); },
-            error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Supprimer avec succès', life: 3000 });  this.findAllEtu();}
+            error: (e) => {
+              this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Supprimer avec succès', life: 3000 }); this.findAllEtu();
+            }
             
           })
         } else {
-          const frmData:any= Object.assign(request);
-          frmData.file=this.file;
-          console.log(frmData);
-          this.service.addEtdudiant(frmData).subscribe({
+          
+          this.service.addEtdudiant(this.formData).subscribe({
             next: (value) => {
-              
+              // window.location.reload();
+              this.hideDialog();
             },
-            complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Enregistrement avec succès', life: 3000 }); this.findAllEtu(); },
-            error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Enregistrement avec succès', life: 3000 }); this.findAllEtu(); }
+            complete: () => {
+              this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Enregistrement avec succès', life: 3000 });
+              this.findAllEtu();
+              // window.location.reload();
+              this.hideDialog();
+            },
+            error: (e) => {
+              console.log(e);
+              // window.location.reload();
+              this.hideDialog();
+            }
           });
         }
       } else {
@@ -154,7 +196,41 @@ export class EtudiantComponent {
       };
     }
     
+    deleteSelected(id:any) {
+      this.service.findEtuById(id)
+      .subscribe({
+        next: (response) => {
+          this.etudiant = response;
+          this.deleteDialog = true;
+        },
+        error: (response) => {
+          console.log(response);
+        }
+      })
+    }
     
+    edit(id:any) {
+      this.service.findEtuById(id)
+      .subscribe({
+        next: (response) => {
+          this.etudiant = response;
+          console.log(this.etudiant);
+          this.etudiantDialog = true;
+          this.etudiantForm.get("nom")?.patchValue(this.etudiant.nom);
+          this.etudiantForm.get("postnom")?.patchValue(this.etudiant.postnom);
+          this.etudiantForm.get("prenom")?.patchValue(this.etudiant.prenom);
+          this.etudiantForm.get("genre")?.patchValue(this.etudiant.genre);
+          this.etudiantForm.get("mail")?.patchValue(this.etudiant.mail);
+          this.etudiantForm.get("photo")?.patchValue(this.etudiant.photo);
+          this.etudiantForm.get("auditoireId")?.patchValue(this.etudiant.auditoireId);
+          this.etudiantForm.get("contact")?.patchValue(this.etudiant.contact);
+          
+        },
+        error: (response) => {
+          console.log(response);
+        }
+      })
+    }
     
     
     get nomValue() {
@@ -181,6 +257,9 @@ export class EtudiantComponent {
     get auditoireIdValue() {
       return this.etudiantForm.get('auditoireId')
     } 
+    get anneeIdValue() {
+      return this.etudiantForm.get('anneeId')
+    } 
     
     delete(id: any) {
       this.service.deleteEtudiant(id)
@@ -193,12 +272,17 @@ export class EtudiantComponent {
       });
     }
     
-    
-    edit(etudiant: any) {
-      this.etudiant = { ...etudiant };
-      this.etudiantDialog = true;
-      console.log(this.etudiant);
+    findImage(code: any) {
+      this.service.findImgById(code)
+      .subscribe({
+        next: (response) => {
+          this.image = response;
+        },
+        complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Supprimer avec succès', life: 3000 }); this.findAllEtu(); },
+        error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Supprimer avec succès', life: 3000 });  this.findAllEtu(); }
+      });
     }
+    
     
     openNew() {
       this.etudiant = {};

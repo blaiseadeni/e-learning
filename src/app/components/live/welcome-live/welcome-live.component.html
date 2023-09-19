@@ -1,110 +1,120 @@
-<!-- <div class="grid">
-    <div class="col-5" style="margin-left: 300px;">
-        <div class="card"> 
-            <h6>Prière de remplir les informations afin de lancer le live</h6>                     
-            <form >
-                <div class="grid p-fluid mt-3">                    
-                    <div class="field col-12 md:col-12">
-                        <label for="">Intitule</label>
-                        <span class="p-float-label">
-                            <input type="text" id="inputtext" pInputText >
-                            <label for="inputtext">Intitule</label>
-                        </span>
-                    </div>
-                </div>
-                <div class="grid p-fluid mt-0">                    
-                    
-                    <div class="field col-12 md:col-12">
-                        <label for="">Cours</label>
-                        <span class="p-float-label">
-                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" 
-                            optionLabel="name">
-                        </p-dropdown>
-                        <label for="inputtext">Cours</label>
-                    </span>
-                </div>
-            </div>
-            <button pButton pRipple label="Demarrer" icon="pi pi-play" class="p-button-primary mr-2" routerLink="/conference/live"> </button>
-            <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-danger mr-2"> </button>
-        </form>
-    </div>        
-</div>
-</div> -->
-<div class="grid">
+<div class="grid ">
+    <p-toast></p-toast> 
     <div class="col-12">
         <div class="card px-6 py-6">
             <div   class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                <div class="col-12 md:col-4">
-                    <label>Libellé</label>               
-                    <div class="p-inputgroup">
-                        <span class="p-float-label">
-                            <input pInputText type="text" class="p-inputtext-sm" placeholder="Small" formControlName="libelle" placeholder="libelle" />  
-                        </span>                    
-                    </div>
-                </div>
-                <div class="col-12 md:col-4"> 
-                    <label>Cours</label>             
+                
+                <div class="col-12 md:col-4 p-fluid mt-3"> 
                     <div class="p-inputgroup">
                         <span class="p-float-label">
                             <p-dropdown
-                            id="rue"
-                            name="rue"
-                            [options]=""
-                            optionLabel="designation"
-                            placeholder="selectionne un cours"
+                            id="auditoireId"
+                            name="auditoireId"
+                            [filter]="true" 
+                            filterBy="libelle" 
+                            [showClear]="true"
+                            [options]="auditoires"
+                            optionLabel="libelle"
                             appendTo="body"
-                            formControlName=""
+                            [(ngModel)]="live.auditoireId"
+                            (onChange)="findCours($event)"
                             >
                         </p-dropdown>
+                        <label for="inputtext">Auditoire</label>
                     </span>                    
                 </div>
             </div>
-            <div class="col-12 md:col-4"> 
-                <label>Auditoire</label>             
+            <div class="col-12 md:col-4 p-fluid mt-3"> 
                 <div class="p-inputgroup">
                     <span class="p-float-label">
                         <p-dropdown
                         id="rue"
                         name="rue"
-                        [options]=""
-                        optionLabel="designation"
-                        placeholder="selectionne un auditoire"
+                        [options]="cours"
+                        [filter]="true" 
+                        filterBy="titre" 
+                        [showClear]="true"
+                        optionLabel="titre"
                         appendTo="body"
-                        formControlName=""
+                        [(ngModel)]="live.libelle"
                         >
                     </p-dropdown>
+                    <label for="inputtext">Cours</label>
+                </span>                    
+            </div>
+        </div>
+        <div class="col-12 md:col-4 p-fluid mt-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input pInputText type="text"
+                    class="p-inputtext-sm" 
+                    id="description"
+                    name="description"
+                    [(ngModel)]="live.description"
+                    />  
+                    <label for="inputtext">Description</label>
                 </span>                    
             </div>
         </div>
     </div>            
     <div   class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-        <div class="col-12 md:col-4">   
-            <label>Date</label>            
+        <div class="col-12 md:col-4 p-fluid mt-3" >  
             <div class="p-inputgroup">
                 <span class="p-float-label">
-                    <input pInputText type="date" class="p-inputtext-sm" placeholder="Small" formControlName="libelle" />  
-                </span>                    
-            </div>
+                    <p-calendar
+                    id="date"
+                    name="date"
+                    [(ngModel)]="live.date"
+                    [showIcon]="true"
+                    appendTo="body">
+                </p-calendar>
+                <label for="inputtext">Date</label>
+            </span>                    
         </div>
-        <div class="col-12 md:col-4">               
-            <label>Heure Début</label>
-            <div class="p-inputgroup">
-                <span class="p-float-label">
-                    <input pInputText type="time" class="p-inputtext-sm" placeholder="Small" formControlName="libelle" />  
-                </span>                    
-            </div>
-        </div>
-        <div class="col-12 md:col-4">
-            <label>Heure Fin</label>               
-            <div class="p-inputgroup">
-                <span class="p-float-label">
-                    <input pInputText type="time" class="p-inputtext-sm" placeholder="Small" formControlName="libelle" />  
-                </span>                    
-            </div>
-        </div>
-    </div>  
-    <div class="button-container">
-        <button  pButton pRipple label="Demarrer la sceance" icon="pi pi-play" class="p-button-primary mr-2" routerLink="/conference/live"> </button>
+    </div>
+    <div class="col-12 md:col-4 p-fluid mt-3">    
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <p-calendar 
+                [showTime]="true"
+                hourFormat="24"
+                [timeOnly]="true"
+                [showIcon]="true"
+                id="heureDebut"
+                name="heureDebut"
+                [(ngModel)]="live.heureDebut"
+                appendTo="body">
+            </p-calendar>
+            <label for="inputtext">Heure debut</label>
+        </span>                    
     </div>
 </div>
+<div class="col-12 md:col-4 p-fluid mt-3">
+    <div class="p-inputgroup">
+        <span class="p-float-label">
+            <p-calendar 
+            [showTime]="true"
+            hourFormat="24"
+            [timeOnly]="true"
+            [showIcon]="true"
+            id="heureFin"
+            name="heureFin"
+            [(ngModel)]="live.heureFin"
+            appendTo="body">
+        </p-calendar>
+        <label for="inputtext">Heure fin</label>
+    </span>                    
 </div>
+</div>
+</div>  
+<div class="button-container">
+    <button  pButton pRipple 
+    label="Demarrer la sceance"
+    icon="pi pi-play" 
+    class="p-button-primary mr-2" 
+    (click)="addLive()"
+    > </button>
+</div>
+</div>
+</div> 
+<!-- routerLink="/conference/live" -->

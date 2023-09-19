@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  baseApiUrl: 'https://localhost:7267/'
+  baseApiUrl: 'https://localhost:7085/'
+  // baseApiUrl: 'https://192.168.142.89:70/'
 };
 
 /*

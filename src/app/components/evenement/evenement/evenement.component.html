@@ -2,7 +2,7 @@
     <div class="col-12">
         <div class="card"> 
             <h5 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">ISI-CALENDAR</h5>
-            <full-calendar [options]="options"></full-calendar>
+            <full-calendar [options]="evenements"></full-calendar>
             <p-dialog [(visible)]="eventDialog" [style]="{width: '450px'}" header="Event Details" [modal]="true" [closable]="true">
                 <ng-template pTemplate="content">
                     <div class="p-fluid">
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                 </ng-template>
-
+                
                 <ng-template pTemplate="footer">
                     <button pButton label="Save" icon="pi pi-check" class="p-button-text" (click)="save()"></button>
                     <button pButton label="Reset" icon="pi pi-refresh" class="p-button-text" (click)="reset()"></button>

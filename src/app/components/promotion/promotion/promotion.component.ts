@@ -16,8 +16,7 @@ export class PromotionComponent {
   
   promotion: any = {};
   promotions: any = [];
-  promotionDialog: boolean = false;
-  promotionForm: FormGroup;
+  
   
   auditoireDialog: boolean = false;
   auditoire: any = {};
@@ -26,11 +25,13 @@ export class PromotionComponent {
   
   orientations: any = [];
   
-  deleteProductDialog: boolean = false;
+  role: any;
+  etudiant = "Etudiant";
+  enseignant = "Enseignant";
+  admin = "Admin";
   
-  deleteProductsDialog: boolean = false;
+  deleteDialog: boolean = false;
   
-  selectedProducts: Product[] = [];
   
   submitted: boolean = false;
   
@@ -43,26 +44,23 @@ export class PromotionComponent {
     private breadcrumbService: BreadcrumbService,
     private service: PromotionService) {
       this.breadcrumbService.setItems([
-        { label: 'Promotion' },
+        { label: 'ISI-AUDIT' },
+        { label: 'Auditoire' },
       ]);
     }
     
     ngOnInit() {
       
+      this.role = localStorage.getItem('role');
+      
       this.auditoireForm = new FormGroup({
         libelle: new FormControl('', Validators.required),
-        promotionId: new FormControl('', Validators.required),
         orientationId: new FormControl('', Validators.required),
-      })
-      
-      this.promotionForm = new FormGroup({
-        libelle: new FormControl('', Validators.required),
       })
       
       
       this.findAllOrients();
       this.findAllAudi();
-      this.findAllPromo();
       
       this.cols = [
         { field: 'name', header: 'Name' },
@@ -100,148 +98,128 @@ export class PromotionComponent {
       })
     }  
     
-    findAllPromo() {
-      this.service.findAllPromo()
-      .subscribe({
-        next: (response) => {
-          this.promotions = response;
-          // console.log(this.promotions);
-        },
-        error: (response) => {
-          console.log(response);
-        }
-      })
-    }  
-    
     addAudi() {
       if (this.auditoireForm.valid) {
         const request = {
           libelle: this.libelleAudiValue.value,
-          promotionId: this.promotionIdValue.value.id,
           orientationId: this.orientationIdValue.value.id,
         }
         if (this.auditoire.id) {
           this.service.updateAudi(this.auditoire.id, request).subscribe({
             next: (value) => {
-              this.messageService.add({ severity: 'success', summary: 'Modification', detail: 'Success', life: 3000 }); this.findAllAudi();
+              this.messageService.add({ severity: 'success', summary: 'Modification', detail: 'Success', life: 3000 });
+              this.findAllAudi();
+              window.location.reload();
             },
-            complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Enregistrement avec succès', life: 3000 }); this.findAllAudi; },
-            error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Enregistrerment avec succès', life: 3000 }); this.findAllAudi; }
-            
-          })
-        } else {
-          this.service.addAudi(request).subscribe({
-            next: (value) => {
-              this.messageService.add({ severity: 'success', summary: 'Enregistrement', detail: 'Success', life: 3000 }); this.findAllAudi(); },
-            complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Enregistrement avec succès', life: 3000 }); this.findAllAudi();  },
-            error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Enregistrement avec succès', life: 3000 }); this.findAllAudi; }
-            
-          })
-        }
-      } else {
-        this.validateAllFields(this.auditoireForm)
-      }
-    }
-    
-    
-    addPromo() {
-      const request = {
-        libelle: this.libellePromoValue.value,
-      }
-      this.service.addPromo(request).subscribe({
-        next: (value) => {
-          this.messageService.add({ severity: 'success', summary: 'Enregistrement', detail: 'Success', life: 3000 });
-        },
-        complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Supprimer avec succès', life: 3000 });  this.findAllPromo();},
-        error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Supprimer avec succès', life: 3000 });  this.findAllPromo();}
-        
-      })
-      this.promotions = [...this.promotions];
-      this.promotionDialog = false;
-      this.promotion = {};
-    }
-    
-    delete(id: any) {
-      this.service.deleteAudi(id)
-      .subscribe({
-        next: (response) => {
+            complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Enregistrement avec succès', life: 3000 }); 
+            this.findAllAudi;
+            window.location.reload();
+          },
+          error: (e) => {
+            this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Enregistrerment avec succès', life: 3000 });
+            this.findAllAudi;
+            window.location.reload();
+          }
           
-        },
-        complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Supprimer avec succès', life: 3000 }); this.findAllAudi(); },
-        error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Supprimer avec succès', life: 3000 });  this.findAllAudi(); }
-      });
-    }
-    
-    
-    edit(auditoire: any) {
-      this.auditoire = { ...auditoire };
-      this.auditoireDialog = true;
-      console.log(this.auditoire);
-    }
-    
-    
-    get libellePromoValue() {
-      return this.promotionForm.get('libelle')
-    }  
-    
-    get orientationIdValue() {
-      return this.auditoireForm.get('orientationId')
-    } 
-    
-    get promotionIdValue() {
-      return this.auditoireForm.get('promotionId')
-    }  
-    
-    get libelleAudiValue() {
-      return this.auditoireForm.get('libelle')
-    }  
-    
-    openAuditoire() {
-      this.auditoire = {};
-      this.submitted = false;
-      this.auditoireDialog = true;
-    }
-    
-    openPromotion() {
-      this.promotion = {};
-      this.submitted = false;
-      this.promotionDialog = true;
-    }
-    hideDialog() {
-      this.auditoireDialog = false;
-      this.submitted = false;
-    }
-    
-    
-    hidePromoDialog() {
-      this.promotionDialog = false;
-      this.submitted = false;
-    }
-    
-    
-    deleteSelectedProducts() {
-      this.deleteProductsDialog = true;
-    }
-    
-    editPromotion(promotion: any) {
-      this.promotion = { ...promotion };
-      this.promotionDialog = true;
-    }
-    
-    onGlobalFilter(table: Table, event: Event) {
-      table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
-    }
-    
-    private validateAllFields(formGroup: FormGroup) {
-      Object.keys(formGroup.controls).forEach((field) => {
-        const control = formGroup.get(field)
-        
-        if (control instanceof FormControl) {
-          control.markAsDirty({ onlySelf: true })
-        } else if (control instanceof FormGroup) {
-          this.validateAllFields(control)
-        }
-      })
+        })
+      } else {
+        this.service.addAudi(request).subscribe({
+          next: (value) => {
+            this.messageService.add({ severity: 'success', summary: 'Enregistrement', detail: 'Success', life: 3000 });
+            this.findAllAudi();
+            window.location.reload();
+          },
+          complete: () => {
+            this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Enregistrement avec succès', life: 3000 });
+            this.findAllAudi();
+            window.location.reload();
+          },
+          error: (e) => {
+            this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Enregistrement avec succès', life: 3000 });
+            this.findAllAudi;
+            window.location.reload();
+          }
+          
+        })
+      }
+    } else {
+      this.validateAllFields(this.auditoireForm)
     }
   }
   
+  delete(id: any) {
+    this.service.deleteAudi(id)
+    .subscribe({
+      next: (response) => {
+        
+      },
+      complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Supprimer avec succès', life: 3000 }); this.findAllAudi(); },
+      error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Supprimer avec succès', life: 3000 });  this.findAllAudi(); }
+    });
+  }
+  
+  deleteSelected(id:any) {
+    this.service.findAudiById(id)
+    .subscribe({
+      next: (response) => {
+        this.auditoire = response;
+        this.deleteDialog = true;
+      },
+      error: (response) => {
+        console.log(response);
+      }
+    })
+  }
+  
+  edit(id:any) {
+    this.service.findAudiById(id)
+    .subscribe({
+      next: (response) => {
+        this.auditoire = response;
+        this.auditoireDialog = true;
+        this.auditoireForm.get("orientationId")?.patchValue(this.auditoire.orientationId);
+        this.auditoireForm.get("libelle")?.patchValue(this.auditoire.libelle);
+      },
+      error: (response) => {
+        console.log(response);
+      }
+    })
+  }
+  
+  get orientationIdValue() {
+    return this.auditoireForm.get('orientationId')
+  } 
+  
+  
+  get libelleAudiValue() {
+    return this.auditoireForm.get('libelle')
+  }  
+  
+  openAuditoire() {
+    this.auditoire = {};
+    this.submitted = false;
+    this.auditoireDialog = true;
+  }
+  
+  
+  hideDialog() {
+    this.auditoireDialog = false;
+    this.submitted = false;
+  }
+  
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
+  
+  private validateAllFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach((field) => {
+      const control = formGroup.get(field)
+      
+      if (control instanceof FormControl) {
+        control.markAsDirty({ onlySelf: true })
+      } else if (control instanceof FormGroup) {
+        this.validateAllFields(control)
+      }
+    })
+  }
+}

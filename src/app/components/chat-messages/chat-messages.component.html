@@ -1,36 +1,48 @@
 <div class="border-round border-1 surface-border p-4 surface-card">
     <div class="flex mb-3">
-        <p-avatar  size="large" styleClass="mr-2" shape="circle" image="https://primefaces.org/cdn/primeng/images/galleria/galleria1.jpg"></p-avatar>
+        <p-avatar  size="large" 
+        styleClass="mr-2"
+        shape="circle"
+        [image]="etudiant.photo"></p-avatar>
         <div style="flex: 1">
-            <div><p width="100%" styleClass="mb-2 " style="font-weight: bold;">Salomon</p></div>
-            <div><p style="font-style: smaller;">L2-GL</p></div>
-        </div>
-    </div>
-    <!-- <p-skeleton width="100%" height="150px"></p-skeleton> -->
-    <div>
-        
-        <!-- <p-virtualScroller [value]="items" class="border-1 surface-border border-round" [style]="{'width': '100%'}" scrollHeight="400px" [itemSize]="40">
-            <ng-template pTemplate="item" let-item>
-                <div class="flex align-items-center p-2 h-full" [ngClass]="{ 'surface-hover': item.index % 2 === 0 }">
-                    {{ item.label }}
-                </div>
-            </ng-template>
-        </p-virtualScroller> -->
-        <div  class="flex align-items-center p-3 w-full flex-wrap">
             <div>
-                <p id="p">Salut Monsieur</p>
+                <p width="100%" 
+                styleClass="mb-2 " 
+                style="font-weight: bold;">{{etudiant.nom}} {{etudiant.postnom }} {{etudiant.prenom}}</p></div>
+                <div>
+                    <p style="font-style: smaller;">{{etudiant.auditoire}}</p>
+                </div>
+            </div>
+        </div>
+        <div  >
+
+            <div  class="flex align-items-center p-1 w-full flex-wrap" *ngFor="let send of messages" >
+                <div id="p">
+                    <p  >{{send.text}}</p>
+                    <p class="flex flex-column align-items-end" id="date">{{send.sentAt | date:'dd/MM/yyyy HH:mm'}}</p>
+                </div>
             </div>
             
+            <div class="flex flex-column align-items-end mt-2" *ngFor="let message of sendTo">
+                <div id="ps">
+                    <p  > {{message.text}}</p>
+                    <p class="flex flex-column align-items-end" id="date">{{message.sentAt | date:'dd/MM/yyyy HH:mm'}}</p>
+                </div>
+            </div>
+
         </div>
-        <div class="flex flex-column align-items-end">
-            <p id="p"> Bonjour lomos comment allez-vous ?</p>
-        </div>
-             
-    </div>
-    <div class="flex justify-content-between mt-3">
-        <textarea rows="1" cols="178" pInputTextarea [autoResize]="true"></textarea>
-        <p-button icon="pi pi-send" styleClass="p-button-rounded p-button-primary"></p-button>
-        
-    </div>   
+        <div class="flex justify-content-between mt-3">
+            <textarea rows="1" cols="178"
+            pInputTextarea 
+            [(ngModel)]="message.text"
+            [autoResize]="true">
+        </textarea>
+        <p-button
+        icon="pi pi-send"
+        (onClick)="send()"
+        styleClass="p-button-rounded p-button-primary">
+    </p-button>
     
+</div>   
+
 </div>

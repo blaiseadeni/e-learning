@@ -25,6 +25,7 @@ export class EnseignantComponent {
   enseignant: any = {};
   enseignants: any = [];
   enseignantDialog: boolean = false;
+  deleteDialog: boolean = false;
   
   submitted: boolean = false;
   
@@ -35,6 +36,12 @@ export class EnseignantComponent {
   frm!:FormGroup;
   imageFile?:File;
   
+  role: any;
+  etudiant = "Etudiant";
+  enseignantR = "Enseignant";
+  admin = "Admin";
+  
+  
   constructor(private service: EnseignantService, private messageService: MessageService,
     private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) {
       this.breadcrumbService.setItems([
@@ -44,6 +51,8 @@ export class EnseignantComponent {
     }
     
     ngOnInit() {
+      
+      this.role = localStorage.getItem('role');
       
       this.findAllEns();
       
@@ -94,43 +103,34 @@ export class EnseignantComponent {
     }
     
     addEnseignant() {
-      const request = {
-        nom: this.nomValue.value,
-        postnom: this.postnomValue.value,
-        prenom: this.prenomValue.value,
-        genre: this.genreValue.value.value,
-        grade: this.niveauValue.value.value,
-        contact: this.contactValue.value,
-        mail: this.mailValue.value,
-        file: this.file,
-      }
-      let formData:FormData = new FormData();  
-      formData.append('nom',request.nom);  
-      formData.append('postnom', request.postnom);  
-      formData.append('prenom',request.prenom);  
-      formData.append('genre',request.genre); 
-      formData.append('grade',request.grade); 
-      formData.append('contact',request.contact); 
-      formData.append('mail',request.mail); 
-      formData.append('file', request.file); 
-
       if (this.enseignantForm.valid) {
+        let formData:FormData = new FormData();  
+        formData.append('nom',this.nomValue.value);  
+        formData.append('postnom', this.postnomValue.value);  
+        formData.append('prenom',this.prenomValue.value);  
+        formData.append('genre',this.genreValue.value.value); 
+        formData.append('grade',this.niveauValue.value.value); 
+        formData.append('contact',this.contactValue.value); 
+        formData.append('mail',this.mailValue.value); 
+        formData.append('file', this.file[0]); 
         if (this.enseignant.id) {
-          this.service.updateEnseignant(this.enseignant.id, request).subscribe({
+          this.service.updateEnseignant(this.enseignant.id, formData).subscribe({
             next: (value) => {
-              this.messageService.add({ severity: 'success', summary: 'Modification', detail: 'Success', life: 3000 }); this.findAllEns();
+              this.messageService.add({ severity: 'success', summary: 'Modification', detail: 'Success', life: 3000 }); this.findAllEns(); this.hideDialog();
             },
-            complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Modification avec succès', life: 3000 });  this.findAllEns(); },
-            error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Modification avec succès', life: 3000 });  this.findAllEns();}
+            complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Modification avec succès', life: 3000 }); this.findAllEns(); this.hideDialog(); },
+            error: (e) => {
+              console.log(e);
+            }
             
           })
         } else {
-          this.service.addEnseignant(request).subscribe({
+          this.service.addEnseignant(formData).subscribe({
             next: (value) => {
-              this.messageService.add({ severity: 'success', summary: 'Enregistrement', detail: 'Success', life: 3000 }); this.findAllEns();
+              this.messageService.add({ severity: 'success', summary: 'Enregistrement', detail: 'Success', life: 3000 }); this.findAllEns(); this.hideDialog();
             },
-            complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Enregistrement avec succès', life: 3000 });  this.findAllEns(); },
-            error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Enregistrement avec succès', life: 3000 });  this.findAllEns();  }
+            complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Enregistrement avec succès', life: 3000 }); this.findAllEns(); this.hideDialog(); },
+            error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Enregistrement avec succès', life: 3000 }); this.findAllEns(); this.hideDialog();  }
             
           })
         }
@@ -139,7 +139,37 @@ export class EnseignantComponent {
       };
     }
     
+    deleteSelected(id:any) {
+      this.service.findEnsById(id)
+      .subscribe({
+        next: (response) => {
+          this.enseignant = response;
+          this.deleteDialog = true;
+        },
+        error: (response) => {
+          console.log(response);
+        }
+      })
+    }
     
+    
+    
+    edit(id: any) {
+      this.service.findEnsById(id)
+      .subscribe({
+        next: (response) => {
+          this.enseignant = response;
+          this.enseignantDialog = true;
+          this.enseignantForm.get("nom")?.patchValue(this.enseignant.nom);
+          this.enseignantForm.get("postnom")?.patchValue(this.enseignant.postnom);
+          this.enseignantForm.get("prenom")?.patchValue(this.enseignant.prenom);
+          this.enseignantForm.get("contact")?.patchValue(this.enseignant.contact);
+          this.enseignantForm.get("mail")?.patchValue(this.enseignant.mail);
+          this.enseignantForm.get("grade")?.patchValue(this.enseignant.grade);
+        },
+      });
+      
+    }
     get nomValue() {
       return this.enseignantForm.get('nom')
     } 
@@ -187,21 +217,7 @@ export class EnseignantComponent {
         complete: () => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: ' Supprimer avec succès', life: 3000 }); this.findAllEns(); },
         error: (e) => { this.messageService.add({ severity: 'success', summary: 'Reussi', detail: 'Supprimer avec succès', life: 3000 });  this.findAllEns(); }
       });
-    }
-    
-    
-    edit(id: any) {
-      this.service.findEnsById(id)
-      .subscribe({
-        next: (response) => {
-          this.enseignant = response;
-          this.enseignantDialog = true;
-          console.log(this.enseignant);
-        },
-      });
-      
-    }
-    
+    } 
     
     openNew() {
       this.enseignant = {};
@@ -214,8 +230,6 @@ export class EnseignantComponent {
       this.enseignantDialog = false;
       this.submitted = false;
     }
-    
-    
     
     onGlobalFilter(table: Table, event: Event) {
       table.filterGlobal((event.target as HTMLInputElement).value, 'contains');

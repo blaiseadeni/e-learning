@@ -1,11 +1,9 @@
 <div class="grid">
 	<div class="col-12">
 		<div class="card">
-			<h5 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">ISI-LIB</h5>
-			<p-dataView #dv [value]="products" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField" [sortOrder]="sortOrder" layout="grid">
+			<p-dataView #dv [value]="cours" [paginator]="true" [rows]="9" filterBy="titre" [sortField]="sortField" >
 				<ng-template pTemplate="header">
 					<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
-						<p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Sort By Price" (onChange)="onSortChange($event)"></p-dropdown>
 						<span class="p-input-icon-left mb-2 md:mb-0">
 							<i class="pi pi-search"></i>
 							<input type="search" pInputText placeholder="Search by Name" (input)="dv.filter($event.target.value)">
@@ -14,37 +12,24 @@
 					</div>
 				</ng-template>
 				
-				<ng-template let-product pTemplate="listItem">
+				<ng-template let-cours pTemplate="listItem">
 					<div class="col-12">
-						<div class="flex flex-column md:flex-row align-items-center p-3 w-full" routerLink="/librairie/lib-lecture">
-							<img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5"/>
+						<div class="flex flex-column md:flex-row align-items-center p-3 w-full"   [routerLink]="['/librairie','lib-lecture',cours.id]">
 							<div class="flex-1 text-center md:text-left">
-								<div class="font-bold text-2xl">{{product.name}}</div>
-								<div class="mb-3">{{product.description}}</div>
+								<div class="font-bold text-2xl ">{{cours.titre}}</div>
+								<div >Promotion : {{cours.libelleAudi}}</div>
+								<div class="mb-3">Année académique : {{cours.annee}}</div>
 								<div class="flex align-items-center mt-2">
 									<i class="pi pi-tag mr-2"></i>
-									<span class="font-semibold">{{product.category}}</span>
+									<span class="font-semibold">{{cours.enseignant}}</span>
 								</div>
 							</div>							
 						</div>
 					</div>
 				</ng-template>
 				
-				<ng-template let-product pTemplate="gridItem">
-					<div class="col-12 md:col-4 " >										
-						<div class="card m-3 border-0 surface-border">
-							<p-card header="Titre du cours" subheader="Auditoire"  [style]="{ width: '250px' }" routerLink="/librairie/lib-lecture">
-								<ng-template pTemplate="header">
-									<img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" />
-								</ng-template>
-								<p style="margin-top: -15px;">Professeur </p>	
-								
-							</p-card>
-						</div>
-					</div>
-				</ng-template>
+				
 			</p-dataView>
-			<a href="http://localhost:85/forum/Upload/index.php">clieck me</a>
 		</div>
 	</div>
 </div>

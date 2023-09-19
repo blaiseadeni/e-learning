@@ -6,6 +6,7 @@ import { AppConfig } from 'src/app/demo/domain/appconfig';
 import { Product } from 'src/app/demo/domain/product';
 import { ConfigService } from 'src/app/demo/service/app.config.service';
 import { ProductService } from 'src/app/demo/service/productservice';
+import { Role } from 'src/app/models/Model';
 
 @Component({
   selector: 'app-student',
@@ -13,7 +14,7 @@ import { ProductService } from 'src/app/demo/service/productservice';
   styleUrls: ['./student.component.scss']
 })
 export class StudentComponent {
-
+  
   lineChartData: any;
   
   lineChartOptions: any;
@@ -36,6 +37,7 @@ export class StudentComponent {
   
   config: AppConfig;
   
+  
   constructor(private productService: ProductService, private breadcrumbService: BreadcrumbService, public configService: ConfigService) {
     this.breadcrumbService.setItems([
       { label: 'Tableau de bord', routerLink: ['/'] },
@@ -51,6 +53,8 @@ export class StudentComponent {
   }
   
   ngOnInit() {
+
+    
     this.productService.getProducts().then(data => this.products = data);
     
     this.lineChartData = {
@@ -193,5 +197,5 @@ export class StudentComponent {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
+  
 }

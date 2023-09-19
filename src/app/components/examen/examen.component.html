@@ -1,78 +1,265 @@
 <div class="grid">
+    
     <div class="col-12">
-        <h5>ISI-CREAQUIZ</h5>
+        <!-- <h5>ISI-CREAQUIZ</h5> -->
         <div class="card px-6 py-6">
-            <div [formGroup]="questionForm">
-                <div   class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <p-toast></p-toast>
+            <p-tabView styleClass="tabview-custom">
+                <p-tabPanel>
+                    <ng-template pTemplate="header">
+                        <i class="pi pi-info-circle mr-2"></i>
+                        <span>Quiz</span>
+                    </ng-template>
                     
-                    <div class="col-12 md:col-6">               
-                        <div class="p-inputgroup">
-                            <span class="p-float-label">
-                                <input pInputText type="text" class="p-inputtext-sm" placeholder="Small" formControlName="libelle" />  
-                                <label for="inputtext">Libellé</label>
+                    <p-panel header="Creation de quiz">
+                        
+                        <div [formGroup]="quizForm">
+                            <div   class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                                
+                                <div class="col-12 md:col-4">
+                                    <div class="p-inputgroup">
+                                        <span class="p-float-label">
+                                            <p-dropdown
+                                            inputId="dropdown"
+                                            [filter]="true" 
+                                            filterBy="libelle" 
+                                            [showClear]="true"
+                                            [options]="auditoires"
+                                            optionLabel="libelle"
+                                            (onChange)="findCours($event)"
+                                            id="auditoire"
+                                            name="auditoire"
+                                            formControlName="auditoire">
+                                        </p-dropdown>
+                                        <label for="inputtext">Auditoire</label>
+                                    </span>                    
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 md:col-4" >
+                                <div class="p-inputgroup">
+                                    <span class="p-float-label">
+                                        <p-dropdown inputId="dropdown"
+                                        [options]="cours"
+                                        [filter]="true" 
+                                        filterBy="titre" 
+                                        [showClear]="true"
+                                        optionLabel="titre"
+                                        formControlName="coursId"></p-dropdown>
+                                        <label for="inputtext">Cours</label>
+                                    </span>                    
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 md:col-4">               
+                                <div class="p-inputgroup">
+                                    <span class="p-float-label">
+                                        <input pInputText type="text"
+                                        class="p-inputtext-sm" 
+                                        formControlName="libelle" />  
+                                        <label for="inputtext">Libellé</label>
+                                    </span>                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div   class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                            
+                            <div class="col-12 md:col-4 p-fluid mt-3">
+                                <div class="p-inputgroup">
+                                    <span class="p-float-label">
+                                        <p-calendar
+                                        id="dateQuiz"
+                                        name="dateQuiz"
+                                        formControlName="dateQuiz"
+                                        [showIcon]="true"
+                                        appendTo="body">
+                                    </p-calendar>
+                                    <label for="inputtext">Date</label>
+                                </span>                    
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 md:col-4 p-fluid mt-3" >
+                            <div class="p-inputgroup">
+                                <span class="p-float-label">
+                                    <p-calendar 
+                                    [showTime]="true"
+                                    hourFormat="24"
+                                    [timeOnly]="true"
+                                    [showIcon]="true"
+                                    id="heureDebut"
+                                    name="heureDebut"
+                                    formControlName="heureDebut"
+                                    appendTo="body">
+                                </p-calendar>
+                                <label for="inputtext">Heure debut</label>
                             </span>                    
                         </div>
                     </div>
                     
-                    <div class="col-12 md:col-6" style="margin-top:5px;">
+                    <div class="col-12 md:col-4 p-fluid mt-3">               
                         <div class="p-inputgroup">
                             <span class="p-float-label">
-                                <p-dropdown inputId="dropdown" optionLabel="name" formControlName="cours"></p-dropdown>
-                                <label for="inputtext">Intitulé du cours</label>
-                            </span>                    
-                        </div>
-                    </div>
-                    
-                </div>
-                
-                <hr >
-                <h5 >Question au choix</h5>
-                <!-- <p>Soyez précis et imaginez que vous posez la question à une autre personne.</p>             -->
-                <div id="area" class="col-12 md:col-12">
-                    <div class="p-inputgroup">
-                        <span class="p-float-label">
-                            <textarea id="float-input" rows="5" cols="70" pInputTextarea formControlName="question"></textarea>
-                            <label for="float-input">Exemple: Angular est basé sur quelle architecture ?</label>
+                                <p-calendar 
+                                [showTime]="true"
+                                hourFormat="24"
+                                [timeOnly]="true"
+                                [showIcon]="true"
+                                id="heureFin"
+                                name="heureFin"
+                                formControlName="heureFin"
+                                appendTo="body">
+                            </p-calendar>
+                            <label for="inputtext">Heure fin</label>
                         </span>                    
                     </div>
-                </div>     
+                </div>   
                 
-                <h5 >Reponses </h5>
-                <p>Cliquer ci-dessous pour ajouter une reponse, Ensuite 
-                    cocher la bonne reponse. </p>
-                    <div>
-                        <button pButton pRipple label="" icon="pi pi-plus" class="p-button-primary mr-2" (click)="addNewRows()"></button>
-                    </div>
-                    
-                    <p-table [value]="newRowsList.controls" >
-                        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
-                            <ng-container formArrayName="questionDetailist"> 
-                                <tr [formGroupName]="rowIndex" >
-                                    <td>  
-                                        <div  class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                                            <div class="col-12 md:col-12" >
-                                                <div class="p-inputgroup">
-                                                    <span class="p-float-label">
-                                                        <input pInputText type="text" class="p-inputtext-sm" placeholder="Small"  formControlName="response" id="response" name="response" />  
-                                                    </span>       
-                                                    <p-checkbox  [binary]="true" inputId="binary" style="margin-left:10px;"  formControlName="assertion" id="assertion" name="assertion"></p-checkbox>    
-                                                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-                                                    (click)="remove(rowIndex)" style="margin-left:10px;"></button>         
-                                                </div>                            
-                                            </div>                                
-                                        </div>                             
-                                    </td>
-                                </tr>                       
-                            </ng-container>
-                        </ng-template>
-                    </p-table>
-                    <hr style="width:500px;">
-                    <div style="margin-top: 10px; ">
-                        <button pButton pRipple label="Annuler" icon="pi pi-check" class="p-button-danger mr-2"></button>
-                        <button pButton pRipple label="Terminer" icon="pi pi-check" class="p-button-primary mr-2" routerLink="/evaluation/interro" ></button>
-                    </div> 
-                </div>
             </div>
         </div>
-    </div>
-    
+        
+        <div [formGroup]="questionForm">
+            <h5 >Question </h5>
+            <p>Cliquer ci-dessous à droite de la page pour ajouter une ou plusieurs questions. </p>
+            <div class="button-container">
+                <button pButton pRipple 
+                label="" icon="pi pi-plus"
+                class="p-button-primary mr-2 "
+                (click)="addQuestion()"></button>
+            </div>
+            <p-table [value]="questionList().controls" >
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <ng-container formArrayName="questions"> 
+                        <tr [formGroupName]="rowIndex" >
+                            <td>  
+                                <div  class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                                    <div class="col-12 md:col-" >
+                                        <h5>Q. {{rowIndex + 1}}</h5>
+                                        <div class="p-inputgroup">
+                                            <span class="p-float-label">
+                                                <textarea id="float-input" 
+                                                rows="1" cols="70"
+                                                pInputTextarea 
+                                                id="question"
+                                                name="question"
+                                                formControlName="question">
+                                            </textarea>
+                                            <label>Question</label>   
+                                        </span>  
+                                        <button 
+                                        pButton pRipple 
+                                        icon="pi pi-trash" 
+                                        class="p-button-rounded p-button-warning"
+                                        (click)="removeQuestion(rowIndex)" id="remove"></button>         
+                                    </div>                            
+                                </div>                                                                
+                            </div>  
+                            
+                            <tr>
+                                <td>
+                                    <div  class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                                        <div class="col-12 md:col-12" >
+                                            <div class="p-inputgroup">
+                                                <span class="p-float-label">
+                                                    <input pInputText 
+                                                    type="text" class="p-inputtext-sm" 
+                                                    formControlName="cote" 
+                                                    id="cote" 
+                                                    name="cote" /> 
+                                                    <label>Cote</label>   
+                                                </span>    
+                                            </div>   
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            
+                            <!-- Responses -->
+                            <div >
+                                <h5 >Reponses </h5>
+                                <p>Cliquer ci-dessous à droite de la page pour ajouter une ou plusieurs reponses, ensuite 
+                                    cocher la bonne reponse. </p>
+                                    <div class="button-container">
+                                        <button pButton pRipple label=""
+                                        icon="pi pi-plus" 
+                                        class="p-button-success mr-2"
+                                        (click)="addQuestionResponse(rowIndex)"></button>
+                                    </div>
+                                    
+                                    <p-table [value]="questionResponses(rowIndex).controls" >
+                                        <ng-template pTemplate="body" let-roData let-i="rowIndex">
+                                            <ng-container formArrayName="responses"> 
+                                                <tr [formGroupName]="i" >
+                                                    <td>  
+                                                        <div  class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                                                            <div class="col-12 md:col-12" >
+                                                                <label for="reponse">R. {{i + 1}}</label>
+                                                                <div class="p-inputgroup">
+                                                                    <span class="p-float-label">
+                                                                        <input pInputText 
+                                                                        type="text" class="p-inputtext-sm" 
+                                                                        formControlName="reponse" 
+                                                                        id="reponse" 
+                                                                        name="reponse" />  
+                                                                    </span>       
+                                                                    <p-checkbox 
+                                                                    [binary]="true"
+                                                                    inputId="binary" 
+                                                                    formControlName="correct" 
+                                                                    id="correct" 
+                                                                    name="correct"></p-checkbox>    
+                                                                    <button pButton pRipple 
+                                                                    icon="pi pi-trash" 
+                                                                    class="p-button-rounded p-button-warning"
+                                                                    (click)="removeQuestionResponse(rowIndex,i)" id="remove"></button>         
+                                                                </div>                            
+                                                            </div>                                
+                                                        </div>                             
+                                                    </td>
+                                                </tr>                       
+                                            </ng-container>
+                                        </ng-template>
+                                    </p-table>
+                                    
+                                </div>
+                            </td>
+                        </tr>                       
+                    </ng-container>
+                </ng-template>
+            </p-table>
+            
+            <div style="margin-top: 10px; " class="button-container">
+                <button pButton pRipple
+                label="Annuler" 
+                icon="pi pi-plus" 
+                class="p-button-danger mr-2"></button>
+                <button pButton pRipple 
+                label="Enregistrer"
+                icon="pi pi-check" 
+                class="p-button-primary mr-2"
+                (click)="save()"></button>
+            </div>
+        </div>
+    </p-panel>
+</p-tabPanel>
+
+
+</p-tabView>
+
+
+
+<!-- <pre>
+    {{this.quizForm.value | json}}
+    {{this.questionForm.value | json}}
+</pre> -->
+
+
+
+
+
+
+
+
+

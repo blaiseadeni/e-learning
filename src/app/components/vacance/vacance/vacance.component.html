@@ -1,199 +1,208 @@
 <div class="grid">
     <div class="col-12">
         <div class="card px-6 py-6">
-             <h5 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">ISI-EVENTS</h5>
-            <p-toolbar styleClass="mb-4">
-                <ng-template pTemplate="left">
-                    <div class="my-2">
+            <p-toast></p-toast>
+            <p-table #dt [value]="evenements" [columns]="cols" responsiveLayout="scroll" [rows]="12"
+            [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="12"
+            [paginator]="true" [rowsPerPageOptions]="[12,20,30]" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <ng-template pTemplate="caption">
+                <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                    <h5 class="m-0"  [hidden]="role === admin">Liste d'évenements</h5>
+                    <div class="my-2"  [hidden]="role === enseignant || role === etudiant">
                         <button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-primary mr-2"
-                            (click)="openNew()"></button>
-                        <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger"
-                            (click)="deleteSelectedProducts()"
-                            [disabled]="!selectedProducts || !selectedProducts.length"></button>
+                        (click)="open()"></button>
                     </div>
-                </ng-template>
-                <ng-template pTemplate="right">
-                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1200000" label="Import"
-                        chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
-                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
-                </ng-template>
-            </p-toolbar>
-
-            <p-table #dt [value]="products" [columns]="cols" responsiveLayout="scroll" [rows]="12"
-                [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="12"
-                [paginator]="true" [rowsPerPageOptions]="[12,20,30]" [showCurrentPageReport]="true"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="id">
-                <ng-template pTemplate="caption">
-                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Vacances</h5>
-                        <span class="block mt-2 md:mt-0 p-input-icon-left">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
-                                class="w-full sm:w-auto" />
-                        </span>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="width: 1rem">
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
-                        <th pSortableColumn="code">No</th>
-                        <th pSortableColumn="name">Libelle <p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="name">Type<p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="name">Heure Debut<p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="name">Heure Fin<p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn=""></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-product>
-                    <tr>
-                        <td>
-                            <p-tableCheckbox [value]="product"></p-tableCheckbox>
-                        </td>
-                        <td style="width:15%; min-width:5rem;"><span class="p-column-title">Code</span>
-                            {{product.code || product.id}}
-                        </td>
-                        <td style="width:20%; min-width:12rem;">
-                            <span class="p-column-title">Name</span>
-                            {{product.name}}
-                        </td>
-                        <td style="width:20%; min-width:12rem;">
-                            <span class="p-column-title">Name</span>
-                            {{product.name}}
-                        </td>
-                        <td style="width:20%; min-width:12rem;">
-                            <span class="p-column-title">Name</span>
-                            {{product.name}}
-                        </td>
-
-                        <td style="width:20%; min-width:12rem;">
-                            <span class="p-column-title">Name</span>
-                            {{product.name}}
-                        </td>
-
-                        <td>
-                            <div class="flex">
-                                <!-- <button pButton pRipple icon="pi pi-fw pi-eye"
-                                    class="p-button-rounded p-button-primary mr-2"
-                                    (click)="editProduct(product)"></button> -->
-                                <button pButton pRipple icon="pi pi-pencil"
-                                    class="p-button-rounded p-button-primary mr-2"
-                                    (click)="editProduct(product)"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                    (click)="deleteProduct(product)"></button>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
-        <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Etudiant" [modal]="true"
-            class="p-fluid">
-            <ng-template pTemplate="content">
-                <!-- <img [src]="'assets/demo/images/product/' + product.image" [alt]="product.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" *ngIf="product.image"> -->
-                <div class="grid p-fluid mt-3">
-
-
-                    <div class="field col-12 md:col-6">
-                        <span class="p-float-label">
-                            <input type="text" id="inputtext" pInputText [(ngModel)]="value1">
-                            <label for="inputtext">Nom</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <span class="p-float-label">
-                            <input type="text" id="inputtext" pInputText [(ngModel)]="value1">
-                            <label for="inputtext">Post-nom</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <span class="p-float-label">
-                            <input type="text" id="inputtext" pInputText [(ngModel)]="value1">
-                            <label for="inputtext">Prenom</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <span class="p-float-label">
-                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="cities"
-                                [(ngModel)]="value12" optionLabel="name">
-                            </p-dropdown>
-                            <label for="inputtext">Promotion</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <span class="p-float-label">
-                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="cities"
-                                [(ngModel)]="value12" optionLabel="name">
-                            </p-dropdown>
-                            <label for="inputtext">Genre</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <span class="p-float-label">
-                            <input type="text" id="inputtext" pInputText [(ngModel)]="value1">
-                            <label for="inputtext">Contact</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <span class="p-float-label">
-                            <input type="text" id="inputtext" pInputText [(ngModel)]="value1">
-                            <label for="inputtext">E-mail</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <div class="p-inputgroup">
-                            <span class="p-float-label">
-                                <input type="text" id="inputtext" pInputText [(ngModel)]="value1" disabled readonly>
-                                <label for="inputtext">Choisir une photo</label>
-                                <button type="button" pButton pRipple icon="pi pi-upload"
-                                    styleClass="p-button-warn"></button>
-                            </span>
-                        </div>
-                    </div>
+                    <span class="block mt-2 md:mt-0 p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                        class="w-full sm:w-auto" />
+                    </span>
                 </div>
-
             </ng-template>
-
-            <ng-template pTemplate="footer">
-                <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text"
-                    (click)="hideDialog()"></button>
-                <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text"
-                    (click)="saveProduct()"></button>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="code">#</th>
+                    <th pSortableColumn="name">Type<p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">Libelle <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">Date <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">Heure Debut<p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">Heure Fin<p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn=""  [hidden]="role === enseignant || role === etudiant"></th>
+                </tr>
             </ng-template>
-        </p-dialog>
-
-        <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-            <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="product">Etes-vous sûr de supprimer <b>{{product.name}}</b>?</span>
-            </div>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Nom"
-                    (click)="deleteProductDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui"
-                    (click)="confirmDelete()"></button>
+            <ng-template pTemplate="body" let-event>
+                <tr>
+                    <td style="width:15%; min-width:5rem;"><span class="p-column-title">Code</span>
+                        {{event.id}}
+                    </td>
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{event.type}}
+                    </td>
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{event.libelle}}
+                    </td>
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{event.dateEvent | date: 'dd/MM/yyyy' }}
+                    </td>
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{event.heureDebut | date:'HH:mm'}}
+                    </td>
+                    
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{event.heureFin | date:'HH:mm'}}
+                    </td>
+                    
+                    <td  [hidden]="role === enseignant || role === etudiant">
+                        <div class="flex">
+                            <button pButton pRipple icon="pi pi-pencil"
+                            class="p-button-rounded p-button-primary mr-2"
+                            (click)="edit(event.id)"></button>
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                            (click)="deleteSelected(event.id)"></button>
+                        </div>
+                    </td>
+                </tr>
             </ng-template>
-        </p-dialog>
-
-        <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-            <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>Etes-vous sûr de supprimer le departement selectionner ?</span>
-            </div>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non"
-                    (click)="deleteProductsDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui"
-                    (click)="confirmDeleteSelected()"></button>
-            </ng-template>
-        </p-dialog>
+        </p-table>
     </div>
+    <p-dialog [(visible)]="eventDialog" [style]="{width: '450px'}" header="Evenement" [modal]="true"
+    class="p-fluid">
+    <ng-template pTemplate="content">
+        <form [formGroup]="evenForm">
+            <div class="grid p-fluid mt-3">            
+                <div class="field col-12 md:col-12">
+                    <span class="p-float-label">
+                        <input type="text" 
+                        id="libelle"
+                        pInputText
+                        name="libelle"
+                        formControlName="libelle">
+                        <label for="libelle">Libelle</label>
+                    </span>
+                    <small
+                    class="p-error"
+                    *ngIf="
+                    evenForm.controls['libelle'].dirty &&
+                    evenForm.hasError('required', 'libelle')
+                    ">* libelle obligatoire.</small>
+                </div>
+                
+                <div class="field col-12 md:col-6">
+                    <span class="p-float-label">
+                        <p-dropdown inputId="dropdown" 
+                        [autoDisplayFirst]="false"
+                        [options]="types"
+                        appendTo="body"
+                        name="type"
+                        id="type"
+                        formControlName="type"
+                        optionLabel="libelle">
+                    </p-dropdown>
+                    <label for="type">Type</label>
+                </span>
+                <small
+                class="p-error"
+                *ngIf="
+                evenForm.controls['type'].dirty &&
+                evenForm.hasError('required', 'type')
+                ">* type obligatoire.</small>
+            </div>
+            
+            <div class="field col-12 md:col-6">
+                <span class="p-float-label">
+                    <p-calendar
+                    id="dateEvent"
+                    name="dateEvent"
+                    formControlName="dateEvent"
+                    [showIcon]="true"
+                    appendTo="body">
+                </p-calendar>
+                <label for="dateEvent">Date</label>
+            </span>
+            <small
+            class="p-error"
+            *ngIf="
+            evenForm.controls['dateEvent'].dirty &&
+            evenForm.hasError('required', 'dateEvent')
+            ">* date obligatoire.</small>
+        </div>
+        
+        
+        
+        <div class="field col-12 md:col-6">
+            <span class="p-float-label">
+                <p-calendar 
+                [showTime]="true"
+                hourFormat="24"
+                [timeOnly]="true"
+                [showIcon]="true"
+                id="heureDebut"
+                name="heureDebut"
+                formControlName="heureDebut"
+                appendTo="body">
+            </p-calendar>
+            <label for="heureDebut">Heure debut</label>
+        </span>
+        <small
+        class="p-error"
+        *ngIf="
+        evenForm.controls['heureDebut'].dirty &&
+        evenForm.hasError('required', 'heureDebut')
+        ">* heure debut obligatoire.</small>
+    </div>
+    
+    <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+            <p-calendar 
+            [showTime]="true"
+            hourFormat="24"
+            [timeOnly]="true"
+            [showIcon]="true"
+            id="heureFin"
+            name="heureFin"
+            formControlName="heureFin"
+            appendTo="body">
+        </p-calendar>
+        <label for="heureFin">Heure fin</label>
+    </span>
+    <small
+    class="p-error"
+    *ngIf="
+    evenForm.controls['heureFin'].dirty &&
+    evenForm.hasError('required', 'heureFin')
+    ">* heure fin obligatoire.</small>
+</div>
+
+</div>
+</form>
+</ng-template>
+
+<ng-template pTemplate="footer">
+    <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text"
+    (click)="hide()"></button>
+    <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text"
+    (click)="add()"></button>
+</ng-template>
+</p-dialog>
+
+
+<p-dialog [(visible)]="deleteDialog" header="Confirmation" [modal]="true" [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="evenement">Etes-vous sûr de supprimer <b>{{evenement.libelle}}</b>?</span>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="delete(orientation.id)"></button>
+    </ng-template>
+</p-dialog>
+
+
+</div>

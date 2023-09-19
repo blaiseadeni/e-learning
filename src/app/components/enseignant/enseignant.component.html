@@ -2,15 +2,11 @@
     <p-toast></p-toast>
     <div class="col-12">
         <div class="card px-6 py-6">
-            <h5 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">ISI-ENS</h5>
-            <p-toolbar styleClass="mb-4">
+            <p-toolbar styleClass="mb-4"  [hidden]="role === enseignantR || role === etudiant">
                 <ng-template pTemplate="left">
                     <div class="my-2">
                         <button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-primary mr-2"
                         (click)="openNew()"></button>
-                        <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger"
-                        (click)="deleteSelectedProducts()"
-                        [disabled]="!selectedProducts || !selectedProducts.length"></button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="right">
@@ -27,7 +23,7 @@
             selectionMode="multiple" [rowHover]="true" dataKey="id">
             <ng-template pTemplate="caption">
                 <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                    <h5 class="m-0">Enseignants</h5>
+                    <h5 class="m-0">Liste d'enseignants</h5>
                     <span class="block mt-2 md:mt-0 p-input-icon-left">
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
@@ -37,9 +33,6 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th style="width: 1rem">
-                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                    </th>
                     <th pSortableColumn="code"># <p-sortIcon field="code"></p-sortIcon></th>
                     <th pSortableColumn="nom">Nom <p-sortIcon field="name"></p-sortIcon></th>
                     <th pSortableColumn="postnom">Postnom <p-sortIcon field="postnom"></p-sortIcon></th>
@@ -48,14 +41,12 @@
                     <th pSortableColumn="niveau">Niveau d'etude<p-sortIcon field="niveau"></p-sortIcon></th>
                     <th pSortableColumn="contact">Contact<p-sortIcon field="contact"></p-sortIcon></th>
                     <th pSortableColumn="mail">E-mail<p-sortIcon field="mail"></p-sortIcon></th>
+                    <th >Photo</th>
                     <th> </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-enseignant>
                 <tr>
-                    <td>
-                        <p-tableCheckbox [value]="enseignant"></p-tableCheckbox>
-                    </td>
                     <td style="width:15%; min-width:5rem;"><span class="p-column-title">Code</span>
                         {{enseignant.id}}
                     </td>
@@ -93,14 +84,18 @@
                         <span class="p-column-title">Name</span>
                         {{enseignant.mail}}
                     </td>                   
+                    <td >
+                        
+                        <img id="profile" [src]="enseignant.photo" alt="image">
+                    </td>                   
                     
-                    <td>
+                    <td  [hidden]="role === enseignant || role === etudiant">
                         <div class="flex">
                             <button pButton pRipple icon="pi pi-pencil"
                             class="p-button-rounded p-button-primary mr-2"
                             (click)="edit(enseignant.id)"></button>
                             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                            (click)="delete(enseignant.id)"></button>
+                            (click)="deleteSelected(enseignant.id)"></button>
                         </div>
                     </td>
                 </tr>
@@ -118,9 +113,18 @@
                         id="nom" 
                         name="nom"
                         formControlName="nom"
+                        required
                         pInputText>
                         <label for="inputtext">Nom</label>
                     </span>
+                    <small
+                    class="p-error"
+                    *ngIf="
+                    enseignantForm.controls['nom'].dirty &&
+                    enseignantForm.hasError('required', 'nom')
+                    "
+                    >* nom obligatoire.</small
+                    >
                 </div>
                 
                 <div class="field col-12 md:col-6">
@@ -129,9 +133,18 @@
                         id="postnom" 
                         name="postnom"
                         formControlName="postnom"
+                        required
                         pInputText>
                         <label for="inputtext">Post-nom</label>
                     </span>
+                    <small
+                    class="p-error"
+                    *ngIf="
+                    enseignantForm.controls['postnom'].dirty &&
+                    enseignantForm.hasError('required', 'postnom')
+                    "
+                    >* postnom obligatoire.</small
+                    >
                 </div>
                 
                 <div class="field col-12 md:col-6">
@@ -140,9 +153,18 @@
                         id="prenom" 
                         name="prenom"
                         formControlName="prenom"
+                        required
                         pInputText>
                         <label for="inputtext">Prénom</label>
                     </span>
+                    <small
+                    class="p-error"
+                    *ngIf="
+                    enseignantForm.controls['prenom'].dirty &&
+                    enseignantForm.hasError('required', 'prenom')
+                    "
+                    >* prenom obligatoire.</small
+                    >
                 </div>
                 
                 <div class="field col-12 md:col-6">
@@ -153,10 +175,19 @@
                         optionLabel="label"
                         id="grade"
                         name="grade"
+                        required
                         formControlName="grade">
                     </p-dropdown>
                     <label for="inputtext">Niveau d'étude</label>
                 </span>
+                <small
+                class="p-error"
+                *ngIf="
+                enseignantForm.controls['grade'].dirty &&
+                enseignantForm.hasError('required', 'grade')
+                "
+                >* grade obligatoire.</small
+                >
             </div>
             
             <div class="field col-12 md:col-6">
@@ -167,10 +198,19 @@
                     optionLabel="label"
                     id="genre"
                     name="genre"
+                    required
                     formControlName="genre">
                 </p-dropdown>
                 <label for="inputtext">Genre</label>
             </span>
+            <small
+            class="p-error"
+            *ngIf="
+            enseignantForm.controls['genre'].dirty &&
+            enseignantForm.hasError('required', 'genre')
+            "
+            >* genre obligatoire.</small
+            >
         </div>
         
         <div class="field col-12 md:col-6">
@@ -179,9 +219,18 @@
                 id="contact" 
                 name="contact"
                 formControlName="contact"
+                required
                 pInputText >
                 <label for="inputtext">Contact</label>
             </span>
+            <small
+            class="p-error"
+            *ngIf="
+            enseignantForm.controls['contact'].dirty &&
+            enseignantForm.hasError('required', 'contact')
+            "
+            >* contact obligatoire.</small
+            >
         </div>
         
         <div class="field col-12 md:col-6">
@@ -190,20 +239,31 @@
                 id="mail" 
                 name="mail"
                 formControlName="mail"
+                required
                 pInputText >
                 <label for="inputtext">E-mail</label>
             </span>
+            <small
+            class="p-error"
+            *ngIf="
+            enseignantForm.controls['mail'].dirty &&
+            enseignantForm.hasError('required', 'mail')
+            "
+            >* mail obligatoire.</small
+            >
         </div>
         
         <div class="col-6 "> 
             <div class="p-col-12 p-md-12">
                 <div class="p-field p-grid">
                     <img id="profil"  [src]="image_url">
-                    <input hidden class="d-none" id="file" formControlName="file" name="file" type="file" accept="image/*" #file (change)="onImageChanged(file.files)">
-                    
-                    
+                    <input hidden class="d-none" id="file" 
+                    formControlName="file" name="file" 
+                    type="file" accept="image/*" #file
+                    (change)="onImageChanged(file.files)">
                 </div>
             </div>
+            
             <div class="p-col-12 p-md-12">
                 <div class="p-field p-grid">
                     <button pButton type="button" label="Importer une image"
@@ -224,4 +284,15 @@
     <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text"
     (click)="addEnseignant()"></button>
 </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="deleteDialog" header="Confirmation" [modal]="true" [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="enseignant">Etes-vous sûr de supprimer <b>{{enseignant.nom}}</b>?</span>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="delete(departement.id)"></button>
+    </ng-template>
 </p-dialog>

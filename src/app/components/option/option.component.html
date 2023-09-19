@@ -2,18 +2,6 @@
     <p-toast></p-toast>
     <div class="col-12">
         <div class="card px-6 py-6">
-            <h5 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">ISI-OPS</h5>
-            <p-toolbar styleClass="mb-4">
-                <ng-template pTemplate="left">
-                    <div class="my-2">
-                        <button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-primary mr-2"
-                        (click)="openNew()"></button>
-                        <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger"
-                        (click)="deleteSelectedProducts()"
-                        [disabled]="!selectedProducts || !selectedProducts.length"> </button>
-                    </div>
-                </ng-template>
-            </p-toolbar>
             <p-table #dt [value]="options" [columns]="cols" responsiveLayout="scroll" [rows]="12"
             [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="12"
             [paginator]="true" [rowsPerPageOptions]="[12,20,30]" [showCurrentPageReport]="true"
@@ -21,7 +9,14 @@
             selectionMode="multiple" [rowHover]="true" dataKey="id">
             <ng-template pTemplate="caption">
                 <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                    <h5 class="m-0">Options</h5>
+                    <h5 class="m-0" [hidden]="role === admin">Liste d'options</h5>
+                    <div class="my-2" [hidden]="role === enseignant || role === etudiant">
+                        <button pButton pRipple
+                        label="Nouveau" 
+                        icon="pi pi-plus" 
+                        class="p-button-primary mr-2"
+                        (click)="openNew()"></button>
+                    </div>
                     <span class="block mt-2 md:mt-0 p-input-icon-left">
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
@@ -31,45 +26,34 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th style="width: 1rem">
-                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                    </th>
                     <th pSortableColumn="code">#<p-sortIcon field="code"></p-sortIcon></th>
                     <th pSortableColumn="name">Departement<p-sortIcon field="name"></p-sortIcon></th>
                     <th pSortableColumn="name">Option <p-sortIcon field="name"></p-sortIcon></th>
-                    <!-- <th pSortableColumn="inventoryStatus">Date<p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
-                    <th ></th>
+                    <th [hidden]="role === enseignant || role === etudiant"></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-option>
                 <tr>
-                    <td>
-                        <p-tableCheckbox [value]="option"></p-tableCheckbox>
-                    </td>
                     <td style="width:20%; min-width:5rem;"><span class="p-column-title">id</span>
                         {{option.id}}
                     </td>
                     
                     <td style="width:40%; min-width:12rem;">
                         <span class="p-column-title">libelle</span>
-                        {{option.departementId}}
+                        {{option.departement}}
                     </td>
                     <td style="width:40%; min-width:12rem;">
                         <span class="p-column-title">sectionId</span>
                         {{option.libelle}}
                     </td>
-                    <!-- <td style="width:20%; min-width:12rem;">
-                        <span class="p-column-title">dateC</span>
-                        {{option.dateC | date:'dd/MM/yyyy' }}
-                    </td> -->
                     
-                    <td>
+                    <td [hidden]="role === enseignant || role === etudiant"r>
                         <div class="flex">
                             <button pButton pRipple icon="pi pi-pencil"
                             class="p-button-rounded p-button-primary mr-2"
-                            (click)=" edit(option)"></button>
+                            (click)=" edit(option.id)"></button>
                             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                            (click)=" delete(option.id)"></button>
+                            (click)=" deleteSelected(option.id)"></button>
                         </div>
                     </td>
                 </tr>
@@ -99,17 +83,17 @@
                             placeholder="Departement"
                             formControlName="departementId">
                         </p-dropdown>
-                        <small
-                        class="p-error"
-                        *ngIf="
-                        optionForm.controls['departementId'].dirty &&
-                        optionForm.hasError('required', 'departementId')
-                        "
-                        >* code is required.</small
-                        >
                         <label for="inputtext">Departement</label>
                     </span>
                 </div>
+                <small
+                class="p-error"
+                *ngIf="
+                optionForm.controls['departementId'].dirty &&
+                optionForm.hasError('required', 'departementId')
+                "
+                >* code is required.</small
+                >
             </div>
             
             <div class="field col-12 md:col-12">
@@ -146,16 +130,14 @@
 </p-dialog>
 
 
-<p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+<p-dialog [(visible)]="deleteDialog" header="Confirmation" [modal]="true" [style]="{width:'450px'}">
     <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Etes-vous sûr de vouloir supprimer le departement selectionner ?</span>
+        <span *ngIf="option">Etes-vous sûr de supprimer <b>{{option.libelle}}</b>?</span>
     </div>
     <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non"
-        (click)="deleteProductsDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui"
-        (click)="confirmDeleteSelected()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="delete(option.id)"></button>
     </ng-template>
 </p-dialog>
 

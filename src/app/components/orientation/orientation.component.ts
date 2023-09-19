@@ -25,10 +25,12 @@ export class OrientationComponent {
   orientationForm: FormGroup;
   orientationDialog: boolean = false;
   
+  role: any;
+  etudiant = "Etudiant";
+  enseignant = "Enseignant";
+  admin = "Admin";
   
-  deleteProductDialog: boolean = false;
-  
-  deleteProductsDialog: boolean = false;
+  deleteDialog: boolean = false;
   
   submitted: boolean = false;
   
@@ -42,12 +44,14 @@ export class OrientationComponent {
     private messageService: MessageService,
     private breadcrumbService: BreadcrumbService) {
       this.breadcrumbService.setItems([
-        { label: 'Configurations' },
-        { label: 'Departement' },
+        { label: 'ISI-ORIENT' },
+        { label: 'Orientation' },
       ]);
     }
     
     ngOnInit() {
+      
+      this.role = localStorage.getItem('role');
       
       this.findAllOps();
       this.findAllOrientations();
@@ -191,14 +195,35 @@ export class OrientationComponent {
     }
     
     
-    edit(orientation: any) {
-      this.orientation = { ...orientation };
-      this.orientationDialog = true;
-      console.log(this.orientation);
+    deleteSelected(id:any) {
+      this.service.findOrById(id)
+      .subscribe({
+        next: (response) => {
+          this.orientation = response;
+          this.deleteDialog = true;
+        },
+        error: (response) => {
+          console.log(response);
+        }
+      })
     }
     
-    
-    
+    edit(id:any) {
+      this.service.findOrById(id)
+      .subscribe({
+        next: (response) => {
+          this.orientation = response;
+          this.orientationDialog = true;
+          this.orientationForm.get("departementId")?.patchValue(this.orientation.optionId);
+          this.orientationForm.get("siteId")?.patchValue(this.orientation.siteId);
+          this.orientationForm.get("libelle")?.patchValue(this.orientation.libelle);
+          
+        },
+        error: (response) => {
+          console.log(response);
+        }
+      })
+    }
     
     get libelleSite() {
       return this.siteForm.get('libelle')
@@ -227,11 +252,6 @@ export class OrientationComponent {
         }
       })
     }
-    
-    deleteSelectedProducts() {
-      this.deleteProductsDialog = true;
-    }
-    
     
     onGlobalFilter(table: Table, event: Event) {
       table.filterGlobal((event.target as HTMLInputElement).value, 'contains');

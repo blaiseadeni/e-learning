@@ -1,32 +1,18 @@
 <div class="grid">
     <div class="col-12">
         <div class="card px-6 py-6">
-            <h5 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">ISI-COURS</h5>
-            <p-toolbar styleClass="mb-4">
-                <ng-template pTemplate="left">
-                    <div class="my-2">
-                        <button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-primary mr-2"
-                        (click)="openNew()"></button>
-                        <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger"
-                        (click)="deleteSelectedProducts()"
-                        [disabled]="!selectedProducts || !selectedProducts.length"></button>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="right">
-                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1200000" label="Import"
-                    chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
-                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
-                </ng-template>
-            </p-toolbar>
-            
             <p-table #dt [value]="cours" [columns]="cols" responsiveLayout="scroll" [rows]="12"
             [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="12"
             [paginator]="true" [rowsPerPageOptions]="[12,20,30]" [showCurrentPageReport]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="id">
+            selectionMode="multiple" [rowHover]="true" dataKey="id">
             <ng-template pTemplate="caption">
                 <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                    <h5 class="m-0"></h5>
+                    <h5 class="m-0" [hidden]="role === enseignant">Liste des cours</h5>
+                    <div class="my-2" [hidden]="role === admin || role === etudiant">
+                        <button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-primary mr-2"
+                        (click)="openNew()"></button>
+                    </div>
                     <span class="block mt-2 md:mt-0 p-input-icon-left">
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
@@ -36,161 +22,215 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th style="width: 1rem">
-                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                    </th>
                     <th pSortableColumn="code">#<p-sortIcon field="code"></p-sortIcon></th>
                     <th pSortableColumn="name">Titre <p-sortIcon field="name"></p-sortIcon></th>
-                    <th pSortableColumn="name">Heure<p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="name">Volume horaire<p-sortIcon field="name"></p-sortIcon></th>
                     <th pSortableColumn="name">Auditoire<p-sortIcon field="name"></p-sortIcon></th>
-                    <th pSortableColumn="inventoryStatus">Enseignant<p-sortIcon
-                        field="inventoryStatus"></p-sortIcon></th>
-                        <th style="text-align: center;" ></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-cours>
-                    <tr>
-                        <td>
-                            <p-tableCheckbox [value]="cours"></p-tableCheckbox>
-                        </td>
-                        <td style="width:15%; min-width:5rem;"><span class="p-column-title">Code</span>
-                            {{cours.id}}
-                        </td>
-                        <td style="width:20%; min-width:12rem;">
-                            <span class="p-column-title">Name</span>
-                            {{cours.titre}}
-                        </td>
-                        <td style="width:20%; min-width:12rem;">
-                            <span class="p-column-title">Name</span>
-                            {{cours.chargeHoraire}}
-                        </td>
-                        <td style="width:20%; min-width:12rem;">
-                            <span class="p-column-title">Name</span>
-                            {{cours.auditoireId}}
-                        </td>
-                        <td style="width:20%; min-width:12rem;">
-                            <span class="p-column-title">Name</span>
-                            {{cours.enseignantId}}
-                        </td>
-                        
-                        <td>
-                            <div class="flex">
-                                <!-- <button pButton pRipple icon="pi pi-fw pi-eye"
-                                    class="p-button-rounded p-button-primary mr-2"
-                                    (click)="editProduct(product)"></button> -->
-                                    <button pButton pRipple icon="pi pi-pencil"
-                                    class="p-button-rounded p-button-primary mr-2"
-                                    (click)="editProduct(product)"></button>
-                                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                    (click)="deleteProduct(product)"></button>
-                                </div>
-                            </td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-            </div>
-            <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Cours" [modal]="true" class="p-fluid">
-                <ng-template pTemplate="content">
-                    <form [formGroup]="coursForm">
-                        <div class="grid p-fluid mt-3">
-                            
-                            
-                            <div class="field col-12 md:col-6">
-                                <span class="p-float-label">
-                                    <p-dropdown inputId="auditoireId"
-                                    [autoDisplayFirst]="false"
-                                    [options]="auditoires"
-                                    name="auditoireId"
-                                    appendTo="body"
-                                    formControlName="auditoireId"
-                                    optionLabel="libelle"></p-dropdown>
-                                    <label for="inputtext">Auditoire</label>
-                                </span>
-                            </div>
-                            
-                            
-                            <div class="field col-12 md:col-6">
-                                <span class="p-float-label">
-                                    <p-dropdown inputId="enseignantId"
-                                    [autoDisplayFirst]="false" 
-                                    [options]="enseignants"
-                                    name="enseignantId"
-                                    formControlName="enseignantId"
-                                    appendTo="body"
-                                    optionLabel="prenom">
-                                </p-dropdown>
-                                <label for="inputtext">Enseignant</label>
-                            </span>
-                        </div>
-                        
-                        <div class="field col-12 md:col-6">
-                            <span class="p-float-label">
-                                <input type="text" 
-                                id="titre"
-                                name="titre"
-                                formControlName="titre" 
-                                pInputText >
-                                <label for="inputtext">Titre</label>
-                            </span>
-                        </div>
-                        
-                        <div class="field col-12 md:col-6">
-                            <span class="p-float-label">
-                                <p-dropdown inputId="chargeHoraire" 
-                                [autoDisplayFirst]="false"
-                                [options]="heures"
-                                optionLabel="libelle"
-                                id="chargeHoraire"
-                                name="chargeHoraire"
-                                appendTo="body"
-                                formControlName="chargeHoraire">
-                            </p-dropdown>
-                            <label for="inputtext">Charge horaire</label>
-                        </span>
-                    </div>
+                    <th pSortableColumn="inventoryStatus">Enseignant<p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                    <th pSortableColumn="name">Année académique<p-sortIcon field="name"></p-sortIcon></th>
+                    <th style="text-align: center;" [hidden]="role === admin || role === etudiant"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cours>
+                <tr>
+                    <td style="width:15%; min-width:5rem;"><span class="p-column-title">Code</span>
+                        {{cours.id}}
+                    </td>
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{cours.titre}}
+                    </td>
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{cours.chargeHoraire}}
+                    </td>
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{cours.libelleAudi}}
+                    </td>
+                    <td style="width:20%; min-width:12rem;">
+                        <span class="p-column-title">Name</span>
+                        {{cours.enseignant}}
+                    </td>
                     
-                    <div class="field col-12 md:col-12">
+                    <td style="width:20%; min-width:13rem;">
+                        <span class="p-column-title">Name</span>
+                        {{cours.annee}}
+                    </td>
+                    
+                    <td [hidden]="role === admin || role === etudiant">
+                        <div class="flex" >
+                            <button pButton pRipple icon="pi pi-pencil"
+                            class="p-button-rounded p-button-primary mr-2"
+                            ></button>
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                            ></button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <p-dialog [(visible)]="coursDialog" [style]="{width: '450px'}" header="Cours" [modal]="true" class="p-fluid">
+        <ng-template pTemplate="content">
+            <form [formGroup]="coursForm">
+                <div class="grid p-fluid mt-3">
+                    
+                    
+                    <div class="field col-12 md:col-6">
                         <span class="p-float-label">
-                            <input type="file" 
-                            (change)="onChange($event)">
+                            <p-dropdown inputId="auditoireId"
+                            [autoDisplayFirst]="false"
+                            [options]="auditoires"
+                            name="auditoireId"
+                            appendTo="body"
+                            [filter]="true"
+                            filterBy="libelle"
+                            formControlName="auditoireId"
+                            optionLabel="libelle"></p-dropdown>
+                            <label for="inputtext">Auditoire</label>
                         </span>
+                        <small
+                        class="p-error"
+                        *ngIf="
+                        coursForm.controls['auditoireId'].dirty &&
+                        coursForm.hasError('required', 'auditoireId')
+                        "
+                        >* auditoire obligatoire.</small
+                        >
                     </div>
                     
+                    <div class="field col-12 md:col-6">
+                        <span class="p-float-label">
+                            <p-dropdown inputId="enseignantId"
+                            [autoDisplayFirst]="false" 
+                            [options]="enseignants"
+                            name="enseignantId"
+                            formControlName="enseignantId"
+                            [filter]="true"
+                            filterBy="prenom"
+                            appendTo="body"
+                            optionLabel="prenom">
+                        </p-dropdown>
+                        <label for="inputtext">Enseignant</label>
+                    </span>
+                    <small
+                    class="p-error"
+                    *ngIf="
+                    coursForm.controls['enseignantId'].dirty &&
+                    coursForm.hasError('required', 'enseignantId')
+                    "
+                    >* enseignant obligatoire.</small
+                    >
                 </div>
-            </form>
-        </ng-template>
+                
+                <div class="field col-12 md:col-6">
+                    <span class="p-float-label">
+                        <input type="text" 
+                        id="titre"
+                        name="titre"
+                        formControlName="titre" 
+                        pInputText >
+                        <label for="inputtext">Titre</label>
+                    </span>
+                    <small
+                    class="p-error"
+                    *ngIf="
+                    coursForm.controls['titre'].dirty &&
+                    coursForm.hasError('required', 'titre')
+                    "
+                    >* titre obligatoire.</small
+                    >
+                </div>
+                
+                <div class="field col-12 md:col-6">
+                    <span class="p-float-label">
+                        <p-dropdown inputId="chargeHoraire" 
+                        [autoDisplayFirst]="false"
+                        [options]="heures"
+                        optionLabel="libelle"
+                        [filter]="true"
+                        filterBy="libelle"
+                        id="chargeHoraire"
+                        name="chargeHoraire"
+                        appendTo="body"
+                        formControlName="chargeHoraire">
+                    </p-dropdown>
+                    <label for="inputtext">Charge horaire</label>
+                </span>
+                <small
+                class="p-error"
+                *ngIf="
+                coursForm.controls['chargeHoraire'].dirty &&
+                coursForm.hasError('required', 'chargeHoraire')
+                "
+                >* nombre heure obligatoire.</small
+                >
+            </div>
+            
+            <div class="field col-12 md:col-12">
+                <span class="p-float-label">
+                    <p-dropdown inputId="anneeId" 
+                    [autoDisplayFirst]="false"
+                    [options]="annees"
+                    optionLabel="libelle"
+                    [filter]="true"
+                    filterBy="libelle"
+                    id="anneeId"
+                    name="anneeId"
+                    appendTo="body"
+                    formControlName="anneeId">
+                </p-dropdown>
+                <label for="inputtext">Année académique</label>
+            </span>
+            <small
+            class="p-error"
+            *ngIf="
+            coursForm.controls['chargeHoraire'].dirty &&
+            coursForm.hasError('required', 'chargeHoraire')
+            "
+            >* nombre heure obligatoire.</small
+            >
+        </div>
         
-        <ng-template pTemplate="footer">
-            <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text"
-            (click)="hideDialog()"></button>
-            <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text"
-            (click)="onPost()"></button>
-        </ng-template>
-    </p-dialog>
-    
-    <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-        <div class="flex align-items-center justify-content-center">
-            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-            <span *ngIf="product">Etes-vous sûr de supprimer <b>{{product.name}}</b>?</span>
+        <div class="field col-12 md:col-6">
+            <span class="p-float-label">
+                <input  class="d-none" id="file" 
+                formControlName="file" name="file" 
+                type="file" accept=".pdf" #file 
+                (change)="onImageChanged(file.files)">
+            </span>
+            <small
+            class="p-error"
+            *ngIf="
+            coursForm.controls['file'].dirty &&
+            coursForm.hasError('required', 'file')
+            "
+            >* fichier obligatoire.</small
+            >
         </div>
-        <ng-template pTemplate="footer">
-            <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Nom"
-            (click)="deleteProductDialog = false"></button>
-            <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui"
-            (click)="confirmDelete()"></button>
-        </ng-template>
-    </p-dialog>
-    
-    <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-        <div class="flex align-items-center justify-content-center">
-            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-            <span>Etes-vous sûr de supprimer le departement selectionner ?</span>
-        </div>
-        <ng-template pTemplate="footer">
-            <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non"
-            (click)="deleteProductsDialog = false"></button>
-            <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui"
-            (click)="confirmDeleteSelected()"></button>
-        </ng-template>
-    </p-dialog>
+        
+    </div>
+</form>
+</ng-template>
+
+<ng-template pTemplate="footer">
+    <button pButton pRipple label="Fermer" icon="pi pi-times" class="p-button-text"
+    (click)="hideDialog()"></button>
+    <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text"
+    (click)="add()"></button>
+</ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="deleteDialog" header="Confirmation" [modal]="true" [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="cours">Etes-vous sûr de supprimer <b>{{cours.titre}}</b>?</span>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="delete(cours.id)"></button>
+    </ng-template>
+</p-dialog>
+
 </div>

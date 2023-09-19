@@ -1,5 +1,5 @@
 <div class="login-body" [ngClass]="{'layout-dark': dark, 'layout-light': !dark}">
-    
+    <p-toast></p-toast>
     <div class="login-content">
         <div class="night-switch">
             <p-button styleClass="dark-switch" icon="pi pi-circle-on" (click)="dark = true"></p-button>
@@ -8,37 +8,137 @@
         <div class="login-panel">
             <div class="login-panel-content">
                 <div class="logo">
-                    <img src="assets/layout/images/logo-mirage@2x.png" alt="mirage-layout" />
+                    <img src="assets/layout/images/isipa.PNG" alt="mirage-layout" />
                 </div>
-                <h4>Bienvenue</h4>
-                <p>Besoin d'un compte?<a routerLink="/inscription"> S'inscrire</a> </p>
+                <h4 >Bienvenue</h4>
+                <!-- <p style="color: white;">Besoin d'un compte?<a routerLink="/inscription"> S'inscrire</a> </p> -->
                 
                 <div class="forms">
                     <div class="login-input-wrapper">
-                        <label for="username">Utilisateur</label>
-                        <input id="username" pInputText placeholder="Entrez votre nom d'utilisateur" />
+                        <label for="username" style="color: black;">Utilisateur</label>
+                        <input 
+                        id="username"
+                        [(ngModel)]="data.username"
+                        pInputText 
+                        placeholder="Entrez votre nom d'utilisateur" />
                         <i class="pi pi-user"></i>
                     </div>
                     
                     <div class="login-input-wrapper">
-                        <label for="password">Mot de passe</label>
-                        <input type="password" id="password" placeholder="Entrez votre mot de passe" pPassword
+                        <label for="password"  style="color: black;">Mot de passe</label>
+                        <input type="password" 
+                        id="password"
+                        [(ngModel)]="data.password"
+                        placeholder="Entrez votre mot de passe" pPassword
                         [feedback]="false" />
                         <i class="pi pi-lock"></i>
                     </div>
                     
                     <div class="col-12">
-                        <p-checkbox [(ngModel)]="checked" label="Souvenez-vous de moi" value="SaveInfo"
+                        <p-checkbox  [(ngModel)]="checked" label="Souvenez-vous de moi" value="SaveInfo"
                         binary="true"></p-checkbox>
                     </div>
                     
                     <div class="buttons">
-                        <button pButton type="button" [routerLink]="['/admin']" label="Connexion"></button>
-                        <a href="#" class="secondary-button" [routerLink]="['/inscription']">Mot de passe oublier?</a>
+                        <button pButton type="button"
+                        (click)="login()" 
+                        label="Connexion"></button>
+                        <!-- <a href="#" class="secondary-button" 
+                            [routerLink]="['/inscription']">Mot de passe oublier?</a> -->
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="desert"></div>
         </div>
-        <div class="desert"></div>
     </div>
-</div>
+    
+    <p-dialog [(visible)]="loginDialog" [style]="{width: '400px'}" header="Modification" [modal]="true"
+    class="p-fluid">
+    <ng-template pTemplate="content">
+        <form [formGroup]="loginForm" >
+            <div class="grid p-fluid mt-1">
+                <div class="field col-12 md:col-12">
+                    <span class="p-float-label">
+                        <input type="text"
+                        pInputText 
+                        id="user"
+                        name="user"
+                        required
+                        autofocus
+                        formControlName="user"
+                        />
+                        <label for="inputtext">Nouveau nom d'utilisateur</label>
+                    </span>
+                    <small
+                    class="p-error"
+                    *ngIf="
+                    loginForm.controls['user'].dirty &&
+                    loginForm.hasError('required', 'user')
+                    ">* utilisateur obligatoire.</small>
+                </div>
+            </div>
+            <div class="grid p-fluid mt-1">
+                <div class="field col-12 md:col-12">
+                    <span class="p-float-label">
+                        <input type="password" id="inputtext"
+                        pInputText 
+                        id="password"
+                        name="password"
+                        required
+                        autofocus
+                        formControlName="password"
+                        />
+                        <label for="inputtext">Nouveau mot de passe</label>
+                    </span>
+                    <small
+                    class="p-error"
+                    *ngIf="
+                    loginForm.controls['passwordConfirm'].dirty &&
+                    loginForm.hasError('required', 'passwordConfirm')
+                    ">* mot de passe obligatoire.</small>
+                </div>
+            </div>
+            <div class="grid p-fluid mt-1">
+                <div class="field col-12 md:col-12">
+                    <span class="p-float-label">
+                        <input type="password" 
+                        pInputText 
+                        id="passwordConfirm"
+                        required
+                        autofocus
+                        name="passwordConfirm"
+                        formControlName="passwordConfirm"
+                        />
+                        <label for="inputtext">Confirmation de nouveau mot de passe </label>
+                    </span>
+                    <small
+                    class="p-error"
+                    *ngIf="
+                    loginForm.controls['passwordConfirm'].dirty &&
+                    loginForm.hasError('required', 'passwordConfirm')
+                    ">* mot de passe obligatoire.</small>
+                </div>
+            </div>
+        </form>
+        
+    </ng-template>
+    
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Fermer" icon="pi pi-times" class="p-button-text"
+        (click)="hide()"></button>
+        <button pButton pRipple label="Valider" icon="pi pi-check" class="p-button-text"
+        (click)="update()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="infoDialog" header="Avertissement" [modal]="true" [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span >C'est votre première connexion, prière de modifier le compte utilisateur !</span>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="infoDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="modifLogin()"></button>
+    </ng-template>
+</p-dialog>

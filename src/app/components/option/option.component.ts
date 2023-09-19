@@ -22,9 +22,12 @@ export class OptionComponent {
   optionDialog: boolean = false;
   
   
-  deleteProductDialog: boolean = false;
-  deleteProductsDialog: boolean = false;
+  deleteDialog: boolean = false;
   
+  role: any;
+  etudiant = "Etudiant";
+  enseignant = "Enseignant";
+  admin = "Admin";
   
   
   submitted: boolean = false;
@@ -39,12 +42,15 @@ export class OptionComponent {
     private messageService: MessageService,
     private breadcrumbService: BreadcrumbService) {
       this.breadcrumbService.setItems([
-        { label: 'Configurations' },
-        { label: 'Optio' },
+        { label: 'ISI-OPT' },
+        { label: 'Option' },
       ]);
     }
     
     ngOnInit() {
+      
+      this.role = localStorage.getItem('role');
+      
       this.findAllDeps();
       this.findAllOptions();
       this.optionForm = new FormGroup({
@@ -138,12 +144,34 @@ export class OptionComponent {
       });
     }
     
-    edit(option: any) {
-      this.option = { ...option };
-      this.optionDialog = true;
-      console.log(this.option);
+    deleteSelected(id:any) {
+      this.service.findOptionById(id)
+      .subscribe({
+        next: (response) => {
+          this.option = response;
+          this.deleteDialog = true;
+        },
+        error: (response) => {
+          console.log(response);
+        }
+      })
     }
     
+    edit(id:any) {
+      this.service.findOptionById(id)
+      .subscribe({
+        next: (response) => {
+          this.option = response;
+          this.optionDialog = true;
+          this.optionForm.get("departementId")?.patchValue(this.option.departementId);
+          this.optionForm.get("libelle")?.patchValue(this.option.libelle);
+          
+        },
+        error: (response) => {
+          console.log(response);
+        }
+      })
+    }
     
     
     
@@ -168,11 +196,6 @@ export class OptionComponent {
         }
       })
     }
-    
-    deleteSelectedProducts() {
-      this.deleteProductsDialog = true;
-    }
-    
     
     onGlobalFilter(table: Table, event: Event) {
       table.filterGlobal((event.target as HTMLInputElement).value, 'contains');

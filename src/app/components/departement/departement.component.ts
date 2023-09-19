@@ -24,10 +24,12 @@ export class DepartementComponent {
   departementDialog: boolean = false;
   
   
-  deleteProductDialog: boolean = false;
-  deleteProductsDialog: boolean = false;
+  deleteDialog: boolean = false;
   
-  
+  role: any;
+  etudiant = "Etudiant";
+  enseignant = "Enseignant";
+  admin = "Admin";
   
   submitted: boolean = false;
   
@@ -41,12 +43,14 @@ export class DepartementComponent {
     private messageService: MessageService,
     private breadcrumbService: BreadcrumbService) {
       this.breadcrumbService.setItems([
-        { label: 'Configurations' },
+        { label: 'ISI-DEP' },
         { label: 'Departement' },
       ]);
     }
     
     ngOnInit() {
+      
+      this.role = localStorage.getItem('role');
       
       this.findAllSections();
       this.findAllDeps();
@@ -56,7 +60,6 @@ export class DepartementComponent {
       })
       
       this.departementForm = new FormGroup({
-      //  dateC: new FormControl('', Validators.required),
         sectionId: new FormControl('', Validators.required),
         libelle: new FormControl('', Validators.required),
       })
@@ -135,10 +138,9 @@ export class DepartementComponent {
             this.findAllSections();
           },
         })
+      } else {
         this.validateAllFields(this.sectionForm)
       }
-      this.section = { ...this.section };
-      this.sectionDialog = false;
     }
     
     addDep() {
@@ -146,7 +148,6 @@ export class DepartementComponent {
         const request = {
           libelle: this.libelleValue.value,
           sectionId: this.sectionValue.value.id,
-        //  dateC: this.dateValue.value
         }
         console.log(request);
         if (this.departement.id) {
@@ -181,10 +182,6 @@ export class DepartementComponent {
       return this.departementForm.get('libelle')
     }
     
-    // get dateValue() {
-    //   return this.departementForm.get('dateC')
-    // }
-    
     get sectionValue() {
       return this.departementForm.get('sectionId')
     }
@@ -200,14 +197,6 @@ export class DepartementComponent {
       });
     }
     
-    edit(departement: any) {
-      this.departement = { ...departement };
-      this.departementDialog = true;
-      console.log(this.departement);
-    }
-    
-    
-    
     private validateAllFields(formGroup: FormGroup) {
       Object.keys(formGroup.controls).forEach((field) => {
         const control = formGroup.get(field)
@@ -220,10 +209,34 @@ export class DepartementComponent {
       })
     }
     
-    deleteSelectedProducts() {
-      this.deleteProductsDialog = true;
+    deleteSelected(id:any) {
+      this.depsService.findDepById(id)
+      .subscribe({
+        next: (response) => {
+          this.departement = response;
+          this.deleteDialog = true;
+        },
+        error: (response) => {
+          console.log(response);
+        }
+      })
     }
     
+    edit(id:any) {
+      this.depsService.findDepById(id)
+      .subscribe({
+        next: (response) => {
+          this.departement = response;
+          this.departementDialog = true;
+          this.departementForm.get("sectionId")?.patchValue(this.departement.sectionId);
+          this.departementForm.get("libelle")?.patchValue(this.departement.libelle);
+          
+        },
+        error: (response) => {
+          console.log(response);
+        }
+      })
+    }
     
     onGlobalFilter(table: Table, event: Event) {
       table.filterGlobal((event.target as HTMLInputElement).value, 'contains');

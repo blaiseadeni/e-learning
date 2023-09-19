@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { BreadcrumbService } from 'src/app/breadcrumb.service';
 import { Product } from 'src/app/demo/domain/product';
-import { ProductService } from 'src/app/demo/service/productservice';
+import { EvenementService } from 'src/app/services/evenement/evenement.service';
 
 @Component({
   selector: 'app-vacance',
@@ -12,139 +13,191 @@ import { ProductService } from 'src/app/demo/service/productservice';
   styleUrls: ['./vacance.component.scss']
 })
 export class VacanceComponent {
-
+  
   productDialog: boolean = false;
-
+  
   deleteProductDialog: boolean = false;
-
+  
   deleteProductsDialog: boolean = false;
-
+  
   products: Product[] = [];
-
+  
   product: Product = {};
-
+  
   selectedProducts: Product[] = [];
-
+  
   submitted: boolean = false;
-
+  
   cols: any[] = [];
-
+  
   statuses: any[] = [];
-
+  
   rowsPerPageOptions = [5, 10, 20];
-
-  constructor(private productService: ProductService, private messageService: MessageService,
-    private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) {
+  
+  eventDialog: boolean = false;
+  deleteDialog: boolean = false;
+  
+  evenements: any = [];
+  evenement: any = {};
+  
+  evenForm: FormGroup;
+  
+  types: any[] = [];
+  
+  role: any;
+  etudiant = "Etudiant";
+  enseignant = "Enseignant";
+  admin = "Admin";
+  
+  constructor(private service: EvenementService, private messageService: MessageService,public breadcrumbService: BreadcrumbService) {
     this.breadcrumbService.setItems([
-      { label: 'Anonces' },
-      { label: 'Evenement' },
+      { label: 'Calendrier' },
+      { label: 'Evenements', routerLink: [''] }
     ]);
   }
-
+  
   ngOnInit() {
-    this.productService.getProducts().then(data => this.products = data);
-    this.cols = [
-      { field: 'name', header: 'Name' },
-      { field: 'price', header: 'Price' },
-      { field: 'category', header: 'Category' },
-      { field: 'rating', header: 'Reviews' },
-      { field: 'inventoryStatus', header: 'Status' }
+    
+    this.role = localStorage.getItem('role');
+    
+    this.findAllEvents();
+    
+    this.evenForm = new FormGroup({
+      libelle: new FormControl('', Validators.required),
+      type: new FormControl('', Validators.required),
+      dateEvent: new FormControl('', Validators.required),
+      heureDebut: new FormControl('', Validators.required),
+      heureFin: new FormControl('', Validators.required),
+    })
+    
+    this.types = [
+      { libelle: 'Sportive', value: 'Sportive' },
+      { libelle: 'Culturelle', value: 'Culturelle' },
+      { libelle: 'Autres', value: 'Autres' },
+      
     ];
-
-    this.statuses = [
-      { label: 'INSTOCK', value: 'instock' },
-      { label: 'LOWSTOCK', value: 'lowstock' },
-      { label: 'OUTOFSTOCK', value: 'outofstock' }
-    ];
   }
-  openNew() {
-    this.product = {};
-    this.submitted = false;
-    this.productDialog = true;
-  }
-
-  deleteSelectedProducts() {
-    this.deleteProductsDialog = true;
-  }
-
-  editProduct(product: Product) {
-    this.product = { ...product };
-    this.productDialog = true;
-  }
-
-  deleteProduct(product: Product) {
-    this.deleteProductDialog = true;
-    this.product = { ...product };
-  }
-
-  confirmDeleteSelected() {
-    this.deleteProductsDialog = false;
-    this.products = this.products.filter(val => !this.selectedProducts.includes(val));
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-    this.selectedProducts = [];
-  }
-
-  confirmDelete() {
-    this.deleteProductDialog = false;
-    this.products = this.products.filter(val => val.id !== this.product.id);
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-    this.product = {};
-  }
-
-  hideDialog() {
-    this.productDialog = false;
-    this.submitted = false;
-  }
-
-  saveProduct() {
-    this.submitted = true;
-
-    if (this.product.name?.trim()) {
-      if (this.product.id) {
-        // @ts-ignore
-        this.product.inventoryStatus = this.product.inventoryStatus.value ? this.product.inventoryStatus.value : this.product.inventoryStatus;
-        this.products[this.findIndexById(this.product.id)] = this.product;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+  
+  findAllEvents() {
+    this.service.findAllEvents()
+    .subscribe({
+      next: (response) => {
+        this.evenements = response;
+        console.log(this.evenements);
+      },
+      error: (response) => {
+        console.log(response);
+      }
+    })
+  }  
+  
+  add() {
+    if (this.evenForm.valid) {
+      const request = {
+        libelle: this.libelleValue.value,
+        type: this.typeValue.value.value,
+        dateEvent: this.dateEventValue.value,
+        heureDebut: this.heureDebutValue.value,
+        heureFin: this.heureFinValue.value,
+      }
+      
+      console.log(request);
+      if (request.heureDebut.getTime() >= request.heureFin.getTime()) {
+        this.messageService.add({ severity: 'error', summary: 'Info', detail: 'Heure invalid', life: 3000 });
       } else {
-        this.product.id = this.createId();
-        this.product.code = this.createId();
-        this.product.image = 'product-placeholder.svg';
-        // @ts-ignore
-        this.product.inventoryStatus = this.product.inventoryStatus ? this.product.inventoryStatus.value : 'INSTOCK';
-        this.products.push(this.product);
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+        this.service.addEvent(request).subscribe({
+          next: (value) => {
+            this.messageService.add({ severity: 'success', summary: 'Enregistrement', detail: 'Success', life: 3000 });
+            this.findAllEvents();
+          },
+          complete: () => {
+            this.messageService.add({ severity: 'success', summary: 'Enregistrement', detail: 'Success', life: 3000 });
+            this.findAllEvents();
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'success', summary: 'Enregistrement', detail: 'Success', life: 3000 });
+            this.findAllEvents();
+          },
+        }) 
       }
-
-      this.products = [...this.products];
-      this.productDialog = false;
-      this.product = {};
+    } else {
+      this.validateAllFields(this.evenForm)
     }
   }
-
-  findIndexById(id: string): number {
-    let index = -1;
-    for (let i = 0; i < this.products.length; i++) {
-      if (this.products[i].id === id) {
-        index = i;
-        break;
+  
+  deleteSelected(id:any) {
+    this.service.findEventById(id)
+    .subscribe({
+      next: (response) => {
+        this.evenement = response;
+        this.deleteDialog = true;
+      },
+      error: (response) => {
+        console.log(response);
       }
-    }
-
-    return index;
+    })
   }
-
-  createId(): string {
-    let id = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 5; i++) {
-      id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
+  
+  edit(id:any) {
+    this.service.findEventById(id)
+    .subscribe({
+      next: (response) => {
+        this.evenement = response;
+        this.eventDialog = true;
+        this.evenForm.get("libelle")?.patchValue(this.evenement.libelle);
+        this.evenForm.get("type")?.patchValue(this.evenement.type);
+        this.evenForm.get("dateEvent")?.patchValue(this.evenement.dateEvent);
+        this.evenForm.get("heureDebut")?.patchValue(this.evenement.heureDebut);
+        this.evenForm.get("heureFin")?.patchValue(this.evenement.heureFin);
+      },
+      error: (response) => {
+        console.log(response);
+      }
+    })
   }
-
+  
+  get libelleValue() {
+    return this.evenForm.get('libelle')
+  }
+  
+  get typeValue() {
+    return this.evenForm.get('type')
+  }
+  
+  get dateEventValue() {
+    return this.evenForm.get('dateEvent')
+  }
+  
+  get heureDebutValue() {
+    return this.evenForm.get('heureDebut')
+  }
+  
+  get heureFinValue() {
+    return this.evenForm.get('heureFin')
+  }
+  
+  open() {
+    this.eventDialog = true;
+  }
+  
+  hide() {
+    this.eventDialog = false;
+  }
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
-
-
+  
+  
+  private validateAllFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach((field) => {
+      const control = formGroup.get(field)
+      
+      if (control instanceof FormControl) {
+        control.markAsDirty({ onlySelf: true })
+      } else if (control instanceof FormGroup) {
+        this.validateAllFields(control)
+      }
+    })
+  }
+  
 }

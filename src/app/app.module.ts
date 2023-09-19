@@ -179,20 +179,13 @@ import { ChatComponent } from './components/chat/chat.component';
 import { ChatMessagesComponent } from './components/chat-messages/chat-messages.component';
 import { OptionComponent } from './components/option/option.component';
 import { OrientationComponent } from './components/orientation/orientation.component';
-// import {VgCoreModule} from '@videogular/ngx-videogular/core';
-// import {VgControlsModule} from '@videogular/ngx-videogular/controls';
-// import {VgOverlayPlayModule} from '@videogular/ngx-videogular/overlay-play';
-// import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
+
 
 @NgModule({
     imports: [
         BrowserModule,        
         ReactiveFormsModule,
         NgxExtendedPdfViewerModule,
-        // VgCoreModule,        
-        // VgControlsModule,
-        // VgOverlayPlayModule,
-        // VgBufferingModule,
         EditorModule,
         FormsModule,
         AppRoutingModule,

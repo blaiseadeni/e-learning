@@ -1,15 +1,19 @@
 <div class="grid">
     <div class="col-12">
         <div class="card">
-            <h5 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">ISI-TUTO</h5>
-            <p-dataView #dv [value]="products" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField"
+            <p-toast></p-toast>
+            <p-dataView #dv [value]="videos" [paginator]="true" [rows]="9" filterBy="titre" [sortField]="sortField"
             [sortOrder]="sortOrder" layout="grid">
             <ng-template pTemplate="header">
                 <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
-                    <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Choisir une date"
-                    (onChange)="onSortChange($event)"></p-dropdown>
-                    <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Choisir un auditoire"
-                    (onChange)="onSortChange($event)"></p-dropdown>
+                    <div class="my-2">
+                        <button pButton pRipple 
+                        label="Téléverser" 
+                        icon="pi pi-plus" 
+                        class="p-button-primary mr-2"
+                        (click)="openDialg()"
+                        ></button>
+                    </div>
                     <span class="p-input-icon-left mb-2 md:mb-0">
                         <i class="pi pi-search"></i>
                         <input type="search" pInputText placeholder="Nom du cours"
@@ -18,18 +22,22 @@
                 </div>
             </ng-template>
             
-            <ng-template let-product pTemplate="gridItem">
+            
+            
+            <ng-template let-video pTemplate="gridItem">
                 <div class="col-12 md:col-4 ">
                     <div class="card m-1">
-                        <div class="video-container paused" data-volume-level="high">
+                        <div #vid class="video-container paused" data-volume-level="high">
                             <img class="thumbnail-img">       
-                            <video controls src="/assets/videos/Videos.mp4">
-                                <track kind="captions" srclang="en" src="/assets/videos/subtitles.vtt">
+                            <video controls [src]="video.fichier">
+                                <track kind="captions" srclang="en" [src]="videos.fichier">
                             </video>
                         </div>  
-                        <div class="font-bold ">POO C#</div>
-                        <div class="mb-3">L2GL</div>
-                        <div style="margin-top: -12px;">Prof. Salomon LOMO AMUKI</div>
+                        <div class="font-bold ">Titre : {{video.titre}}</div>
+                        <div class="mb-1">Cours : {{video.cours}}</div>
+                        <div class="mb-1">Promotion : {{video.auditoire}}</div>
+                        <div class="mb-3">Année académique : {{video.annee}}</div>
+                        <!-- <div style="margin-top: -12px;">Prof. Salomon LOMO AMUKI</div> -->
                     </div>
                 </div>
             </ng-template> 
@@ -39,11 +47,82 @@
 </div>
 
 
+<p-dialog [(visible)]="videoDialog" [style]="{width: '450px'}" header="Video" [modal]="true"
+class="p-fluid">
+<p-toast></p-toast>
+<ng-template pTemplate="content">
+    <form [formGroup]="videoForm">
+        <div class="grid p-fluid mt-3">
+            
+            <div class="field col-12 md:col-12">
+                <span class="p-float-label">
+                    <input type="text" 
+                    id="titre"
+                    name="titre"
+                    formControlName="titre"
+                    required
+                    pInputText>
+                    <label for="inputtext">Titre</label>
+                </span>
+                <small
+                class="p-error"
+                *ngIf="
+                videoForm.controls['titre'].dirty &&
+                videoForm.hasError('required', 'titre')
+                ">* titre obligatoire.</small>
+            </div>
+            
+            
+            <div class="field col-12 md:col-12">
+                <span class="p-float-label">
+                    <p-dropdown inputId="dropdown" 
+                    [autoDisplayFirst]="false"
+                    [options]="cours"
+                    optionLabel="titre"
+                    id="coursId"
+                    name="coursId"
+                    [filter]="true"
+                    filterBy="titre"
+                    required
+                    appendTo="body"
+                    formControlName="coursId">
+                </p-dropdown>
+                <label for="inputtext">Cours</label>
+            </span>
+            <small
+            class="p-error"
+            *ngIf="
+            videoForm.controls['coursId'].dirty &&
+            videoForm.hasError('required', 'coursId')
+            ">* cours obligatoire.</small>
+        </div>
+        
+        <div class="col-6 "> 
+            <div class="p-col-12 p-md-12">
+                <div class="p-field p-grid">
+                    <input class="d-none" 
+                    type="file" accept="video/*" 
+                    #file 
+                    required
+                    (change)="onVideoChanged(file.files)">
+                    <small
+                    class="p-error"
+                    *ngIf="
+                    videoForm.controls['coursId'].dirty &&
+                    videoForm.hasError('required', 'coursId')
+                    ">* fichier obligatoire.</small>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</form>
+</ng-template>
 
-
-<!-- <div class="video-container paused" data-volume-level="high">
-    <img class="thumbnail-img">       
-    <video controls src="/assets/videos/Videos.mp4">
-        <track kind="captions" srclang="en" src="/assets/videos/subtitles.vtt">
-    </video>
-</div>     -->
+<ng-template pTemplate="footer">
+    <button pButton pRipple label="Fermer" icon="pi pi-times" class="p-button-text"
+    (click)="hideDialog()"></button>
+    <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text"
+    (click)="save()"></button>
+</ng-template>
+</p-dialog>

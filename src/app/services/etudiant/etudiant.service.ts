@@ -7,8 +7,15 @@ import { environment } from 'src/environments/environment';
 })
 export class EtudiantService {
   baseApiUrl: string = environment.baseApiUrl;
-  private headers = {
-    headers: new HttpHeaders().set('Content-Type', 'application/json')
+  // baseApiUrl: string = 'http://192.168.142.89:70/';
+  // private headers = {
+  //   headers: new HttpHeaders().set('Content-Type', 'application/json')
+  // };
+  headers={
+    headers: new HttpHeaders({
+      'enctype': 'multipart/form-data',
+      'Accept': 'application/json'
+    })
   };
   
   
@@ -20,6 +27,10 @@ export class EtudiantService {
   
   findEtuById(id: string) {
     return this.http.get(this.baseApiUrl + 'api/Etudiant/' + id);
+  }
+  
+  findImgById(code: string) {
+    return this.http.get(this.baseApiUrl + 'api/Etudiant/' + code);
   }
   
   addEtdudiant(etudiant: any) {

@@ -1,35 +1,25 @@
-
-<div class="border-round border-1 surface-border p-4 surface-card">
-    <ul class="m-0 p-0 list-none">
-        <li class="mb-3">
-            <div class="flex" routerLink="/conference/chatText">
-                <p-avatar  size="large" styleClass="mr-2" shape="circle" image="https://primefaces.org/cdn/primeng/images/galleria/galleria1.jpg"></p-avatar>
+<div class="border-round border-1 surface-border p-4 surface-card"  >
+    <ul class="m-0 p-0 list-none" *ngFor="let etudiant of etudiants let i=index" >
+        <li class="mb-3"  >
+            <div class="flex" [routerLink]="['/conference','chatText',etudiant.id]">
+                <p-avatar  size="large"
+                styleClass="mr-2"
+                shape="circle" 
+                [image]="etudiant.photo"></p-avatar>
                 <div style="flex: 1">
-                    <div><p width="100%" styleClass="mb-2 " style="font-weight: bold;">Salomon</p></div>
-                    <div><p style="font-style: smaller;">L2-GL</p></div>
+                    <div>
+                        <p width="100%" styleClass="mb-2 " > {{etudiant.nom +" "+etudiant.postnom+" "+etudiant.prenom}} </p>
+                    </div>
+                    <div>
+                        <p style="font-style: smaller;">{{etudiant.auditoire}}</p>
+                    </div>
                 </div>
-                <p-avatar label="10" styleClass="mr-2" [style]="{ 'background-color': '#65d200', color: '#ffffff' }" shape="circle"></p-avatar>
+                <p-avatar label="10" 
+                styleClass="mr-2"
+                [style]="{ 'background-color': '#65d200', color: '#ffffff' }" 
+                shape="circle"></p-avatar>
             </div>
         </li>
-        <li class="mb-3">
-            <div class="flex" routerLink="/conference/chatText">
-                <p-avatar label="P" size="large" styleClass="mr-2" shape="circle" image="" [style]="{ 'background-color': '#2196F3', color: '#ffffff' }"></p-avatar>
-                <div style="flex: 1">
-                    <div><p width="100%" styleClass="mb-2 " style="font-weight: bold;">Providence</p></div>
-                    <div><p style="font-style: smaller;">L2-BDD</p></div>
-                </div>
-                <p-avatar label="1" styleClass="mr-2" [style]="{ 'background-color': '#65d200', color: '#ffffff' }" shape="circle"></p-avatar>
-            </div>
-        </li>        
-        <li class="mb-3">
-            <div class="flex" routerLink="/conference/chatText">
-                <p-avatar label="S" size="large" styleClass="mr-2" shape="circle" image="" [style]="{ 'background-color': '#2196F3', color: '#ffffff' }"></p-avatar>
-                <div style="flex: 1">
-                    <div><p width="100%" styleClass="mb-2 " style="font-weight: bold;">Jolie</p></div>
-                    <div><p style="font-style: smaller;">L2-INFO</p></div>
-                </div>
-                 <p-avatar label="3" styleClass="mr-2" [style]="{ 'background-color': '#65d200', color: '#ffffff' }" shape="circle"></p-avatar>
-            </div>
-        </li>        
     </ul>
 </div>
+

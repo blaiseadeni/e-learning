@@ -1,109 +1,126 @@
 import { Component } from '@angular/core';
 import { BreadcrumbService } from 'src/app/breadcrumb.service';
-import { EventService } from 'src/app/demo/service/eventservice';
 // @fullcalendar plugins
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import timeGridPlugin from '@fullcalendar/timegrid';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Table } from 'primeng/table/public_api';
+import { EvenementService } from 'src/app/services/evenement/evenement.service';
 
 @Component({
   selector: 'app-evenement',
   templateUrl: './evenement.component.html',
-  styles: [`
-  @media screen and (max-width: 960px) {
-      :host ::ng-deep .fc-header-toolbar {
-          display: flex;
-          flex-wrap: wrap;
-
-          .fc-dayGridMonth-button {
-              margin-top: 1rem;
-          }
-          .fc-timeGridWeek-button{
-              margin-top: 1rem;
-          }
-          .fc-timeGridDay-button{
-              margin-top: 1rem;
-          }
-      }
-  }
-
-  :host ::ng-deep {
-      .fc.fc-theme-standard .fc-highlight {
-          color: #ffffff;
-          background: var(--fc-highlight-color, rgba(63, 81, 181, 0.12));
-      }
-  }
-`],
+  providers: [MessageService, ConfirmationService],
   styleUrls: ['./evenement.component.scss']
 })
 export class EvenementComponent {
-
-  events: any[];
-
-  options: any;
-
-  header: any;
-
+  
   eventDialog: boolean;
-
-  changedEvent: any;
-
-  clickedEvent = null;
-
-  constructor(private eventService: EventService, public breadcrumbService: BreadcrumbService) {
+  
+  evenements: any = [];
+  
+  evenForm: FormGroup;
+  
+  
+  
+  constructor(private service: EvenementService, private messageService: MessageService,public breadcrumbService: BreadcrumbService) {
     this.breadcrumbService.setItems([
       { label: 'Calendrier' },
       { label: 'Evenements', routerLink: [''] }
     ]);
   }
-
+  
   ngOnInit() {
-    this.eventService.getEvents().then(events => {
-      this.events = events;
-      this.options = { ...this.options, ...{ events: events } };
-    });
-
-    this.options = {
-      plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-      initialDate: '2023-05-11',
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    
+    
+    this.findAllEvents();
+    
+    this.evenForm = new FormGroup({
+      libelle: new FormControl('', Validators.required),
+      type: new FormControl('', Validators.required),
+      dateEvent: new FormControl('', Validators.required),
+      heureDebut: new FormControl('', Validators.required),
+      heureFin: new FormControl('', Validators.required),
+    })
+  }
+  
+  findAllEvents() {
+    this.service.findAllEvents()
+    .subscribe({
+      next: (response) => {
+        this.evenements = response;
+        console.log(this.evenements);
       },
-      editable: true,
-      selectable: true,
-      selectMirror: true,
-      dayMaxEvents: true,
-      eventClick: (e) => {
-        this.eventDialog = true;
-
-        this.clickedEvent = e.event;
-
-        this.changedEvent.title = this.clickedEvent.title;
-        this.changedEvent.start = this.clickedEvent.start;
-        this.changedEvent.end = this.clickedEvent.end;
+      error: (response) => {
+        console.log(response);
       }
-    };
-
-    this.changedEvent = { title: '', start: null, end: '', allDay: null };
-  }
-
-  save() {
+    })
+  }  
+  
+  add() {
+    if (this.evenForm.valid) {
+      const request = {
+        libelle: this.libelleValue.value,
+        type: this.typeValue.value,
+        dateEvent: this.dateEventValue.value,
+        heureDebut: this.heureDebutValue.value.id,
+        heureFin: this.heureFinValue.value,
+      }
+      
+      this.service.addEvent(request).subscribe({
+        next: (value) => {
+          this.messageService.add({ severity: 'success', summary: 'Enregistrement', detail: 'Success', life: 3000 });
+          this.findAllEvents();
+        },
+        complete: () => {
+          this.messageService.add({ severity: 'success', summary: 'Enregistrement', detail: 'Success', life: 3000 });
+          this.findAllEvents();
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'success', summary: 'Enregistrement', detail: 'Success', life: 3000 });
+          this.findAllEvents();
+        },
+      })
+      this.validateAllFields(this.evenForm)
+    }
     this.eventDialog = false;
-
-    this.clickedEvent.setProp('title', this.changedEvent.title);
-    this.clickedEvent.setStart(this.changedEvent.start);
-    this.clickedEvent.setEnd(this.changedEvent.end);
-    this.clickedEvent.setAllDay(this.changedEvent.allDay);
-
-    this.changedEvent = { title: '', start: null, end: '', allDay: null };
   }
-
-  reset() {
-    this.changedEvent.title = this.clickedEvent.title;
-    this.changedEvent.start = this.clickedEvent.start;
-    this.changedEvent.end = this.clickedEvent.end;
+  
+  
+  get libelleValue() {
+    return this.evenForm.get('libelle')
   }
-
+  
+  get typeValue() {
+    return this.evenForm.get('type')
+  }
+  
+  get dateEventValue() {
+    return this.evenForm.get('dateEvent')
+  }
+  
+  get heureDebutValue() {
+    return this.evenForm.get('heureDebut')
+  }
+  
+  get heureFinValue() {
+    return this.evenForm.get('heureDebut')
+  }
+  
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
+  
+  
+  private validateAllFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach((field) => {
+      const control = formGroup.get(field)
+      
+      if (control instanceof FormControl) {
+        control.markAsDirty({ onlySelf: true })
+      } else if (control instanceof FormGroup) {
+        this.validateAllFields(control)
+      }
+    })
+  }
+  
 }

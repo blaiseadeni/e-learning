@@ -1,14 +1,18 @@
-<div>
-    <h3>Posez une question publique</h3>
+<div class="grid">    
+    <div class="col-12">
+        <h5 id="isi">ISI-FORUM</h5>
+        
+    </div>
 </div>
 
-<div style="width: 700px;">
-    <p-card header="Écrire une bonne question">
+<div >
+    <p-toast></p-toast> 
+    <p-card header="POSEZ UNE BONNE QUESTION">
         <p class="m-0">
-            Vous êtes prêt à poser une question liée à la programmation et ce formulaire vous guidera tout au long du processus. 
+            Vous êtes prêt à poser une question  et ce formulaire vous guidera tout au long du processus. 
             Vous cherchez à poser une question non liée à la programmation ? 
             Voir les rubriques ici pour trouver un site pertinent.
-        </p>
+        </p> 
         
         <h6>Étapes</h6>
         <ul>
@@ -18,38 +22,47 @@
             <li>Ajoutez des "tags" qui aident à présenter votre question aux membres de la communauté.</li>
             <li> Passez en revue votre question et postez-la sur le site.</li>
         </ul>
-    </p-card>
-</div>
-
-<div style="margin-top: 10px; width:700px;">
-    <p-card >
+        
         <h5>Titre</h5>
-        <p>Soyez précis et imaginez que vous posez une question à une autre personne.</p>
-        <input style="width:660px;" pInputText type="text" class="p-inputtext-sm" placeholder="Exemple: Quel est l'élément typeScript utilisé pour spécifier Les types ?" />
-    </p-card>
-</div>
-
-<div style="display: flex; ">
-    <div style="margin-top: 10px; width:700px;">
-        <p-card >
-            <h5>Quels sont les détails de votre problème ?</h5>
-            <p style="margin-top: -15px;">Présentez le problème et développez ce que vous avez mis dans le titre. Minimum 20 caractères.</p>
-            <p-editor [(ngModel)]="text" [style]="{'height':'320px'} "></p-editor>
-            <div style="margin-top: 10px;">
-                <!-- <button routerLink="/conference/forum" pButton pRipple label="Annuler" icon="pi pi-times-circle" class="p-button-danger mr-2"></button> -->
-                <button pButton pRipple label="Soumettre" icon="pi pi-check" class="p-button-primary mr-2"></button>
+        <p>Soyez précis et imaginez que vous posez une question à une autre personne.</p>  
+        <div class="grid p-fluid mt-3">
+            <div class="field col-12 md:col-12">
+                <span class="p-float-label">
+                    <input  pInputText 
+                    type="text" 
+                    id="titre"
+                    name="titre" 
+                    [(ngModel)]="question.titre"
+                    />
+                    <label for="titre">Exemple: Quel est l'élément typeScript utilisé pour spécifier Les types ?</label>
+                </span>
             </div>
-        </p-card>
+        </div>
+        <h5>Quels sont les détails de votre problème ?</h5>
+        <p style="margin-top: -15px;">Présentez le problème et développez ce que vous avez mis dans le titre. Minimum 20 caractères.</p>
+        <div class="grid p-fluid mt-3">
+            <div class="field col-12 md:col-12">
+                <span class="p-float-label">
+                    <textarea rows="5"
+                    cols="157" 
+                    id="contenu"
+                    name="contenu"
+                    [(ngModel)]="question.contenu"
+                    pInputTextarea >
+                </textarea>
+            </span>
+        </div>
+        </div>
+        
+        <div id="btn" >
+            <!-- <button routerLink="/conference/forum" pButton pRipple label="Annuler" icon="pi pi-times-circle" class="p-button-danger mr-2"></button> -->
+            <button pButton pRipple 
+            label="Soumettre"
+            icon="pi pi-check"
+            (click)="save()"
+            class="p-button-primary mr-2">
+        </button>
     </div>
     
-    <div style="margin-top: 10px; width:300px; margin-left: 20px;">        
-        <p-card header="Présentez le problème" >
-            <div style="display: flex;">
-                <div> <img src="assets/layout/images/editer.png" alt="logo"  style="height: 30px; width: 30px;"></div>
-                <div style="margin-left: 10px; font-size: smaller;">
-                    <p>Expliquez comment vous avez rencontré le problème que vous essayez de résoudre et toutes les difficultés qui vous ont empêché de le résoudre vous-même.</p>
-                </div>
-            </div>
-        </p-card>
-    </div>
+</p-card>
 </div>

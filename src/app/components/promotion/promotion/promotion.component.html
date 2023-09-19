@@ -2,32 +2,19 @@
     <p-toast></p-toast>
     <div class="col-12">
         <div class="card px-6 py-6">
-            <h5 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">ISI-PROM</h5>
-            <p-toolbar styleClass="mb-4">
-                <ng-template pTemplate="left">
-                    <div class="my-2">
-                        <button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-primary mr-2"
-                        (click)="openAuditoire()"></button>
-                        <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger"
-                        (click)="deleteSelectedProducts()"
-                        [disabled]="!selectedProducts || !selectedProducts.length"></button>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="right">
-                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1200000" label="Import"
-                    chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
-                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
-                </ng-template>
-            </p-toolbar>
             
             <p-table #dt [value]="auditoires" [columns]="cols" responsiveLayout="scroll" [rows]="12"
             [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="12"
             [paginator]="true" [rowsPerPageOptions]="[12,20,30]" [showCurrentPageReport]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="id">
+            selectionMode="multiple" [rowHover]="true" dataKey="id">
             <ng-template pTemplate="caption">
                 <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                    <h5 class="m-0">Auditoires</h5>
+                    <h5 class="m-0" [hidden]="role === admin">Liste d'auditoires</h5>
+                    <div class="my-2" [hidden]="role === enseignant || role === etudiant">
+                        <button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-primary mr-2"
+                        (click)="openAuditoire()"></button>
+                    </div>
                     <span class="block mt-2 md:mt-0 p-input-icon-left">
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
@@ -37,45 +24,27 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th style="width: 1rem">
-                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                    </th>
                     <th pSortableColumn="code"># <p-sortIcon field="code"></p-sortIcon></th>
                     <th pSortableColumn="name">Auditoire <p-sortIcon field="name"></p-sortIcon></th>
-                    <th pSortableColumn="name">Promotion<p-sortIcon field="name"></p-sortIcon></th>
-                    <!-- <th pSortableColumn="inventoryStatus">Date<p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
-                    <th > </th>
+                    <th [hidden]="role === enseignant || role === etudiant"> </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-auditoire>
                 <tr>
-                    <td>
-                        <p-tableCheckbox [value]="auditoire"></p-tableCheckbox>
-                    </td>
-                    <td style="width:20%; min-width:5rem;"><span class="p-column-title">Code</span>
+                    <td style="width:40%; min-width:5rem;"><span class="p-column-title">Code</span>
                         {{auditoire.id }}
                     </td>
-                    <td style="width:30%; min-width:12rem;">
+                    <td style="width:60%; min-width:12rem;">
                         <span class="p-column-title">Name</span>
                         {{auditoire.libelle}}
                     </td>
-                    <td style="width:30%; min-width:12rem;">
-                        <span class="p-column-title">Name</span>
-                        {{auditoire.promotionId}}
-                    </td>
-                    <!-- <td style="width:20%; min-width:12rem;">
-                        <span class="p-column-title">Name</span>
-                        {{product.name}}
-                    </td> -->
-                    
-                    
-                    <td>
+                    <td [hidden]="role === enseignant || role === etudiant">
                         <div class="flex">
                             <button pButton pRipple icon="pi pi-pencil"
                             class="p-button-rounded p-button-primary mr-2"
-                            (click)="edit(auditoire)"></button>
+                            (click)="edit(auditoire.id)"></button>
                             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                            (click)="delete(auditoire.id)"></button>
+                            (click)="deleteSelected(auditoire.id)"></button>
                         </div>
                     </td>
                 </tr>
@@ -103,38 +72,36 @@
                         <label for="inputtext">Orientation</label>
                     </span>
                 </div>
+                <small
+                class="p-error"
+                *ngIf="
+                auditoireForm.controls['orientationId'].dirty &&
+                auditoireForm.hasError('required', 'orientationId')
+                "
+                >* orientation obligatoire.</small
+                >
             </div>
             
-            <div class="col-12 md:col-12">
-                <div class="p-inputgroup">
-                    <span class="p-float-label">
-                        <p-dropdown inputId="dropdown" 
-                        [autoDisplayFirst]="false" 
-                        [options]="promotions"
-                        id="promotionId"
-                        name="promotionId"
-                        formControlName="promotionId"
-                        optionLabel="libelle"
-                        appendTo="body">
-                    </p-dropdown>
-                    <label for="inputtext">Promotion</label>
+            <div class="field col-12 md:col-12">
+                <span class="p-float-label">
+                    <input type="text" 
+                    id="libelle"
+                    name="libelle"
+                    formControlName="libelle" 
+                    pInputText>
+                    <label for="inputtext">Auditoire</label>
                 </span>
-                <button (click)="openPromotion()" type="button" pButton pRipple icon="pi pi-plus" styleClass="p-button-warn"></button>
             </div>
+            <small
+            class="p-error"
+            *ngIf="
+            auditoireForm.controls['libelle'].dirty &&
+            auditoireForm.hasError('required', 'libelle')
+            "
+            >* libelle obligatoire.</small
+            >
         </div>
-        
-        <div class="field col-12 md:col-12">
-            <span class="p-float-label">
-                <input type="text" 
-                id="libelle"
-                name="libelle"
-                formControlName="libelle" 
-                pInputText>
-                <label for="inputtext">Auditoire</label>
-            </span>
-        </div>
-    </div>
-</form> 
+    </form> 
 </ng-template>
 
 <ng-template pTemplate="footer">
@@ -145,46 +112,14 @@
 </ng-template>
 </p-dialog>
 
-<p-dialog [(visible)]="promotionDialog" [style]="{width: '450px'}" header="Promotion" [modal]="true"
-class="p-fluid">
-<ng-template pTemplate="content">
-    <form [formGroup]="promotionForm">
-        <div class="grid p-fluid mt-3">
-            
-            <div class="field col-12 md:col-12">
-                <span class="p-float-label">
-                    <input type="text"
-                    id="libelle" 
-                    name="libelle"
-                    formControlName="libelle"
-                    pInputText>
-                    <label for="inputtext">Promotion</label>
-                </span>
-            </div>
-        </div>
-    </form>
-</ng-template>
-
-<ng-template pTemplate="footer">
-    <button pButton pRipple label="Fermer" icon="pi pi-times" class="p-button-text"
-    (click)="hidePromoDialog()"></button>
-    <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text"
-    (click)="addPromo()"></button>
-</ng-template>
-</p-dialog>
-
-
-
-<p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+<p-dialog [(visible)]="deleteDialog" header="Confirmation" [modal]="true" [style]="{width:'450px'}">
     <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Etes-vous sûr de supprimer le departement selectionner ?</span>
+        <span *ngIf="auditoire">Etes-vous sûr de supprimer <b>{{auditoire.libelle}}</b>?</span>
     </div>
     <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non"
-        (click)="deleteProductsDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui"
-        (click)="confirmDeleteSelected()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="delete(orientation.id)"></button>
     </ng-template>
 </p-dialog>
 </div>
