@@ -14,22 +14,22 @@
                 </div>
             </div>
         </div>
-        <div  >
-
-            <div  class="flex align-items-center p-1 w-full flex-wrap" *ngFor="let send of messages" >
-                <div id="p">
-                    <p  >{{send.text}}</p>
-                    <p class="flex flex-column align-items-end" id="date">{{send.sentAt | date:'dd/MM/yyyy HH:mm'}}</p>
+        <div  *ngFor="let message of tableauFinal">
+            
+            <div  class="flex align-items-center p-1 w-full flex-wrap" *ngIf="message.author == author">
+                <div id="p" >
+                    <p  >{{message.text}}</p>
+                    <p class="flex flex-column align-items-end" id="date">{{message.sentAt | date:'dd/MM/yyyy HH:mm'}}</p>
                 </div>
             </div>
             
-            <div class="flex flex-column align-items-end mt-2" *ngFor="let message of sendTo">
+            <div class="flex flex-column align-items-end mt-2" *ngIf="message.author == etudiantId">
                 <div id="ps">
                     <p  > {{message.text}}</p>
                     <p class="flex flex-column align-items-end" id="date">{{message.sentAt | date:'dd/MM/yyyy HH:mm'}}</p>
                 </div>
             </div>
-
+            
         </div>
         <div class="flex justify-content-between mt-3">
             <textarea rows="1" cols="178"

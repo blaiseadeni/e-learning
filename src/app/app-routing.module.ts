@@ -36,6 +36,7 @@ import { ChatComponent } from './components/chat/chat.component';
 import { ChatMessagesComponent } from './components/chat-messages/chat-messages.component';
 import { OrientationComponent } from './components/orientation/orientation.component';
 import { OptionComponent } from './components/option/option.component';
+import { ReportComponent } from './components/report/report/report.component';
 
 @NgModule({
     imports: [
@@ -64,6 +65,7 @@ import { OptionComponent } from './components/option/option.component';
                     {path: 'evaluation/td', component: TdComponent},
                     {path: 'evaluation/interro', component: InterroComponent},
                     {path: 'evaluation/examen', component: ExamenComponent},
+                    {path: 'evaluation/note', component: ReportComponent},
                     {path: 'conference/forum', component: ForumComponent},
                     {path: 'conference/live', component: LiveComponent},
                     {path: 'conference/welcome-live', component: WelcomeLiveComponent},

@@ -24,10 +24,11 @@ export class InterroComponent implements OnInit{
   rowsPerPageOptions = [5, 10, 20];
   
   role: any;
+  auditoireId: any;
   etudiant = "Etudiant";
   enseignant = "Enseignant";
   admin = "Admin";
-
+  
   constructor(
     private messageService: MessageService,
     private service: ExamenService,
@@ -38,10 +39,11 @@ export class InterroComponent implements OnInit{
       ]);
     }
     
-  ngOnInit() {
-
-       this.role = localStorage.getItem('role');
-      this.findAll();
+    ngOnInit() {
+      
+      this.role = localStorage.getItem('role');
+      this.auditoireId = localStorage.getItem('auditoireId');
+      this.get();
       
       this.statuses = [
         { label: 'En entente', value: 'En entente' },
@@ -51,8 +53,29 @@ export class InterroComponent implements OnInit{
       
     }
     
+    
+    get() {
+      if (this.role == this.etudiant) {
+        this.find();
+      } else {
+        this.findAll();
+      }
+    }
+    
     findAll() {
       this.service.findAllQuizes()
+      .subscribe({
+        next: (response) => {
+          this.examens = response;
+          // console.log(response);
+        },
+        error: (Response) => {
+        }
+      })
+    } 
+    
+    find() {
+      this.service.find(this.auditoireId)
       .subscribe({
         next: (response) => {
           this.examens = response;

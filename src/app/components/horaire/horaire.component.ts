@@ -30,13 +30,16 @@ export class HoraireComponent {
   rowsPerPageOptions = [5, 10, 20];
   
   role: any;
+  auditoireId: any;
   etudiant = "Etudiant";
   enseignant = "Enseignant";
   admin = "Admin";
   
   
-  constructor(private service: HoraireService, private messageService: MessageService,
-    private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) {
+  constructor(
+    private service: HoraireService,
+    private messageService: MessageService,
+    private breadcrumbService: BreadcrumbService) {
       this.breadcrumbService.setItems([
         { label: 'Annonces' },
         { label: 'Horaire' },
@@ -46,7 +49,8 @@ export class HoraireComponent {
     ngOnInit() {
       
       this.role = localStorage.getItem('role');
-      this.findAllHor();
+      this.auditoireId = localStorage.getItem('auditoireId');
+      this.getAll();
       this.findAllCours();
       
       this.horaireForm = new FormGroup({
@@ -115,8 +119,29 @@ export class HoraireComponent {
       return this.horaireForm.get('coursId')
     }
     
+    getAll() {
+      if (this.role == this.etudiant) {
+        this.find();
+      } else {
+        this.findAllHor();
+      }
+    }
+    
     findAllHor() {
       this.service.findAllHor()
+      .subscribe({
+        next: (response) => {
+          this.horaires = response;
+          console.log(this.horaires);
+        },
+        error: (response) => {
+          console.log(response);
+        }
+      })
+    }  
+    
+    find() {
+      this.service.find(this.auditoireId)
       .subscribe({
         next: (response) => {
           this.horaires = response;

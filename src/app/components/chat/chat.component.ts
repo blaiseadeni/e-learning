@@ -11,11 +11,13 @@ import { EtudiantService } from 'src/app/services/etudiant/etudiant.service';
 export class ChatComponent implements OnInit {
   
   etudiants: any = [];
+  messages: any = [];
   /**
   *
   */
   constructor(
     private service: EtudiantService,
+    private chatService: ChatService,
     ) { }
     
     
@@ -37,7 +39,14 @@ export class ChatComponent implements OnInit {
       })
     } 
     
-    
-    
-  }
+    myMessages(id:any) {
+      this.chatService.findAllReceiver(id)
+      .subscribe({
+        next: (response) => {
+          this.messages = response;
+          
+        }
+      })
+    }
   
+}

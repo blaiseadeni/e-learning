@@ -108,7 +108,12 @@
                         "assets": [
                             "src/favicon.ico",
                             "src/upload.php",
-                            "src/assets"
+                            "src/assets",
+                            {
+                                "glob": "**/*",
+                                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                                "output": "/assets/"
+                            }
                         ],
                         "styles": [
                             "src/styles.scss",

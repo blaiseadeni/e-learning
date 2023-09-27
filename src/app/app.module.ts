@@ -179,6 +179,7 @@ import { ChatComponent } from './components/chat/chat.component';
 import { ChatMessagesComponent } from './components/chat-messages/chat-messages.component';
 import { OptionComponent } from './components/option/option.component';
 import { OrientationComponent } from './components/orientation/orientation.component';
+import { ReportComponent } from './components/report/report/report.component';
 
 
 @NgModule({
@@ -344,7 +345,8 @@ import { OrientationComponent } from './components/orientation/orientation.compo
         ChatComponent,
         ChatMessagesComponent,
         OptionComponent,
-        OrientationComponent
+        OrientationComponent,
+        ReportComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

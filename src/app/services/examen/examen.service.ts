@@ -29,6 +29,11 @@ export class ExamenService {
   findQuizById(id: string) {
     return this.http.get(this.baseApiUrl + 'api/Quiz/' + id);
   }
+
+  find(id: any) {
+    return this.http.get(this.baseApiUrl + 'api/Quiz/quizes/' + id);
+  }
+  
   findDureeById(id: string) {
     return this.http.get(this.baseApiUrl + 'api/Duree/' + id);
   }

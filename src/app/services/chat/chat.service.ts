@@ -25,6 +25,10 @@ export class ChatService {
   findAllReceiver(users:any) {
     return this.http.post(this.baseApiUrl + 'api/Messages/receiver',users, this.headers);
   }
+
+  findAll(users:any) {
+    return this.http.post(this.baseApiUrl + 'api/Messages/all',users, this.headers);
+  }
   
   
   updateMessage(id?: string, message?: any){

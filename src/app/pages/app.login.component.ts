@@ -68,6 +68,7 @@ export class AppLoginComponent  {
           localStorage.setItem('active', user.active);
           localStorage.setItem('id', user.id);
           localStorage.setItem('etudiantId', user.etudiantId);
+          localStorage.setItem('auditoireId', user.auditoireId);
           if (user.role !== null) {
             if (user.active === true) {
               if (user.status === true) {
@@ -147,10 +148,10 @@ export class AppLoginComponent  {
         }
       }
       
-  modifLogin(){
-     this.infoDialog = false;
-     this.loginDialog = true;
-  }
+      modifLogin(){
+        this.infoDialog = false;
+        this.loginDialog = true;
+      }
       
       hide() {
         this.loginDialog = false;

@@ -19,7 +19,7 @@ export class AppMenuComponent implements OnInit {
         this.model = [
             
             {
-                label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'],
+                label: 'Accuiel', icon: 'pi pi-fw pi-home', routerLink: ['/'],
                 items: [
                     { label: 'Administrateurs', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin'], visible:this.role ==="Admin"},
                     { label: 'Enseignants', icon: 'pi pi-fw pi-paypal', routerLink: ['/teacher'],  visible:this.role ==="Enseignant" },
@@ -46,6 +46,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     {label: 'Créer', icon: 'pi pi-fw pi-circle-fill', routerLink: ['/evaluation/examen'],visible:this.role ==="Enseignant" },
                     {label: 'Liste', icon: 'pi pi-fw pi-stop-circle', routerLink: ['/evaluation/interro']},
+                    {label: 'Notes', icon: 'pi pi-fw pi-stop-circle', routerLink: ['/evaluation/note'],visible:this.role ==="Enseignant"},
                 ]
             },
             {

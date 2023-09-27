@@ -21,6 +21,10 @@ export class HoraireService {
     return this.http.get(this.baseApiUrl + 'api/Horaire/' + id);
   }
   
+  find(id: any) {
+    return this.http.get(this.baseApiUrl + 'api/Horaire/horaire/' + id);
+  }
+  
   addHor(horaire: any) {
     return this.http.post(this.baseApiUrl + 'api/Horaire', horaire, this.headers);
   }

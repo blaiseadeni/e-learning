@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { CoursService } from 'src/app/services/cours/cours.service';
 import { ExamenService } from 'src/app/services/examen/examen.service';
@@ -26,6 +27,7 @@ export class ExamenComponent {
     private service: CoursService,
     private quizService: ExamenService,
     private messageService: MessageService,
+    private route: Router
     ) { }
     
     ngOnInit(): void {
@@ -44,7 +46,7 @@ export class ExamenComponent {
       });
       
     }
-    
+        
     findAllCours() {
       this.service.findAllAud()
       .subscribe({
@@ -141,12 +143,17 @@ export class ExamenComponent {
       this.quizService.addQuiz(value).subscribe({
         next: (value) => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Enregistrer avec succès', life: 3000 });
+              this.route.navigate(['evaluation/interro'])
+     
         },
         complete: () => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: ' Enregistrer avec succès', life: 3000 });
+               this.route.navigate(['evaluation/interro'])
+
         },
         error: (e) => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Enregistrer avec succès', life: 3000 });
+               this.route.navigate(['evaluation/interro'])
         }
         
       })

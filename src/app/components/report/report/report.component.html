@@ -1,0 +1,101 @@
+<div class="grid-nogutter">
+    <div >
+        <p-toast></p-toast>
+        <form [formGroup]="reportForm">
+            <div   class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                <div class="col-12 md:col-3 p-fluid mt-3" >  
+                    <div class="p-inputgroup">
+                        <span class="p-float-label">
+                            <p-dropdown
+                            [autoDisplayFirst]="false"
+                            [options]="cours"
+                            optionLabel="titre"
+                            [showClear]="true"
+                            [filter]="true"
+                            filterBy="titre"
+                            formControlName="coursId"
+                            appendTo="body">
+                        </p-dropdown>
+                        <label for="inputtext">Cours</label>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="col-12 md:col-2 p-fluid mt-3" >  
+                <div class="p-inputgroup">
+                    <span class="p-float-label">
+                        <p-dropdown
+                        [autoDisplayFirst]="false"
+                        [options]="auditoires"
+                        optionLabel="libelle"
+                        [showClear]="true"
+                        [filter]="true"
+                        filterBy="libelle"
+                        formControlName="auditoireId"
+                        appendTo="body">
+                    </p-dropdown>
+                    <label id="label">Auditoire </label>
+                </span>
+            </div>
+        </div>
+        
+        <div class="col-12 md:col-3 p-fluid mt-3 " >  
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <p-dropdown
+                    [autoDisplayFirst]="false"
+                    [options]="annees"
+                    optionLabel="libelle"
+                    [showClear]="true"
+                    [filter]="true"
+                    filterBy="libelle"
+                    formControlName="anneeId"
+                    appendTo="body">
+                </p-dropdown>
+                <label id="label" >Année académique  </label>
+            </span>
+        </div>
+    </div>
+    
+    <div class="col-12 md:col-2 p-fluid mt-3" >  
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <p-calendar
+                id="date"
+                name="date"
+                [showIcon]="true"
+                formControlName="date"
+                appendTo="body">
+            </p-calendar>
+            <label id="label" >Date quiz </label>
+        </span>                    
+    </div>
+</div>
+
+<div class="col-12 md:col-2 p-fluid mt-3" >  
+    <div class="p-inputgroup">
+        <button pButton pRipple
+        label="Imprimer"
+        icon="pi pi-print"
+        id="print"
+        (click)="print()"
+        class="p-button-primary mr-2"></button>
+    </div>
+</div>
+
+</div>
+</form>
+</div>
+
+<div class="col-12" id="pdf" >
+    <div >
+        <ngx-extended-pdf-viewer
+        [src]="url"
+        [height]="'150vh'"
+        [useBrowserLocale]="true"
+        [textLayer]="true"
+        [showHandToolButton]="true">
+    </ngx-extended-pdf-viewer>
+</div>
+</div>
+</div>

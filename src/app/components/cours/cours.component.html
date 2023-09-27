@@ -58,7 +58,7 @@
                         {{cours.annee}}
                     </td>
                     
-                    <td [hidden]="role === admin || role === etudiant">
+                    <td [hidden]="role === enseignant || role === etudiant">
                         <div class="flex" >
                             <button pButton pRipple icon="pi pi-pencil"
                             class="p-button-rounded p-button-primary mr-2"
